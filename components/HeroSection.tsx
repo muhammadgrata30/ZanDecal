@@ -12,6 +12,9 @@ import {
   ArrowRight,
   ChevronRight,
   Eye,
+  Sliders,
+  Maximize2,
+  Cpu,
 } from "lucide-react";
 
 // Interactive showcase finishes
@@ -23,6 +26,7 @@ const FINISH_PREVIEWS = [
     gradient: "from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4]",
     accent: "#A18CD1",
     desc: "Perubahan gradasi warna dinamis mengikuti sudut pencahayaan studio.",
+    specCode: "SPEC-01 // PRISMATIC",
   },
   {
     id: "satin-purple",
@@ -31,6 +35,7 @@ const FINISH_PREVIEWS = [
     gradient: "from-[#6B5B95] via-[#A18CD1] to-[#D8B4E2]",
     accent: "#A18CD1",
     desc: "Tekstur satin halus anti-silau dengan refleksi cahaya elegan.",
+    specCode: "SPEC-02 // SATIN-MATTE",
   },
   {
     id: "neo-cyan",
@@ -39,6 +44,7 @@ const FINISH_PREVIEWS = [
     gradient: "from-[#4FACFE] via-[#00F2FE] to-[#8FD3F4]",
     accent: "#8FD3F4",
     desc: "Aksen cyan tajam terinspirasi dari aero racing livery sirkuit modern.",
+    specCode: "SPEC-03 // MOTORSPORT",
   },
   {
     id: "candy-pink",
@@ -47,6 +53,7 @@ const FINISH_PREVIEWS = [
     gradient: "from-[#FA709A] via-[#FEE140] to-[#FF9A9E]",
     accent: "#FF9A9E",
     desc: "Kilap mendalam layaknya pernis permen dengan proteksi UV jangka panjang.",
+    specCode: "SPEC-04 // CANDY-GLOSS",
   },
 ];
 
@@ -54,34 +61,51 @@ export function HeroSection() {
   const [activeFinish, setActiveFinish] = useState(FINISH_PREVIEWS[0]);
 
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+    <section className="relative pt-32 pb-20 md:pt-44 md:pb-32 overflow-hidden">
       {/* Dynamic Ambient Background Glows */}
-      <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] sm:w-[900px] h-[450px] bg-gradient-to-tr from-[#FF9A9E]/20 via-[#A18CD1]/25 to-[#8FD3F4]/20 blur-[130px] rounded-full pointer-events-none -z-10" />
-      <div className="absolute top-1/3 -left-32 w-80 h-80 bg-[#FF9A9E]/15 blur-[100px] rounded-full pointer-events-none -z-10" />
-      <div className="absolute bottom-10 -right-32 w-96 h-96 bg-[#8FD3F4]/15 blur-[120px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] sm:w-[1000px] h-[520px] bg-gradient-to-tr from-[#FF9A9E]/18 via-[#A18CD1]/22 to-[#8FD3F4]/18 blur-[140px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-1/3 -left-40 w-96 h-96 bg-[#FF9A9E]/12 blur-[120px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute bottom-12 -right-40 w-[450px] h-[450px] bg-[#8FD3F4]/12 blur-[140px] rounded-full pointer-events-none -z-10" />
 
-      {/* Automotive Technical Grid Background */}
-      <div className="absolute inset-0 pattern-carbon opacity-35 dark:opacity-20 pointer-events-none -z-10" />
+      {/* Automotive Telemetry Grid Background */}
+      <div className="absolute inset-0 pattern-grid-telemetry opacity-40 dark:opacity-25 pointer-events-none -z-10" />
+      <div className="absolute inset-0 pattern-carbon opacity-20 dark:opacity-15 pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        
+        {/* Top Editorial Telemetry Bar */}
+        <div className="flex items-center justify-between pb-6 mb-8 border-b border-slate-200/60 dark:border-white/5 text-[11px] font-mono tracking-wider text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-3">
+            <span className="flex h-2 w-2 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF9A9E] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF9A9E]"></span>
+            </span>
+            <span className="uppercase text-slate-700 dark:text-slate-300 font-semibold">
+              Zan Decal Studio // Engineering & Livery Hub
+            </span>
+          </div>
+          <div className="hidden sm:flex items-center gap-4 text-slate-400 dark:text-slate-500">
+            <span>BYD SEAL 6 CERTIFIED</span>
+            <span>•</span>
+            <span>HIGH-PRECISION CAST VINYL</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
           
           {/* Left Column: Headline, Badge, CTAs, Value Props */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left">
             
             {/* Required Badge: 'Premium Decal & Custom Sticker Studio' */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 dark:bg-[#151128]/90 border border-[#A18CD1]/30 dark:border-[#A18CD1]/40 shadow-sm backdrop-blur-md mb-6 hover:border-[#8FD3F4]/60 transition-colors">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF9A9E] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF9A9E]"></span>
-              </span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 dark:bg-[#120E24]/90 border border-[#A18CD1]/30 dark:border-[#A18CD1]/40 shadow-sm backdrop-blur-md mb-6 hover:border-[#8FD3F4]/60 transition-colors">
+              <Sparkles className="w-3.5 h-3.5 text-[#FF9A9E]" />
               <span className="text-xs sm:text-sm font-bold tracking-wide uppercase bg-gradient-to-r from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4] bg-clip-text text-transparent">
                 Premium Decal & Custom Sticker Studio
               </span>
             </div>
 
             {/* Required Headline: 'Transformasi Visual Tanpa Batas untuk Kendaraan Anda' */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[3.8rem] font-black tracking-tight leading-[1.1] mb-6 text-slate-900 dark:text-white">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.1rem] font-black tracking-tight leading-[1.08] mb-6 text-slate-900 dark:text-white">
               Transformasi Visual{" "}
               <span className="gradient-zan-text block sm:inline">
                 Tanpa Batas
@@ -96,21 +120,21 @@ export function HeroSection() {
             </p>
 
             {/* Required 2 CTAs: 'Coba 3D Visualizer' & 'Konsultasi Custom' (NO PRICE MENTION) */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-10">
+            <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-12">
               {/* CTA 1: Coba 3D Visualizer */}
               <a
                 href="#3d-studio"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl font-bold text-sm sm:text-base text-white bg-gradient-to-r from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4] shadow-lg shadow-[#A18CD1]/30 hover:shadow-xl hover:shadow-[#A18CD1]/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4.5 rounded-2xl font-bold text-sm sm:text-base text-white bg-gradient-to-r from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4] shadow-xl shadow-[#A18CD1]/30 hover:shadow-2xl hover:shadow-[#A18CD1]/45 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group"
               >
                 <Box className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
                 <span>Coba 3D Visualizer</span>
-                <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 ml-0.5 group-hover:translate-x-1 transition-transform" />
               </a>
 
               {/* CTA 2: Konsultasi Custom */}
               <a
                 href="#konsultasi"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl font-bold text-sm sm:text-base text-slate-800 dark:text-white bg-white/80 dark:bg-white/5 border border-slate-300 dark:border-white/15 backdrop-blur-md hover:bg-white dark:hover:bg-white/10 hover:border-[#A18CD1] dark:hover:border-[#A18CD1] transition-all duration-200 shadow-sm"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4.5 rounded-2xl font-bold text-sm sm:text-base text-slate-800 dark:text-white bg-white/90 dark:bg-white/[0.04] border border-slate-300 dark:border-white/12 backdrop-blur-md hover:bg-white dark:hover:bg-white/10 hover:border-[#A18CD1] dark:hover:border-[#A18CD1] transition-all duration-200 shadow-sm"
               >
                 <MessageSquare className="w-5 h-5 text-[#A18CD1]" />
                 <span>Konsultasi Custom</span>
@@ -119,34 +143,34 @@ export function HeroSection() {
 
             {/* Trust and Engineering Highlights (Zero Prices) */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-6 border-t border-slate-200/80 dark:border-white/10 w-full text-left">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg bg-pink-500/10 dark:bg-pink-500/20 text-[#FF9A9E]">
-                  <ShieldCheck className="w-4 h-4" />
+              <div className="p-3.5 rounded-2xl bg-white/60 dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/5 backdrop-blur-sm">
+                <div className="flex items-center gap-2.5 mb-1">
+                  <div className="p-1.5 rounded-lg bg-pink-500/15 text-[#FF9A9E]">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100">Cat Asli Aman</div>
                 </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-800 dark:text-slate-100">Cat Asli Aman</div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">Zero Adhesive Residue</div>
-                </div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">Zero Adhesive Residue</div>
               </div>
 
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg bg-purple-500/10 dark:bg-purple-500/20 text-[#A18CD1]">
-                  <Layers className="w-4 h-4" />
+              <div className="p-3.5 rounded-2xl bg-white/60 dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/5 backdrop-blur-sm">
+                <div className="flex items-center gap-2.5 mb-1">
+                  <div className="p-1.5 rounded-lg bg-purple-500/15 text-[#A18CD1]">
+                    <Layers className="w-4 h-4" />
+                  </div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100">Ultra-Cast Vinyl</div>
                 </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-800 dark:text-slate-100">Ultra-Cast Vinyl</div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">Air-Release Channels</div>
-                </div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">Air-Release Channels</div>
               </div>
 
-              <div className="flex items-center gap-2.5 col-span-2 sm:col-span-1">
-                <div className="p-2 rounded-lg bg-cyan-500/10 dark:bg-cyan-500/20 text-[#8FD3F4]">
-                  <Wand2 className="w-4 h-4" />
+              <div className="p-3.5 rounded-2xl bg-white/60 dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/5 backdrop-blur-sm col-span-2 sm:col-span-1">
+                <div className="flex items-center gap-2.5 mb-1">
+                  <div className="p-1.5 rounded-lg bg-cyan-500/15 text-[#8FD3F4]">
+                    <Wand2 className="w-4 h-4" />
+                  </div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100">Presisi CNC Vector</div>
                 </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-800 dark:text-slate-100">Presisi CNC Vector</div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">Custom 1-on-1 Fitting</div>
-                </div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">Custom 1-on-1 Fitting</div>
               </div>
             </div>
 
@@ -156,29 +180,29 @@ export function HeroSection() {
           <div className="lg:col-span-5 relative">
             
             {/* Main Interactive Showcase Card with Glassmorphism */}
-            <div className="relative rounded-3xl p-6 sm:p-7 transition-all duration-300 bg-white/90 dark:bg-[#120F24]/80 backdrop-blur-2xl border border-slate-200/80 dark:border-white/15 shadow-2xl shadow-purple-950/15 dark:shadow-black/70">
+            <div className="relative rounded-3xl p-6 sm:p-7 transition-all duration-300 bg-white/90 dark:bg-[#0E0B1A]/85 backdrop-blur-2xl border border-slate-200/80 dark:border-white/15 shadow-2xl shadow-purple-950/15 dark:shadow-black/70">
               
               {/* Studio Header Bar */}
-              <div className="flex items-center justify-between pb-5 border-b border-slate-100 dark:border-white/10">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-white/10">
                 <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-[#FF9A9E]" />
-                  <span className="w-3 h-3 rounded-full bg-[#A18CD1]" />
-                  <span className="w-3 h-3 rounded-full bg-[#8FD3F4]" />
-                  <span className="text-xs font-mono font-medium tracking-wider text-slate-400 dark:text-slate-500 ml-2">
-                    STUDIO VIEW // SIMULATION
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#FF9A9E]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#A18CD1]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#8FD3F4]" />
+                  <span className="text-[10px] font-mono font-bold tracking-wider text-slate-400 dark:text-slate-400 ml-2">
+                    LIVERY SIMULATOR // v2.6
                   </span>
                 </div>
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold tracking-wider uppercase bg-[#8FD3F4]/15 text-[#3ea7d4] dark:text-[#8FD3F4]">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold tracking-wider uppercase bg-[#8FD3F4]/15 text-[#3ea7d4] dark:text-[#8FD3F4] border border-[#8FD3F4]/20">
                   <Eye className="w-3 h-3" /> Live Render
                 </span>
               </div>
 
-              {/* Dynamic Vehicle Visualizer Display */}
-              <div className="relative my-6 py-10 px-4 rounded-2xl bg-gradient-to-b from-slate-100 to-slate-200/60 dark:from-[#0B0914] dark:to-[#17132D] border border-slate-200/60 dark:border-white/5 overflow-hidden flex flex-col items-center justify-center min-h-[260px]">
+              {/* Dynamic Vehicle Visualizer Display Canvas */}
+              <div className="relative my-5 py-8 px-4 rounded-2xl bg-gradient-to-b from-slate-100 to-slate-200/60 dark:from-[#07050E] dark:to-[#141026] border border-slate-200/60 dark:border-white/5 overflow-hidden flex flex-col items-center justify-center min-h-[260px]">
                 
                 {/* Background Ambient Glow mapped to active finish */}
                 <div
-                  className={`absolute inset-0 bg-gradient-to-r ${activeFinish.gradient} opacity-20 blur-2xl transition-all duration-500`}
+                  className={`absolute inset-0 bg-gradient-to-r ${activeFinish.gradient} opacity-25 blur-2xl transition-all duration-500`}
                 />
 
                 {/* Plotter Grid Decal Guides */}
@@ -193,14 +217,19 @@ export function HeroSection() {
                   </svg>
                 </div>
 
+                {/* Technical Coordinates Stamp */}
+                <div className="absolute top-3 left-3 text-[9px] font-mono text-slate-400 dark:text-slate-500">
+                  {activeFinish.specCode}
+                </div>
+
                 {/* Peeling Sticker Corner Badge on Vehicle Canvas */}
-                <div className="absolute top-3 right-3 bg-white/90 dark:bg-[#0E0B1A]/90 border border-slate-200 dark:border-white/10 px-3 py-1 rounded-lg text-[11px] font-medium text-slate-700 dark:text-slate-300 shadow-sm flex items-center gap-1.5 backdrop-blur-md">
+                <div className="absolute top-3 right-3 bg-white/90 dark:bg-[#0E0B1A]/90 border border-slate-200 dark:border-white/10 px-3 py-1 rounded-xl text-[11px] font-medium text-slate-700 dark:text-slate-300 shadow-sm flex items-center gap-1.5 backdrop-blur-md">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   <span>{activeFinish.tag}</span>
                 </div>
 
                 {/* Automotive Sport Silhouette Graphic with Active Livery Gradient */}
-                <div className="relative w-full max-w-[340px] h-32 flex items-center justify-center">
+                <div className="relative w-full max-w-[340px] h-32 flex items-center justify-center my-2">
                   <svg
                     viewBox="0 0 420 140"
                     fill="none"
@@ -220,7 +249,7 @@ export function HeroSection() {
                     </defs>
 
                     {/* Ground reflection shadow */}
-                    <ellipse cx="210" cy="128" rx="190" ry="8" fill="#000000" fillOpacity="0.35" />
+                    <ellipse cx="210" cy="128" rx="190" ry="8" fill="#000000" fillOpacity="0.4" />
 
                     {/* Aerodynamic GT Silhouette Body */}
                     <path
@@ -238,7 +267,7 @@ export function HeroSection() {
                          C 145 102, 125 98, 110 102 
                          C 95 106, 88 116, 75 116 
                          L 40 114 Z"
-                      className={`fill-slate-800 dark:fill-[#120F22] stroke-white/20`}
+                      className="fill-slate-800 dark:fill-[#0F0C1F] stroke-white/20"
                       strokeWidth="2"
                     />
 
@@ -294,8 +323,8 @@ export function HeroSection() {
                 </div>
 
                 {/* Active Finish Description */}
-                <div className="text-center z-10 px-4 mt-2">
-                  <div className="text-sm font-bold text-slate-800 dark:text-white">
+                <div className="text-center z-10 px-4 mt-1">
+                  <div className="text-sm font-bold text-slate-900 dark:text-white">
                     {activeFinish.name}
                   </div>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
@@ -306,9 +335,12 @@ export function HeroSection() {
 
               {/* Finish Selector Buttons */}
               <div className="space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
-                  Pilih Simulasi Karakter Wrap:
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                    Pilih Simulasi Karakter Wrap:
+                  </span>
+                  <span className="text-[10px] font-mono text-[#A18CD1]">4 PRESETS</span>
+                </div>
                 <div className="grid grid-cols-2 gap-2">
                   {FINISH_PREVIEWS.map((finish) => {
                     const isSelected = activeFinish.id === finish.id;
@@ -317,10 +349,10 @@ export function HeroSection() {
                         key={finish.id}
                         type="button"
                         onClick={() => setActiveFinish(finish)}
-                        className={`flex items-center gap-2 p-2.5 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
+                        className={`flex items-center gap-2.5 p-2.5 rounded-2xl border text-left transition-all duration-200 cursor-pointer ${
                           isSelected
-                            ? "bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-blue-500/10 border-[#A18CD1] dark:border-[#A18CD1] shadow-sm"
-                            : "bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20"
+                            ? "bg-slate-100 dark:bg-white/10 border-[#A18CD1] ring-1 ring-[#A18CD1]/40 shadow-sm"
+                            : "bg-slate-50 dark:bg-white/[0.03] border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20"
                         }`}
                       >
                         <span
@@ -337,15 +369,16 @@ export function HeroSection() {
 
               {/* Bottom Quick Feature Tagline */}
               <div className="mt-5 pt-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                <span className="flex items-center gap-1.5">
+                <span className="flex items-center gap-1.5 font-medium">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
                   Precision 3D Mapping
                 </span>
                 <a
                   href="#3d-studio"
-                  className="font-bold text-[#A18CD1] hover:text-[#8FD3F4] transition-colors flex items-center gap-1"
+                  className="font-bold text-[#A18CD1] hover:text-[#8FD3F4] transition-colors flex items-center gap-1 group"
                 >
-                  Buka Full 3D Studio <ChevronRight className="w-3 h-3" />
+                  <span>Buka Full 3D Studio</span>
+                  <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                 </a>
               </div>
 

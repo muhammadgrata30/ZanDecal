@@ -3,16 +3,16 @@
 import React from "react";
 import Link from "next/link";
 import { Logo } from "./Logo";
-import { Sparkles, Shield, Compass, Heart } from "lucide-react";
+import { Sparkles, Shield, Compass, Heart, ArrowUpRight } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-slate-200/80 dark:border-white/10 pt-16 pb-12 overflow-hidden bg-white/50 dark:bg-[#07060E]/80 backdrop-blur-md">
+    <footer className="relative border-t border-slate-200/80 dark:border-white/10 pt-20 pb-12 overflow-hidden bg-white/60 dark:bg-[#05040A]/90 backdrop-blur-xl">
       {/* Background ambient glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-gradient-to-t from-[#A18CD1]/10 to-transparent blur-[120px] pointer-events-none -z-10" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-t from-[#A18CD1]/12 to-transparent blur-[140px] pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 border-b border-slate-200/60 dark:border-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-14 border-b border-slate-200/60 dark:border-white/10">
           
           {/* Brand Info (5 cols) */}
           <div className="lg:col-span-5 space-y-4">
@@ -27,7 +27,7 @@ export function Footer() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-white hover:bg-gradient-to-tr hover:from-[#FF9A9E] hover:to-[#A18CD1] transition-all"
+                className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-white hover:bg-gradient-to-tr hover:from-[#FF9A9E] hover:to-[#A18CD1] transition-all"
                 aria-label="Instagram Zan Decal"
               >
                 <svg className="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
@@ -41,7 +41,7 @@ export function Footer() {
                 href="https://youtube.com"
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-white hover:bg-gradient-to-tr hover:from-[#FF9A9E] hover:to-[#8FD3F4] transition-all"
+                className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-white hover:bg-gradient-to-tr hover:from-[#FF9A9E] hover:to-[#8FD3F4] transition-all"
                 aria-label="YouTube Zan Decal"
               >
                 <svg className="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
@@ -54,7 +54,7 @@ export function Footer() {
 
           {/* Quick Links (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400">
+            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400">
               Eksplorasi Studio
             </h4>
             <ul className="space-y-2 text-sm font-medium">
@@ -103,17 +103,17 @@ export function Footer() {
 
           {/* Studio Guarantee & Features (4 cols) */}
           <div className="lg:col-span-4 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400">
+            <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400">
               Jaminan Kualitas
             </h4>
             <div className="space-y-3 text-xs text-slate-600 dark:text-slate-400">
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/5">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/5">
                 <span className="font-bold text-slate-900 dark:text-slate-200 block mb-0.5">
                   100% Paint-Safe Formula
                 </span>
                 Vinyl otomotif kami dirancang tanpa residu lem keras dan menjaga kondisi cat pabrikan orisinil.
               </div>
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/5">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/80 dark:border-white/5">
                 <span className="font-bold text-slate-900 dark:text-slate-200 block mb-0.5">
                   Clean Room Studio Installation
                 </span>
@@ -129,7 +129,7 @@ export function Footer() {
           <div>
             &copy; 2026 Zan Decal Studio. Hak Cipta Dilindungi Undang-Undang.
           </div>
-          <div className="flex items-center gap-1 font-medium">
+          <div className="flex items-center gap-1.5 font-mono text-[11px]">
             <span>Crafted for Automotive Enthusiasts</span>
             <span className="text-[#FF9A9E]">•</span>
             <span className="gradient-zan-text font-bold">Midnight Garage & Clean Studio</span>

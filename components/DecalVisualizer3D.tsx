@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import * as THREE from "three";
+import type * as THREE from "three";
 import {
   Sparkles,
   Send,
@@ -14,6 +14,9 @@ import {
   Car,
   ExternalLink,
   ShieldCheck,
+  Compass,
+  Cpu,
+  RefreshCw,
 } from "lucide-react";
 
 export type FinishType = "Glossy" | "Matte" | "Satin" | "Metallic";
@@ -44,17 +47,20 @@ export const FINISH_SPECS: Record<FinishType, { roughness: number; metalness: nu
 // Indikator Loading Estetik
 function VisualizerLoader() {
   return (
-    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#F8F9FE]/90 dark:bg-[#0B0914]/90 backdrop-blur-md">
+    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#F8F9FE]/92 dark:bg-[#07050E]/92 backdrop-blur-xl">
       <div className="relative flex items-center justify-center w-20 h-20 mb-4">
         <div className="absolute inset-0 rounded-full border-4 border-t-[#FF9A9E] border-r-[#A18CD1] border-b-[#8FD3F4] border-l-transparent animate-spin" />
         <Car className="w-8 h-8 text-[#A18CD1] animate-pulse" />
       </div>
-      <div className="text-center">
-        <div className="text-sm font-black tracking-wider uppercase bg-gradient-to-r from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4] bg-clip-text text-transparent">
-          Memuat Model 3D BYD Seal...
+      <div className="text-center px-4">
+        <div className="text-xs font-mono font-bold tracking-[0.2em] uppercase text-[#A18CD1] mb-1">
+          CONFIGURING 3D ENVIRONMENT
         </div>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Menyiapkan shader material & studio lighting
+        <div className="text-base font-black tracking-tight text-slate-900 dark:text-white">
+          Memuat Model 3D BYD Seal EV
+        </div>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto">
+          Menginisialisasi PBR material, studio HDRI, dan penyesuaian skala mesh...
         </p>
       </div>
     </div>
@@ -91,12 +97,13 @@ export default function DecalVisualizer3D() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      
       {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto mb-12">
+      <div className="text-center max-w-3xl mx-auto mb-14">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-white/5 border border-[#A18CD1]/30 backdrop-blur-md mb-4 shadow-sm">
           <Car className="w-4 h-4 text-[#A18CD1]" />
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
             3D Decal Visualizer Studio
           </span>
         </div>
@@ -104,52 +111,54 @@ export default function DecalVisualizer3D() {
           Simulasi 3D Interaktif{" "}
           <span className="gradient-zan-text">BYD Seal EV</span>
         </h2>
-        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300">
+        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
           Model 3D asli BYD Seal dengan refleksi studio real-time. Putar mobil 360°, coba kombinasi warna decal pastel & stealth, atau klik langsung bodi mobil untuk mewarnai part spesifik.
         </p>
       </div>
 
-      <div className="relative rounded-3xl overflow-hidden bg-white/90 dark:bg-[#110E23]/90 border border-slate-200/80 dark:border-white/10 shadow-2xl backdrop-blur-2xl transition-colors duration-300">
+      {/* Main Studio Console Container */}
+      <div className="relative rounded-3xl sm:rounded-[2rem] overflow-hidden bg-white/90 dark:bg-[#0C091A]/90 border border-slate-200/80 dark:border-white/12 shadow-2xl backdrop-blur-2xl transition-colors duration-300">
         
-        {/* Header Visualizer */}
-        <div className="p-5 sm:p-7 border-b border-slate-100 dark:border-white/10 flex flex-wrap items-center justify-between gap-4">
+        {/* Telemetry Header Bar */}
+        <div className="px-5 sm:px-8 py-4 sm:py-5 border-b border-slate-100 dark:border-white/10 flex flex-wrap items-center justify-between gap-4 bg-slate-50/50 dark:bg-black/20">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4] p-0.5 shadow-md">
-              <div className="w-full h-full rounded-2xl bg-white dark:bg-[#0B0914] flex items-center justify-center">
+              <div className="w-full h-full rounded-2xl bg-white dark:bg-[#07050E] flex items-center justify-center">
                 <Car className="w-5 h-5 text-[#A18CD1]" />
               </div>
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">
-                  BYD Seal 6 // 3D Decal Studio
+                <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
+                  BYD Seal EV // Studio Viewport
                 </h3>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                  Live 3D
+                <span className="px-2 py-0.5 rounded-md text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  REAL-TIME GLB
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Pilih warna & finishing, atau klik langsung bodi mobil untuk mewarnai bagian tertentu
+              <p className="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">
+                Orbit kamera 360° • Click-to-paint bodi • PBR Shaders
               </p>
             </div>
           </div>
 
+          {/* Active Target Indicator Badge */}
           <div className="flex items-center gap-2 text-xs">
             {clickedMesh ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/15 border border-[#A18CD1]/40 text-[#A18CD1] font-semibold">
-                <MousePointerClick className="w-3.5 h-3.5" />
+                <MousePointerClick className="w-3.5 h-3.5 text-[#FF9A9E]" />
                 Target: {clickedMesh.name || "Bagian Terpilih"}
                 <button
                   type="button"
                   onClick={() => setClickedMesh(null)}
-                  className="ml-1 text-[11px] underline hover:text-white"
+                  className="ml-1 text-[11px] underline hover:text-white flex items-center gap-0.5 cursor-pointer"
                   title="Kembali ke filter otomatis bodi"
                 >
-                  (Reset)
+                  <RefreshCw className="w-3 h-3" /> Reset
                 </button>
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 font-medium">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 font-mono text-[11px]">
                 <Sparkles className="w-3.5 h-3.5 text-[#8FD3F4]" />
                 Auto Body Filter ({matchedCount} parts aktif)
               </span>
@@ -157,8 +166,27 @@ export default function DecalVisualizer3D() {
           </div>
         </div>
 
-        {/* 3D Canvas Area */}
-        <div className="relative w-full h-[400px] sm:h-[480px] md:h-[540px] bg-gradient-to-b from-slate-100 via-slate-200/50 to-slate-100 dark:from-[#0B0914] dark:via-[#130F24] dark:to-[#0B0914] cursor-grab active:cursor-grabbing">
+        {/* 3D Canvas Viewport Area */}
+        <div className="relative w-full h-[420px] sm:h-[500px] md:h-[580px] bg-gradient-to-b from-slate-100 via-slate-200/50 to-slate-100 dark:from-[#07050E] dark:via-[#110D24] dark:to-[#07050E] cursor-grab active:cursor-grabbing overflow-hidden">
+          
+          {/* Subtle Viewport Grid Lines */}
+          <div className="absolute inset-0 pattern-grid-telemetry opacity-25 dark:opacity-20 pointer-events-none" />
+
+          {/* Viewport Corner Crosshairs */}
+          <div className="absolute top-4 left-4 text-slate-400 dark:text-slate-600 pointer-events-none select-none text-xs font-mono">
+            + [TL 0,0]
+          </div>
+          <div className="absolute top-4 right-4 text-slate-400 dark:text-slate-600 pointer-events-none select-none text-xs font-mono">
+            [TR 1,0] +
+          </div>
+          <div className="absolute bottom-12 left-4 text-slate-400 dark:text-slate-600 pointer-events-none select-none text-xs font-mono">
+            + [BL 0,1]
+          </div>
+          <div className="absolute bottom-12 right-4 text-slate-400 dark:text-slate-600 pointer-events-none select-none text-xs font-mono">
+            [BR 1,1] +
+          </div>
+
+          {/* R3F Canvas Mount */}
           {isMounted ? (
             <DecalCanvas3D
               color={selectedColor}
@@ -171,18 +199,19 @@ export default function DecalVisualizer3D() {
             <VisualizerLoader />
           )}
 
+          {/* Bottom Floating Viewport Controls Hints */}
           <div className="absolute bottom-3 left-4 right-4 z-10 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 pointer-events-none">
-            <span className="flex items-center gap-1.5 backdrop-blur-sm bg-white/70 dark:bg-black/50 px-2.5 py-1 rounded-lg">
-              <RotateCw className="w-3 h-3 text-[#A18CD1]" /> Drag 360° untuk memutar sudut pandang
+            <span className="flex items-center gap-1.5 backdrop-blur-md bg-white/80 dark:bg-black/60 px-3 py-1.5 rounded-xl border border-slate-200/60 dark:border-white/10 shadow-sm">
+              <RotateCw className="w-3.5 h-3.5 text-[#A18CD1]" /> Drag 360° untuk memutar sudut pandang
             </span>
-            <span className="hidden sm:flex items-center gap-1.5 backdrop-blur-sm bg-white/70 dark:bg-black/50 px-2.5 py-1 rounded-lg">
-              <MousePointerClick className="w-3 h-3 text-[#8FD3F4]" /> Klik bagian bodi untuk fitur Click-to-Paint
+            <span className="hidden sm:flex items-center gap-1.5 backdrop-blur-md bg-white/80 dark:bg-black/60 px-3 py-1.5 rounded-xl border border-slate-200/60 dark:border-white/10 shadow-sm">
+              <MousePointerClick className="w-3.5 h-3.5 text-[#8FD3F4]" /> Klik bagian bodi untuk fitur Click-to-Paint
             </span>
           </div>
         </div>
 
         {/* UI CONTROL DOCK */}
-        <div className="p-6 sm:p-8 bg-white/95 dark:bg-[#120F24]/95 border-t border-slate-200/80 dark:border-white/10 space-y-6">
+        <div className="p-6 sm:p-8 bg-white/95 dark:bg-[#0B0818]/95 border-t border-slate-200/80 dark:border-white/10 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* Pilihan Warna Decal */}
@@ -192,8 +221,8 @@ export default function DecalVisualizer3D() {
                   <Palette className="w-4 h-4 text-[#A18CD1]" />
                   Pilihan Warna Decal:
                 </span>
-                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                  {selectedColor.name} ({selectedColor.hex})
+                <span className="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">
+                  {selectedColor.name} // <span className="text-[#A18CD1]">{selectedColor.hex}</span>
                 </span>
               </div>
 
@@ -205,18 +234,20 @@ export default function DecalVisualizer3D() {
                       key={col.hex}
                       type="button"
                       onClick={() => setSelectedColor(col)}
-                      className={`flex flex-col items-center p-3 rounded-2xl border text-center transition-all cursor-pointer ${
+                      className={`flex flex-col items-center p-3 rounded-2xl border text-center transition-all duration-200 cursor-pointer ${
                         isSelected
-                          ? "bg-slate-100 dark:bg-white/10 border-[#A18CD1] ring-2 ring-[#A18CD1]/50 shadow-md scale-[1.02]"
-                          : "bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20"
+                          ? "bg-slate-100 dark:bg-white/10 border-[#A18CD1] ring-2 ring-[#A18CD1]/40 shadow-md scale-[1.02]"
+                          : "bg-slate-50 dark:bg-white/[0.03] border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20"
                       }`}
                     >
                       <div
-                        className={`w-9 h-9 rounded-xl bg-gradient-to-tr ${col.accent} shadow-md flex items-center justify-center mb-2 transition-transform ${
+                        className={`w-10 h-10 rounded-xl bg-gradient-to-tr ${col.accent} shadow-md flex items-center justify-center mb-2 transition-transform relative ${
                           isSelected ? "scale-110" : ""
                         }`}
                         style={{ backgroundColor: col.hex }}
                       >
+                        {/* Specular gloss sheen overlay */}
+                        <div className="absolute inset-0 rounded-xl bg-white/25 opacity-40 pointer-events-none" />
                         {isSelected && <Check className="w-4 h-4 text-white stroke-[3] drop-shadow" />}
                       </div>
                       <span className="text-xs font-bold text-slate-900 dark:text-white truncate w-full">
@@ -247,10 +278,10 @@ export default function DecalVisualizer3D() {
                       key={finish}
                       type="button"
                       onClick={() => setSelectedFinish(finish)}
-                      className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col justify-between ${
+                      className={`p-3 rounded-2xl border text-center transition-all duration-200 cursor-pointer flex flex-col justify-between ${
                         isSelected
-                          ? "bg-slate-100 dark:bg-white/10 border-[#8FD3F4] ring-2 ring-[#8FD3F4]/50 shadow-md scale-[1.02]"
-                          : "bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20"
+                          ? "bg-slate-100 dark:bg-white/10 border-[#8FD3F4] ring-2 ring-[#8FD3F4]/40 shadow-md scale-[1.02]"
+                          : "bg-slate-50 dark:bg-white/[0.03] border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20"
                       }`}
                     >
                       <span className="text-xs font-extrabold text-slate-900 dark:text-white">
@@ -283,7 +314,7 @@ export default function DecalVisualizer3D() {
             <button
               type="button"
               onClick={handleOrderWhatsApp}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-sm sm:text-base text-white bg-gradient-to-r from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4] shadow-lg shadow-[#A18CD1]/30 hover:shadow-xl hover:shadow-[#A18CD1]/40 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shrink-0"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-sm sm:text-base text-white bg-gradient-to-r from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4] shadow-lg shadow-[#A18CD1]/30 hover:shadow-xl hover:shadow-[#A18CD1]/45 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shrink-0"
             >
               <Send className="w-4 h-4" />
               <span>Order Konsep Ini via WhatsApp</span>

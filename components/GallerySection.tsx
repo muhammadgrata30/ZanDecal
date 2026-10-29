@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   Eye,
   Send,
+  Camera,
 } from "lucide-react";
 
 interface PortfolioItem {
@@ -168,7 +169,7 @@ export function GallerySection() {
   return (
     <section id="galeri" className="py-24 relative overflow-hidden">
       {/* Background ambient radial glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[500px] bg-gradient-to-tr from-[#A18CD1]/15 via-[#8FD3F4]/10 to-transparent blur-[140px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-gradient-to-tr from-[#A18CD1]/12 via-[#8FD3F4]/10 to-transparent blur-[160px] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -176,7 +177,7 @@ export function GallerySection() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-white/5 border border-[#A18CD1]/30 backdrop-blur-md mb-4 shadow-sm">
             <ImageIcon className="w-4 h-4 text-[#8FD3F4]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
               Galeri Portofolio Customer
             </span>
           </div>
@@ -184,7 +185,7 @@ export function GallerySection() {
             Karya Nyata &{" "}
             <span className="gradient-zan-text">Kepuasan Pelanggan</span>
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300">
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
             Jelajahi transformasi visual mobil sport, motor sirkuit, dan custom sticker hasil pengerjaan studio Zan Decal dengan bahan Oracal, Maxdecal, dan TeckWrap.
           </p>
         </div>
@@ -207,7 +208,7 @@ export function GallerySection() {
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                   isActive
                     ? "bg-slate-900 dark:bg-white text-white dark:text-slate-950 shadow-lg shadow-purple-950/20 scale-[1.02]"
-                    : "bg-white/80 dark:bg-white/5 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-white/10 hover:border-[#A18CD1]"
+                    : "bg-white/80 dark:bg-white/[0.04] text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-white/10 hover:border-[#A18CD1]"
                 }`}
               >
                 <TabIcon className="w-4 h-4" />
@@ -223,10 +224,10 @@ export function GallerySection() {
             <div
               key={item.id}
               onClick={() => setSelectedItem(item)}
-              className="group relative rounded-3xl overflow-hidden bg-white/90 dark:bg-[#110E23]/90 border border-slate-200/80 dark:border-white/10 shadow-xl backdrop-blur-xl hover:border-[#A18CD1]/60 transition-all duration-300 flex flex-col justify-between cursor-pointer"
+              className="group relative rounded-3xl overflow-hidden bg-white/90 dark:bg-[#0C091A]/90 border border-slate-200/80 dark:border-white/12 shadow-xl backdrop-blur-xl hover:border-[#A18CD1]/60 transition-all duration-300 flex flex-col justify-between cursor-pointer"
             >
               {/* Card Media Preview Canvas */}
-              <div className="relative h-60 sm:h-64 w-full overflow-hidden bg-gradient-to-b from-slate-200 to-slate-100 dark:from-[#0B0914] dark:to-[#17132D] flex items-center justify-center p-6">
+              <div className="relative h-60 sm:h-64 w-full overflow-hidden bg-gradient-to-b from-slate-200 to-slate-100 dark:from-[#07050E] dark:to-[#141028] flex items-center justify-center p-6">
                 
                 {/* Dynamic colored background glow */}
                 <div
@@ -234,7 +235,7 @@ export function GallerySection() {
                 />
 
                 {/* Tech Pattern Grid */}
-                <div className="absolute inset-0 pattern-carbon opacity-35 dark:opacity-25" />
+                <div className="absolute inset-0 pattern-grid-telemetry opacity-35 dark:opacity-25" />
 
                 {/* Graphic Representation */}
                 <div className="relative z-10 flex flex-col items-center justify-center text-center">
@@ -256,7 +257,7 @@ export function GallerySection() {
 
                 {/* Media Type Badge (Top Right) */}
                 <div className="absolute top-4 right-4 z-20">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-[10px] font-extrabold uppercase tracking-wider bg-black/60 text-white backdrop-blur-md border border-white/10">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-[10px] font-mono font-bold uppercase tracking-wider bg-black/60 text-white backdrop-blur-md border border-white/10">
                     {item.mediaType === "video" ? (
                       <>
                         <Play className="w-3 h-3 text-[#FF9A9E] fill-current" />
@@ -264,7 +265,7 @@ export function GallerySection() {
                       </>
                     ) : (
                       <>
-                        <ImageIcon className="w-3 h-3 text-[#8FD3F4]" />
+                        <Camera className="w-3 h-3 text-[#8FD3F4]" />
                         <span>High-Res</span>
                       </>
                     )}
@@ -273,7 +274,7 @@ export function GallerySection() {
 
                 {/* Category Badge (Top Left) */}
                 <div className="absolute top-4 left-4 z-20">
-                  <span className="px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase tracking-wider bg-white/90 dark:bg-[#0B0914]/90 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-white/10">
+                  <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold uppercase tracking-wider bg-white/90 dark:bg-[#07050E]/90 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-white/10">
                     {item.categoryLabel}
                   </span>
                 </div>
@@ -281,9 +282,9 @@ export function GallerySection() {
 
               {/* Card Meta Content */}
               <div className="p-6">
-                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
+                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2 font-mono">
                   <span className="font-semibold text-[#A18CD1]">{item.materialBrand}</span>
-                  <span className="text-[10px] uppercase font-mono">{item.finishType}</span>
+                  <span className="text-[10px] uppercase">{item.finishType}</span>
                 </div>
 
                 <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-[#A18CD1] transition-colors line-clamp-1 mb-3">
@@ -295,7 +296,7 @@ export function GallerySection() {
                 </p>
 
                 <div className="pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
-                  <span className="flex items-center gap-1.5 text-emerald-500">
+                  <span className="flex items-center gap-1.5 text-emerald-500 font-mono text-[11px]">
                     <CheckCircle2 className="w-3.5 h-3.5" /> Showroom Ready
                   </span>
                   <span className="text-[#A18CD1] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
@@ -310,20 +311,20 @@ export function GallerySection() {
         {/* LIGHTBOX MODAL DETAIL PORTOFOLIO */}
         {selectedItem && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-            <div className="relative w-full max-w-2xl rounded-3xl bg-white dark:bg-[#120F24] border border-slate-200 dark:border-white/15 p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="relative w-full max-w-2xl rounded-3xl bg-white dark:bg-[#0C091A] border border-slate-200 dark:border-white/15 p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
               
               {/* Close Button */}
               <button
                 type="button"
                 onClick={() => setSelectedItem(null)}
-                className="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white transition-colors"
+                className="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
                 aria-label="Tutup Detail"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <div className="pr-8 mb-6">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#A18CD1] block mb-1">
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#A18CD1] block mb-1">
                   {selectedItem.categoryLabel} // {selectedItem.vehicleModel}
                 </span>
                 <h3 className="text-2xl font-black text-slate-900 dark:text-white">
@@ -332,7 +333,7 @@ export function GallerySection() {
               </div>
 
               {/* Showcase Banner */}
-              <div className="relative h-56 rounded-2xl overflow-hidden bg-gradient-to-r from-slate-900 to-[#17132D] flex items-center justify-center p-6 mb-6">
+              <div className="relative h-56 rounded-2xl overflow-hidden bg-gradient-to-r from-slate-900 to-[#141026] flex items-center justify-center p-6 mb-6">
                 <div
                   className={`absolute inset-0 bg-gradient-to-tr ${selectedItem.gradient} opacity-30 blur-2xl`}
                 />
@@ -354,14 +355,14 @@ export function GallerySection() {
 
               {/* Specs Grid */}
               <div className="grid grid-cols-2 gap-3 mb-6">
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/60 dark:border-white/5">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Merk Bahan</span>
+                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/5">
+                  <span className="text-[10px] uppercase font-mono font-bold text-slate-400 block">Merk Bahan</span>
                   <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
                     {selectedItem.materialBrand}
                   </span>
                 </div>
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/60 dark:border-white/5">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Karakter Finishing</span>
+                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/5">
+                  <span className="text-[10px] uppercase font-mono font-bold text-slate-400 block">Karakter Finishing</span>
                   <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
                     {selectedItem.finishType}
                   </span>
@@ -375,7 +376,7 @@ export function GallerySection() {
                 </p>
 
                 <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-white/10">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 block">
                     Poin Pengerjaan Studio:
                   </span>
                   {selectedItem.transformationHighlights.map((pt, idx) => (

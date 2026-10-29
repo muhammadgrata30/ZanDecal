@@ -10,7 +10,7 @@ import { Footer } from "../components/Footer";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8F9FE] dark:bg-[#0B0914] text-slate-900 dark:text-[#F4F3FA] transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-[#F8F9FE] dark:bg-[#07050E] text-slate-900 dark:text-[#F4F3FA] transition-colors duration-300 relative selection:bg-[#A18CD1]/30 selection:text-white">
       {/* Floating Glassmorphism Navbar with Peeling Sticker Logo & Theme Switcher */}
       <Navbar />
 

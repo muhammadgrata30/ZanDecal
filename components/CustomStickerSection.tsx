@@ -1,13 +1,14 @@
 "use client";
 
 import React from "react";
-import { Sticker, Scissors, Trophy, Truck, ShieldAlert, Sparkles, CheckCircle2, ChevronRight } from "lucide-react";
+import { Sticker, Scissors, Trophy, Truck, Sparkles, CheckCircle2, ChevronRight, Cpu } from "lucide-react";
 
 const STICKER_SERVICES = [
   {
     icon: Scissors,
     title: "Precision Die-Cut Decal",
     badge: "Vector Cutting CNC",
+    specCode: "TOLERANCE // ±0.1MM",
     description:
       "Stiker potongan presisi tanpa background transparan. Sangat cocok untuk logo sponsor, tipografi custom, striping velg, dan nomor start balap.",
     gradient: "from-[#FF9A9E] to-[#A18CD1]",
@@ -21,6 +22,7 @@ const STICKER_SERVICES = [
     icon: Trophy,
     title: "Motorsport & Livery Balap",
     badge: "Track & Circuit Grade",
+    specCode: "CIRCUIT SPEC // FIA-READY",
     description:
       "Desain grafis livery lengkap untuk mobil balap turing, drift, drag, dan motor sport sirkuit dengan penempatan sponsor aerodinamis.",
     gradient: "from-[#A18CD1] to-[#8FD3F4]",
@@ -34,6 +36,7 @@ const STICKER_SERVICES = [
     icon: Truck,
     title: "Commercial Fleet Branding",
     badge: "Armada Bisnis",
+    specCode: "FLEET SPEC // HEAVY DUTY",
     description:
       "Transformasi visual armada niaga (van, truk box, mobil operasional kantor) menjadi media promosi berjalan yang menarik perhatian publik.",
     gradient: "from-[#8FD3F4] to-[#FF9A9E]",
@@ -47,6 +50,7 @@ const STICKER_SERVICES = [
     icon: Sparkles,
     title: "Helmet & Visor Decal",
     badge: "Aerodynamic Fit",
+    specCode: "AERO // CURVATURE MAPPING",
     description:
       "Kustomisasi livery helm full face maupun open face dengan lekukan tajam, striping visor anti-silau, dan emblem personal inisial rider.",
     gradient: "from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4]",
@@ -62,16 +66,16 @@ export function CustomStickerSection() {
   return (
     <section id="custom-sticker" className="py-24 relative overflow-hidden">
       {/* Background radial glow */}
-      <div className="absolute top-1/2 left-0 w-80 h-80 bg-[#FF9A9E]/10 blur-[130px] rounded-full pointer-events-none -z-10" />
-      <div className="absolute bottom-10 right-0 w-96 h-96 bg-[#A18CD1]/15 blur-[140px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-1/2 left-0 w-96 h-96 bg-[#FF9A9E]/10 blur-[150px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute bottom-10 right-0 w-[450px] h-[450px] bg-[#A18CD1]/12 blur-[150px] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-white/5 border border-[#A18CD1]/30 backdrop-blur-md mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-white/5 border border-[#A18CD1]/30 backdrop-blur-md mb-4 shadow-sm">
             <Sticker className="w-4 h-4 text-[#FF9A9E]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
               Custom Decal & Cutting
             </span>
           </div>
@@ -79,31 +83,36 @@ export function CustomStickerSection() {
             Setiap Detail,{" "}
             <span className="gradient-zan-text">Dibuat Khusus Untuk Anda</span>
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300">
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
             Dari satu stiker logo eksklusif hingga striping balap satu set lengkap. Kami mewujudkan imajinasi grafis otomotif Anda dengan presisi pisau plotter mutakhir.
           </p>
         </div>
 
         {/* 4 Service Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-7 sm:gap-8">
           {STICKER_SERVICES.map((srv, idx) => {
             const IconComponent = srv.icon;
             return (
               <div
                 key={idx}
-                className="group relative rounded-3xl p-7 sm:p-9 bg-white/90 dark:bg-[#110E23]/90 border border-slate-200/80 dark:border-white/10 shadow-xl backdrop-blur-xl hover:border-[#A18CD1]/60 transition-all duration-300 flex flex-col justify-between"
+                className="group relative rounded-3xl p-7 sm:p-9 bg-white/90 dark:bg-[#0C091A]/90 border border-slate-200/80 dark:border-white/12 shadow-xl backdrop-blur-xl hover:border-[#A18CD1]/50 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-6">
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#FF9A9E]/20 via-[#A18CD1]/20 to-[#8FD3F4]/20 border border-[#A18CD1]/30 flex items-center justify-center text-[#A18CD1] group-hover:scale-110 transition-transform">
                       <IconComponent className="w-6 h-6" />
                     </div>
-                    <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10">
-                      {srv.badge}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500 uppercase tracking-wider hidden sm:block">
+                        {srv.specCode}
+                      </span>
+                      <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10">
+                        {srv.badge}
+                      </span>
+                    </div>
                   </div>
 
-                  <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mb-3">
+                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mb-3">
                     {srv.title}
                   </h3>
                   <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">

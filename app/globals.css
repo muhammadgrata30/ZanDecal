@@ -4,39 +4,48 @@
 
 @theme {
   --color-studio: #F8F9FE;
-  --color-midnight: #0B0914;
+  --color-midnight: #07050E;
   --color-zan-pink: #FF9A9E;
   --color-zan-lavender: #A18CD1;
   --color-zan-cyan: #8FD3F4;
+  --color-zan-magenta: #F43F5E;
+  --color-zan-dark: #0E0B1A;
 }
 
 :root {
   --bg-primary: #F8F9FE;
-  --bg-card: #FFFFFF;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #F1F3FA;
   --bg-card-glass: rgba(255, 255, 255, 0.85);
-  --border-subtle: rgba(161, 140, 209, 0.2);
-  --text-main: #0F0E17;
-  --text-muted: #595868;
-  --nav-glass: rgba(248, 249, 254, 0.78);
-  --accent-glow: rgba(161, 140, 209, 0.15);
+  --border-subtle: rgba(161, 140, 209, 0.18);
+  --border-strong: rgba(161, 140, 209, 0.35);
+  --text-main: #0C0A14;
+  --text-muted: #535164;
+  --text-subtle: #7A788E;
+  --nav-glass: rgba(248, 249, 254, 0.82);
+  --accent-glow: rgba(161, 140, 209, 0.18);
 }
 
 html.dark {
-  --bg-primary: #0B0914;
-  --bg-card: rgba(18, 15, 32, 0.75);
-  --bg-card-glass: rgba(18, 15, 32, 0.65);
-  --border-subtle: rgba(161, 140, 209, 0.22);
+  --bg-primary: #07050E;
+  --bg-surface: #0E0B1A;
+  --bg-surface-elevated: #141026;
+  --bg-card-glass: rgba(14, 11, 26, 0.72);
+  --border-subtle: rgba(161, 140, 209, 0.15);
+  --border-strong: rgba(161, 140, 209, 0.32);
   --text-main: #F4F3FA;
-  --text-muted: #9E9BB2;
-  --nav-glass: rgba(11, 9, 20, 0.78);
-  --accent-glow: rgba(161, 140, 209, 0.25);
+  --text-muted: #A3A0B8;
+  --text-subtle: #6D6A82;
+  --nav-glass: rgba(7, 5, 14, 0.82);
+  --accent-glow: rgba(161, 140, 209, 0.22);
 }
 
 body {
   background-color: var(--bg-primary);
   color: var(--text-main);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   overflow-x: hidden;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 /* Custom Gradients */
@@ -50,6 +59,10 @@ body {
   background: linear-gradient(135deg, #FF9A9E 0%, #A18CD1 50%, #8FD3F4 100%);
 }
 
+.gradient-zan-reverse {
+  background: linear-gradient(135deg, #8FD3F4 0%, #A18CD1 50%, #FF9A9E 100%);
+}
+
 .gradient-zan-border-glow {
   position: relative;
 }
@@ -60,50 +73,65 @@ body {
   inset: -1px;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, #FF9A9E 0%, #A18CD1 50%, #8FD3F4 100%);
+  background: linear-gradient(135deg, rgba(255, 154, 158, 0.5) 0%, rgba(161, 140, 209, 0.6) 50%, rgba(143, 211, 244, 0.5) 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
 }
 
-/* Glassmorphism Classes */
+/* High-Precision Glassmorphism Panels */
 .glass-panel-light {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 10px 30px -10px rgba(161, 140, 209, 0.12);
+  box-shadow: 0 16px 40px -12px rgba(161, 140, 209, 0.12), 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .glass-panel-dark {
-  background: rgba(18, 15, 32, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(161, 140, 209, 0.2);
-  box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.5);
+  background: rgba(14, 11, 26, 0.68);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(161, 140, 209, 0.16);
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-/* Automotive Carbon Pattern simulation */
+/* Automotive Carbon & Plotter Grid Simulation */
 .pattern-carbon {
   background-image: 
-    radial-gradient(rgba(161, 140, 209, 0.08) 1px, transparent 1px),
-    radial-gradient(rgba(143, 211, 244, 0.08) 1px, transparent 1px);
-  background-size: 24px 24px;
-  background-position: 0 0, 12px 12px;
+    radial-gradient(rgba(161, 140, 209, 0.09) 1px, transparent 1px),
+    radial-gradient(rgba(143, 211, 244, 0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: 0 0, 14px 14px;
+}
+
+.pattern-grid-telemetry {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(161, 140, 209, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(161, 140, 209, 0.06) 1px, transparent 1px);
+}
+
+/* Technical Telemetry Badge */
+.telemetry-tag {
+  font-family: var(--font-geist-mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(161, 140, 209, 0.35);
+  background: rgba(161, 140, 209, 0.3);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(161, 140, 209, 0.6);
+  background: rgba(161, 140, 209, 0.55);
 }
