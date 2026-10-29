@@ -15,6 +15,8 @@ import {
   Eye,
   Send,
   Camera,
+  ArrowRight,
+  ShieldCheck,
 } from "lucide-react";
 
 interface PortfolioItem {
@@ -169,29 +171,29 @@ export function GallerySection() {
   return (
     <section id="galeri" className="py-24 relative overflow-hidden">
       {/* Background ambient radial glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-gradient-to-tr from-[#A18CD1]/12 via-[#8FD3F4]/10 to-transparent blur-[160px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[950px] h-[600px] bg-gradient-to-tr from-[#A18CD1]/12 via-[#8FD3F4]/10 to-transparent blur-[170px] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-white/5 border border-[#A18CD1]/30 backdrop-blur-md mb-4 shadow-sm">
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/80 dark:bg-white/5 border border-[#A18CD1]/40 backdrop-blur-md mb-4 shadow-sm">
             <ImageIcon className="w-4 h-4 text-[#8FD3F4]" />
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
-              Galeri Portofolio Customer
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-slate-800 dark:text-slate-200">
+              EDITORIAL LOOKBOOK & PORTFOLIO
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4 text-slate-900 dark:text-white">
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight mb-5 text-slate-900 dark:text-white">
             Karya Nyata &{" "}
             <span className="gradient-zan-text">Kepuasan Pelanggan</span>
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
             Jelajahi transformasi visual mobil sport, motor sirkuit, dan custom sticker hasil pengerjaan studio Zan Decal dengan bahan Oracal, Maxdecal, dan TeckWrap.
           </p>
         </div>
 
         {/* Filter Tabs: Semua, Mobil, Motor, Custom Sticker */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-12">
+        <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 mb-14">
           {[
             { id: "semua", label: "Semua Karya", icon: Sparkles },
             { id: "mobil", label: "Mobil (BYD & Sport)", icon: Car },
@@ -218,8 +220,69 @@ export function GallerySection() {
           })}
         </div>
 
+        {/* FEATURED SPOTLIGHT CARD (When in 'semua' or 'mobil') */}
+        {(activeFilter === "semua" || activeFilter === "mobil") && (
+          <div
+            onClick={() => setSelectedItem(PORTFOLIO_DATA[0])}
+            className="mb-12 rounded-[2.5rem] p-7 sm:p-10 bg-white/90 dark:bg-[#0C091A]/90 border border-slate-200/80 dark:border-white/12 shadow-2xl backdrop-blur-2xl cursor-pointer hover:border-[#A18CD1]/70 transition-all group overflow-hidden relative"
+          >
+            {/* Ambient dynamic glow */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#FF9A9E]/15 via-[#A18CD1]/20 to-transparent blur-2xl pointer-events-none" />
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-7 space-y-4">
+                <div className="flex items-center gap-3">
+                  <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-pink-500/15 text-[#FF9A9E] border border-pink-500/25">
+                    FEATURED ATELIER BUILD
+                  </span>
+                  <span className="text-xs font-mono text-slate-400">
+                    BYD SEAL EV // TRI-TONE
+                  </span>
+                </div>
+                <h3 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white group-hover:text-[#A18CD1] transition-colors">
+                  {PORTFOLIO_DATA[0].title}
+                </h3>
+                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                  {PORTFOLIO_DATA[0].description}
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 font-mono text-xs text-slate-700 dark:text-slate-300">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>Knifeless Tape</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>Ceramic Topcoat</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>Garansi Resmi</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="lg:col-span-5 relative h-64 sm:h-72 rounded-3xl overflow-hidden bg-gradient-to-tr from-slate-900 to-[#17112E] flex items-center justify-center p-6 border border-white/10">
+                <div className="absolute inset-0 pattern-grid-telemetry opacity-30" />
+                <div className="relative z-10 text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4] p-0.5 mx-auto mb-3 shadow-2xl group-hover:scale-110 transition-transform">
+                    <div className="w-full h-full rounded-2xl bg-black/85 flex items-center justify-center text-white">
+                      <Play className="w-8 h-8 text-[#8FD3F4] fill-current ml-0.5" />
+                    </div>
+                  </div>
+                  <div className="text-sm font-bold text-white">
+                    Tonton Video Dokumentasi
+                  </div>
+                  <div className="text-xs font-mono text-slate-400 mt-0.5">
+                    {PORTFOLIO_DATA[0].videoDuration} • 4K Cinematic
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Portfolio Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
           {filteredData.map((item) => (
             <div
               key={item.id}
