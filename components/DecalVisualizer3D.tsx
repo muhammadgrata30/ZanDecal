@@ -1,9 +1,8 @@
 "use client";
 
-import React, { Suspense, useEffect, useState, useRef, useMemo } from "react";
+import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import * as THREE from "three";
-import { Canvas } from "@react-three/fiber";
-import { useGLTF, Stage, OrbitControls } from "@react-three/drei";
 import {
   Sparkles,
   Send,
@@ -12,13 +11,11 @@ import {
   Palette,
   Check,
   MousePointerClick,
-  Info,
   Car,
   ExternalLink,
   ShieldCheck,
 } from "lucide-react";
 
-// Types
 export type FinishType = "Glossy" | "Matte" | "Satin" | "Metallic";
 
 export interface DecalColor {
@@ -28,221 +25,21 @@ export interface DecalColor {
   desc: string;
 }
 
-// 5 Warna Pilihan Sesuai Ketentuan
+// 5 Pilihan Warna Decal
 export const DECAL_COLORS: DecalColor[] = [
-  {
-    name: "Soft Pink",
-    hex: "#FF9A9E",
-    accent: "from-[#FF9A9E] to-[#FECFEF]",
-    desc: "Zan Signature Pastel Pink",
-  },
-  {
-    name: "Lavender Purple",
-    hex: "#A18CD1",
-    accent: "from-[#A18CD1] to-[#FBC2EB]",
-    desc: "Cyber Studio Lavender",
-  },
-  {
-    name: "Sky Blue",
-    hex: "#8FD3F4",
-    accent: "from-[#8FD3F4] to-[#84FAB0]",
-    desc: "Aerodynamic Sky Cyan",
-  },
-  {
-    name: "Cyber Magenta",
-    hex: "#F43F5E",
-    accent: "from-[#F43F5E] to-[#FB7185]",
-    desc: "Vibrant Motorsport Magenta",
-  },
-  {
-    name: "Stealth Black",
-    hex: "#1E1E24",
-    accent: "from-[#1E1E24] to-[#2E2E38]",
-    desc: "Midnight Satin Stealth",
-  },
+  { name: "Soft Pink", hex: "#FF9A9E", accent: "from-[#FF9A9E] to-[#FECFEF]", desc: "Zan Signature Pastel Pink" },
+  { name: "Lavender Purple", hex: "#A18CD1", accent: "from-[#A18CD1] to-[#FBC2EB]", desc: "Cyber Studio Lavender" },
+  { name: "Sky Blue", hex: "#8FD3F4", accent: "from-[#8FD3F4] to-[#84FAB0]", desc: "Aerodynamic Sky Cyan" },
+  { name: "Cyber Magenta", hex: "#F43F5E", accent: "from-[#F43F5E] to-[#FB7185]", desc: "Vibrant Motorsport Magenta" },
+  { name: "Stealth Black", hex: "#1E1E24", accent: "from-[#1E1E24] to-[#2E2E38]", desc: "Midnight Satin Stealth" },
 ];
 
-export const FINISH_SPECS: Record<
-  FinishType,
-  { roughness: number; metalness: number; label: string; desc: string }
-> = {
-  Glossy: {
-    roughness: 0.1,
-    metalness: 0.2,
-    label: "Glossy",
-    desc: "Refleksi jernih cermin wet-look",
-  },
-  Matte: {
-    roughness: 0.7,
-    metalness: 0.05,
-    label: "Matte",
-    desc: "Doff beludru anti-silau",
-  },
-  Satin: {
-    roughness: 0.35,
-    metalness: 0.25,
-    label: "Satin",
-    desc: "Semi-gloss mewah sentuhan sutra",
-  },
-  Metallic: {
-    roughness: 0.2,
-    metalness: 0.85,
-    label: "Metallic",
-    desc: "Pendaran butiran kristal metalik",
-  },
+export const FINISH_SPECS: Record<FinishType, { roughness: number; metalness: number; label: string; desc: string }> = {
+  Glossy: { roughness: 0.1, metalness: 0.2, label: "Glossy", desc: "Refleksi jernih cermin wet-look" },
+  Matte: { roughness: 0.7, metalness: 0.05, label: "Matte", desc: "Doff beludru anti-silau" },
+  Satin: { roughness: 0.35, metalness: 0.25, label: "Satin", desc: "Semi-gloss mewah sentuhan sutra" },
+  Metallic: { roughness: 0.2, metalness: 0.85, label: "Metallic", desc: "Pendaran butiran kristal metalik" },
 };
-
-// Helper: Terapkan warna, roughness, metalness ke material Three.js
-function applyDecalToMaterial(
-  mat: THREE.Material,
-  hexColor: string,
-  finish: FinishType
-) {
-  const spec = FINISH_SPECS[finish];
-  const targetColor = new THREE.Color(hexColor);
-
-  if ("color" in mat && mat.color instanceof THREE.Color) {
-    mat.color.copy(targetColor);
-  }
-  if ("roughness" in mat && typeof mat.roughness === "number") {
-    mat.roughness = spec.roughness;
-  }
-  if ("metalness" in mat && typeof mat.metalness === "number") {
-    mat.metalness = spec.metalness;
-  }
-  if ("clearcoat" in mat && typeof mat.clearcoat === "number") {
-    mat.clearcoat = finish === "Glossy" ? 1.0 : finish === "Satin" ? 0.4 : 0.0;
-  }
-  mat.needsUpdate = true;
-}
-
-// Sub-komponen 3D Model BYD Seal
-interface ModelProps {
-  color: DecalColor;
-  finish: FinishType;
-  clickedMesh: THREE.Mesh | null;
-  setClickedMesh: (mesh: THREE.Mesh | null) => void;
-  setMatchedCount: (count: number) => void;
-}
-
-function BydSealModel({
-  color,
-  finish,
-  clickedMesh,
-  setClickedMesh,
-  setMatchedCount,
-}: ModelProps) {
-  // Load model .glb dari public/models/byd-seal.glb
-  const { scene } = useGLTF("/models/byd-seal.glb");
-
-  // Filter Otomatis & Logging Mesh/Material
-  useEffect(() => {
-    if (!scene) return;
-
-    console.group("🏁 [Zan Decal] Inspeksi Mesh & Material GLB: BYD Seal");
-    console.log("Total Nodes di Scene:", scene.children.length);
-
-    // Kata kunci target bodi
-    const includeKeywords = ["body", "paint", "car", "shell", "coat"];
-    // Kata kunci yang harus diabaikan
-    const excludeKeywords = [
-      "glass",
-      "window",
-      "tire",
-      "wheel",
-      "rim",
-      "light",
-      "interior",
-      "black",
-    ];
-
-    let matchCount = 0;
-
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        const meshName = (mesh.name || "").toLowerCase();
-
-        // Ambil material
-        const materials = Array.isArray(mesh.material)
-          ? mesh.material
-          : [mesh.material];
-
-        materials.forEach((mat, idx) => {
-          if (!mat) return;
-          const matName = (mat.name || "").toLowerCase();
-
-          // Tampilkan log semua nama mesh dan material di console
-          console.log(
-            `📦 Mesh: "${mesh.name}" | Material[${idx}]: "${mat.name}" (${mat.type})`
-          );
-
-          // Cek apakah mengandung kata kunci target
-          const isTarget =
-            includeKeywords.some(
-              (kw) => meshName.includes(kw) || matName.includes(kw)
-            ) &&
-            !excludeKeywords.some(
-              (kw) => meshName.includes(kw) || matName.includes(kw)
-            );
-
-          if (isTarget) {
-            matchCount++;
-            applyDecalToMaterial(mat, color.hex, finish);
-          }
-        });
-      }
-    });
-
-    console.log(`✅ Otomatis terapkan decal pada ${matchCount} mesh/material bodi.`);
-    console.groupEnd();
-
-    setMatchedCount(matchCount);
-  }, [scene, color, finish, setMatchedCount]);
-
-  // Efek kedua: jika user pernah mengklik mesh tertentu (Click-to-Paint)
-  useEffect(() => {
-    if (!clickedMesh) return;
-    const materials = Array.isArray(clickedMesh.material)
-      ? clickedMesh.material
-      : [clickedMesh.material];
-
-    materials.forEach((mat) => {
-      if (mat) {
-        applyDecalToMaterial(mat, color.hex, finish);
-      }
-    });
-  }, [clickedMesh, color, finish]);
-
-  // Handler Click-to-Paint Cadangan
-  const handlePointerDown = (e: any) => {
-    e.stopPropagation();
-    if (e.object && e.object.isMesh) {
-      const targetMesh = e.object as THREE.Mesh;
-      console.log("🎯 [Click-to-Paint] Target mesh dipilih:", targetMesh.name);
-      setClickedMesh(targetMesh);
-
-      // Langsung beri warna
-      const materials = Array.isArray(targetMesh.material)
-        ? targetMesh.material
-        : [targetMesh.material];
-      materials.forEach((mat) => {
-        if (mat) applyDecalToMaterial(mat, color.hex, finish);
-      });
-    }
-  };
-
-  return (
-    <primitive
-      object={scene}
-      onPointerDown={handlePointerDown}
-      cursor="pointer"
-    />
-  );
-}
-
-// Preload model agar instan saat dibuka
-useGLTF.preload("/models/byd-seal.glb");
 
 // Indikator Loading Estetik
 function VisualizerLoader() {
@@ -264,7 +61,12 @@ function VisualizerLoader() {
   );
 }
 
-// Komponen Utama
+// Dynamic Client-Only Import untuk Kanvas 3D (Mencegah SSR Memory Overflow)
+const DecalCanvas3D = dynamic(() => import("./DecalCanvas3D"), {
+  ssr: false,
+  loading: () => <VisualizerLoader />,
+});
+
 export default function DecalVisualizer3D() {
   const [selectedColor, setSelectedColor] = useState<DecalColor>(DECAL_COLORS[0]);
   const [selectedFinish, setSelectedFinish] = useState<FinishType>("Glossy");
@@ -272,12 +74,10 @@ export default function DecalVisualizer3D() {
   const [matchedCount, setMatchedCount] = useState<number>(0);
   const [isMounted, setIsMounted] = useState<boolean>(false);
 
-  // Hindari masalah SSR canvas pada Next.js
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // WhatsApp Order Handler
   const handleOrderWhatsApp = () => {
     const text =
       `Halo Studio Zan Decal, saya tertarik memesan decal dari 3D Visualizer:%0A%0A` +
@@ -292,7 +92,6 @@ export default function DecalVisualizer3D() {
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      {/* Container Utama Glassmorphism */}
       <div className="relative rounded-3xl overflow-hidden bg-white/90 dark:bg-[#110E23]/90 border border-slate-200/80 dark:border-white/10 shadow-2xl backdrop-blur-2xl transition-colors duration-300">
         
         {/* Header Visualizer */}
@@ -318,7 +117,6 @@ export default function DecalVisualizer3D() {
             </div>
           </div>
 
-          {/* Status Target Badge */}
           <div className="flex items-center gap-2 text-xs">
             {clickedMesh ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/15 border border-[#A18CD1]/40 text-[#A18CD1] font-semibold">
@@ -345,39 +143,17 @@ export default function DecalVisualizer3D() {
         {/* 3D Canvas Area */}
         <div className="relative w-full h-[400px] sm:h-[480px] md:h-[540px] bg-gradient-to-b from-slate-100 via-slate-200/50 to-slate-100 dark:from-[#0B0914] dark:via-[#130F24] dark:to-[#0B0914] cursor-grab active:cursor-grabbing">
           {isMounted ? (
-            <Suspense fallback={<VisualizerLoader />}>
-              <Canvas
-                shadows
-                camera={{ position: [4, 2, 5], fov: 45 }}
-                gl={{ antialias: true, alpha: true }}
-              >
-                {/* Stage dari Drei: skala otomatis pas dan posisi otomatis di tengah */}
-                <Stage environment="city" intensity={0.6} adjustCamera={1.2}>
-                  <BydSealModel
-                    color={selectedColor}
-                    finish={selectedFinish}
-                    clickedMesh={clickedMesh}
-                    setClickedMesh={setClickedMesh}
-                    setMatchedCount={setMatchedCount}
-                  />
-                </Stage>
-
-                {/* OrbitControls Default */}
-                <OrbitControls
-                  makeDefault
-                  enablePan={false}
-                  minPolarAngle={Math.PI / 6}
-                  maxPolarAngle={Math.PI / 2 - 0.05}
-                  minDistance={2.5}
-                  maxDistance={9.0}
-                />
-              </Canvas>
-            </Suspense>
+            <DecalCanvas3D
+              color={selectedColor}
+              finish={selectedFinish}
+              clickedMesh={clickedMesh}
+              setClickedMesh={setClickedMesh}
+              setMatchedCount={setMatchedCount}
+            />
           ) : (
             <VisualizerLoader />
           )}
 
-          {/* Hint Navigasi */}
           <div className="absolute bottom-3 left-4 right-4 z-10 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 pointer-events-none">
             <span className="flex items-center gap-1.5 backdrop-blur-sm bg-white/70 dark:bg-black/50 px-2.5 py-1 rounded-lg">
               <RotateCw className="w-3 h-3 text-[#A18CD1]" /> Drag 360° untuk memutar sudut pandang
@@ -388,11 +164,11 @@ export default function DecalVisualizer3D() {
           </div>
         </div>
 
-        {/* UI CONTROL DOCK (Cyber-Pastel Theme) */}
+        {/* UI CONTROL DOCK */}
         <div className="p-6 sm:p-8 bg-white/95 dark:bg-[#120F24]/95 border-t border-slate-200/80 dark:border-white/10 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            {/* Pilihan Warna Decal (7 cols) */}
+            {/* Pilihan Warna Decal */}
             <div className="lg:col-span-7 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
@@ -404,7 +180,6 @@ export default function DecalVisualizer3D() {
                 </span>
               </div>
 
-              {/* Grid 5 Pilihan Warna */}
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
                 {DECAL_COLORS.map((col) => {
                   const isSelected = selectedColor.hex === col.hex;
@@ -439,14 +214,13 @@ export default function DecalVisualizer3D() {
               </div>
             </div>
 
-            {/* Pilihan Finishing (5 cols) */}
+            {/* Pilihan Finishing */}
             <div className="lg:col-span-5 space-y-3">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                 <Layers className="w-4 h-4 text-[#8FD3F4]" />
                 Tekstur Finishing Material:
               </span>
 
-              {/* 4 Pilihan Finishing */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {(["Glossy", "Matte", "Satin", "Metallic"] as FinishType[]).map((finish) => {
                   const isSelected = selectedFinish === finish;
@@ -473,7 +247,6 @@ export default function DecalVisualizer3D() {
                 })}
               </div>
 
-              {/* Info Garansi Non-Residu */}
               <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 pt-1">
                 <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
                 <span>Cast vinyl grade industri, 100% aman bagi cat asli BYD.</span>
@@ -482,7 +255,7 @@ export default function DecalVisualizer3D() {
 
           </div>
 
-          {/* Tombol Order Otomatis via WhatsApp */}
+          {/* Tombol Order WhatsApp */}
           <div className="pt-6 border-t border-slate-100 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-xs text-slate-500 dark:text-slate-400 text-center sm:text-left">
               Konfigurasi aktif: <strong className="text-slate-900 dark:text-white">{selectedColor.name}</strong> •{" "}
