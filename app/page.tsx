@@ -1,6 +1,6 @@
 import { Navbar } from "../components/Navbar";
 import { HeroSection } from "../components/HeroSection";
-import { VisualizerSection } from "../components/VisualizerSection";
+import DecalVisualizer3D from "../components/DecalVisualizer3D";
 import { MaterialSection } from "../components/MaterialSection";
 import { CustomStickerSection } from "../components/CustomStickerSection";
 import { GallerySection } from "../components/GallerySection";
@@ -19,8 +19,10 @@ export default function Home() {
         {/* Hero Section with Headline, Badge, and 2 CTAs */}
         <HeroSection />
 
-        {/* 3D Studio Visualizer Section */}
-        <VisualizerSection />
+        {/* 3D Decal Visualizer Section dengan Model Asli BYD Seal .GLB */}
+        <section id="3d-studio">
+          <DecalVisualizer3D />
+        </section>
 
         {/* Material Specification Showcase (No Pricing) */}
         <MaterialSection />

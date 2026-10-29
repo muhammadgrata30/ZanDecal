@@ -91,7 +91,24 @@ export default function DecalVisualizer3D() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      {/* Section Header */}
+      <div className="text-center max-w-3xl mx-auto mb-12">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-white/5 border border-[#A18CD1]/30 backdrop-blur-md mb-4 shadow-sm">
+          <Car className="w-4 h-4 text-[#A18CD1]" />
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+            3D Decal Visualizer Studio
+          </span>
+        </div>
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4 text-slate-900 dark:text-white">
+          Simulasi 3D Interaktif{" "}
+          <span className="gradient-zan-text">BYD Seal EV</span>
+        </h2>
+        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300">
+          Model 3D asli BYD Seal dengan refleksi studio real-time. Putar mobil 360°, coba kombinasi warna decal pastel & stealth, atau klik langsung bodi mobil untuk mewarnai part spesifik.
+        </p>
+      </div>
+
       <div className="relative rounded-3xl overflow-hidden bg-white/90 dark:bg-[#110E23]/90 border border-slate-200/80 dark:border-white/10 shadow-2xl backdrop-blur-2xl transition-colors duration-300">
         
         {/* Header Visualizer */}
