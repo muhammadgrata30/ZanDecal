@@ -1,14 +1,16 @@
 "use client";
 
-import React from "react";
-import { Sticker, Scissors, Trophy, Truck, Sparkles, CheckCircle2, ChevronRight, Cpu } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
+import { MotionHead, ScrollStage } from "./ScrollStage";
+import { Scissors, Trophy, Truck, Sparkles } from "lucide-react";
 
 const STICKER_SERVICES = [
   {
     icon: Scissors,
     title: "Precision Die-Cut Decal",
     badge: "Vector Cutting CNC",
-    specCode: "TOLERANCE // ±0.1MM",
+    specCode: "TOLERANCE // Â±0.1MM",
     description:
       "Stiker potongan presisi tanpa background transparan. Sangat cocok untuk logo sponsor, tipografi custom, striping velg, dan nomor start balap.",
     gradient: "from-[#FF9A9E] to-[#A18CD1]",
@@ -48,14 +50,14 @@ const STICKER_SERVICES = [
   },
   {
     icon: Sparkles,
-    title: "Helmet & Visor Decal",
-    badge: "Aerodynamic Fit",
-    specCode: "AERO // CURVATURE MAPPING",
+    title: "Full Body Wrap",
+    badge: "Full Coverage",
+    specCode: "WRAP // BODY MAPPING",
     description:
-      "Kustomisasi livery helm full face maupun open face dengan lekukan tajam, striping visor anti-silau, dan emblem personal inisial rider.",
+      "Wrapping seluruh bodi mobil dan motor dengan warna pilihan, mengikuti lekukan panel dan karakter kendaraan.",
     gradient: "from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4]",
     points: [
-      "Vinyl super elastis anti-kerut pada kurva helm bulat",
+      "Vinyl elastis mengikuti lekukan panel kendaraan",
       "Lapisan finishing gloss kristal atau ultra-matte",
       "Perlindungan tambahan terhadap benturan kerikil kecil",
     ],
@@ -63,87 +65,26 @@ const STICKER_SERVICES = [
 ];
 
 export function CustomStickerSection() {
-  return (
-    <section id="custom-sticker" className="py-24 relative overflow-hidden">
-      {/* Background radial glow */}
-      <div className="absolute top-1/2 left-0 w-96 h-96 bg-[#FF9A9E]/10 blur-[150px] rounded-full pointer-events-none -z-10" />
-      <div className="absolute bottom-10 right-0 w-[450px] h-[450px] bg-[#A18CD1]/12 blur-[150px] rounded-full pointer-events-none -z-10" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-white/5 border border-[#A18CD1]/30 backdrop-blur-md mb-4 shadow-sm">
-            <Sticker className="w-4 h-4 text-[#FF9A9E]" />
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
-              Custom Decal & Cutting
-            </span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4 text-slate-900 dark:text-white">
-            Setiap Detail,{" "}
-            <span className="gradient-zan-text">Dibuat Khusus Untuk Anda</span>
-          </h2>
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
-            Dari satu stiker logo eksklusif hingga striping balap satu set lengkap. Kami mewujudkan imajinasi grafis otomotif Anda dengan presisi pisau plotter mutakhir.
-          </p>
+  return <section id="custom-sticker" className="editorial-custom">
+    <ScrollStage className="vehicle-stage" distance={3.2}>
+      <div className="custom-scene">
+        <div className="custom-copy"><span className="editorial-kicker">04 / CUSTOM STICKER</span>
+          <MotionHead><span><i>Karakter</i> baru.</span><span>Standar yang sama.</span></MotionHead>
+          <p>Premium automotive wrap untuk kendaraan yang lebih personal. Pilih warna, eksplorasi desain, dan wujudkan karakter baru bersama Zan Decal.</p>
+          <a href="#konsultasi" className="editorial-link">Rancang livery Anda <ArrowUpRight size={18}/></a>
         </div>
-
-        {/* 4 Service Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-7 sm:gap-8">
-          {STICKER_SERVICES.map((srv, idx) => {
-            const IconComponent = srv.icon;
-            return (
-              <div
-                key={idx}
-                className="group relative rounded-3xl p-7 sm:p-9 bg-white/90 dark:bg-[#0C091A]/90 border border-slate-200/80 dark:border-white/12 shadow-xl backdrop-blur-xl hover:border-[#A18CD1]/50 transition-all duration-300 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#FF9A9E]/20 via-[#A18CD1]/20 to-[#8FD3F4]/20 border border-[#A18CD1]/30 flex items-center justify-center text-[#A18CD1] group-hover:scale-110 transition-transform">
-                      <IconComponent className="w-6 h-6" />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500 uppercase tracking-wider hidden sm:block">
-                        {srv.specCode}
-                      </span>
-                      <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/10">
-                        {srv.badge}
-                      </span>
-                    </div>
-                  </div>
-
-                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mb-3">
-                    {srv.title}
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
-                    {srv.description}
-                  </p>
-
-                  <div className="space-y-2.5 pt-4 border-t border-slate-100 dark:border-white/10">
-                    {srv.points.map((pt, pIdx) => (
-                      <div key={pIdx} className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
-                        <CheckCircle2 className="w-4 h-4 text-[#A18CD1] shrink-0" />
-                        <span>{pt}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-8 pt-4">
-                  <a
-                    href="#konsultasi"
-                    className="inline-flex items-center gap-2 text-xs font-bold text-[#A18CD1] group-hover:text-[#8FD3F4] transition-colors"
-                  >
-                    <span>Konsultasikan Kebutuhan Ini</span>
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </a>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
+        <div className="vehicle-runway" aria-label="Eksplorasi wrapping motor dan mobil">
+          <div className="vehicle-motor"><Image src="/images/sticker-r6-blue.png" alt="Yamaha YZF-R6 dengan livery sky blue dan hitam" fill sizes="94vw"/></div>
+          <div className="vehicle-car"><Image src="/images/sticker-ferrari-pink.png" alt="Ferrari 488 GTB dengan wrapping soft pink dan hitam" fill sizes="94vw"/></div>
+        </div><span className="scene-caption">DETAIL YANG<br/>MEMBENTUK KARAKTER.</span>
+        <div className="scene-progress" aria-hidden="true"><span/></div>
       </div>
-    </section>
-  );
+    </ScrollStage>
+    <div className="custom-services"><span className="editorial-kicker">LAYANAN KAMI</span>
+      {STICKER_SERVICES.map((service,index)=><details key={service.title} className="service-item motion-reveal">
+        <summary><span>0{index+1}</span><h3>{["Cutting Sticker","Custom Livery","Branding Armada","Full Wrap"][index]}</h3><ArrowUpRight size={18}/></summary>
+        <div><p>{service.description}</p><ul>{service.points.map(point=><li key={point}>{point}</li>)}</ul><a className="editorial-link" href="#konsultasi">Konsultasikan kebutuhan ini <ArrowUpRight size={16}/></a></div>
+      </details>)}
+    </div>
+  </section>;
 }

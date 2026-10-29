@@ -2,8 +2,8 @@
 
 import React, { useEffect } from "react";
 import * as THREE from "three";
-import { Canvas } from "@react-three/fiber";
-import { useGLTF, Stage, OrbitControls } from "@react-three/drei";
+import { Canvas, type ThreeEvent } from "@react-three/fiber";
+import { useGLTF, Stage, OrbitControls, Environment, Lightformer } from "@react-three/drei";
 import { FinishType, DecalColor, FINISH_SPECS } from "./DecalVisualizer3D";
 
 interface DecalCanvas3DProps {
@@ -33,7 +33,7 @@ function applyDecalToMaterial(
     mat.metalness = spec.metalness;
   }
   if ("clearcoat" in mat && typeof mat.clearcoat === "number") {
-    mat.clearcoat = finish === "Glossy" ? 1.0 : finish === "Satin" ? 0.4 : 0.0;
+    mat.clearcoat = spec.coat;
   }
   mat.needsUpdate = true;
 }
@@ -119,9 +119,9 @@ function BydSealModel({
   }, [clickedMesh, color, finish]);
 
   // 3. Pointer event handler untuk Click-to-Paint
-  const handlePointerDown = (e: any) => {
+  const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
-    if (e.object && e.object.isMesh) {
+    if (e.object instanceof THREE.Mesh) {
       const targetMesh = e.object as THREE.Mesh;
       setClickedMesh(targetMesh);
       const materials = Array.isArray(targetMesh.material)
@@ -149,9 +149,14 @@ export default function DecalCanvas3D(props: DecalCanvas3DProps) {
       camera={{ position: [4, 2, 5], fov: 45 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
     >
-      <Stage environment="city" intensity={0.6} adjustCamera={1.2}>
+      <Stage environment={null} intensity={0.6} adjustCamera={1.2}>
         <BydSealModel {...props} />
       </Stage>
+      <Environment resolution={128} frames={1}>
+        <Lightformer intensity={3} position={[0, 5, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[10, 5, 1]} />
+        <Lightformer intensity={2} position={[-5, 2, 0]} rotation={[0, Math.PI / 2, 0]} scale={[8, 3, 1]} />
+        <Lightformer intensity={2} position={[5, 2, 0]} rotation={[0, -Math.PI / 2, 0]} scale={[8, 3, 1]} />
+      </Environment>
       <OrbitControls
         makeDefault
         enablePan={false}

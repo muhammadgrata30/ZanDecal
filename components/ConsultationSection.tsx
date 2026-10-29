@@ -1,249 +1,61 @@
-"use client";
-
-import React, { useState } from "react";
-import { MessageSquare, Send, Sparkles, MapPin, Phone, Clock, ShieldCheck, CheckCircle2 } from "lucide-react";
-
+﻿"use client";
+import { useState, type FormEvent } from "react";
+import Image from "next/image";
+import { ArrowUpRight, CheckCircle2, Clock, MapPin, Phone, ShieldCheck } from "lucide-react";
+import { MotionHead, ScrollStage } from "./ScrollStage";
+const VEHICLES = ["Mobil Sport / Coupe", "Superbike / Motor Sport", "Sedan / Hatchback", "SUV / Crossover", "Armada Bisnis / Fleet", "Lainnya"];
+const SERVICES = ["Full Wrap Livery", "Custom Striping & Racing Decal", "Precision Die-Cut Cutting Sticker", "Paint Protection Film (PPF)"];
+const FINISHES = ["Signature Chameleon", "Ultra High-Gloss", "Satin Stealth Matte", "Prismatic Holo"];
 export function ConsultationSection() {
-  const [vehicleType, setVehicleType] = useState("Mobil Sport / Coupe");
-  const [serviceType, setServiceType] = useState("Full Wrap Livery");
-  const [finishType, setFinishType] = useState("Signature Chameleon");
+  const [vehicleType, setVehicleType] = useState(VEHICLES[0]);
+  const [services, setServices] = useState([SERVICES[0]]);
+  const [finishType, setFinishType] = useState(FINISHES[0]);
+  const [make, setMake] = useState("");
+  const [model, setModel] = useState("");
+  const [year, setYear] = useState("");
   const [notes, setNotes] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!services.length) return;
+    const message = ["Halo Studio Zan Decal, saya ingin konsultasi custom decal:",
+      `- Tipe Kendaraan: ${vehicleType}`, `- Merek / Model / Tahun: ${[make, model, year].filter(Boolean).join(" / ") || "Belum ditentukan"}`,
+      `- Layanan: ${services.join(", ")}`, `- Finishing: ${finishType}`, `- Catatan: ${notes || "Belum ada catatan khusus"}`].join("\n");
+    window.open(`https://wa.me/6281234567890?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
     setIsSubmitted(true);
-    // Construct WhatsApp message URL
-    const message = `Halo Studio Zan Decal, saya ingin konsultasi custom decal:%0A- Tipe Kendaraan: ${vehicleType}%0A- Layanan: ${serviceType}%0A- Finishing: ${finishType}%0A- Catatan: ${notes || "Belum ada catatan khusus"}`;
-    window.open(`https://wa.me/6281234567890?text=${message}`, "_blank");
   };
-
-  return (
-    <section id="konsultasi" className="py-24 relative overflow-hidden">
-      {/* Background radial glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-gradient-to-tr from-[#FF9A9E]/12 via-[#A18CD1]/18 to-[#8FD3F4]/12 blur-[170px] rounded-full pointer-events-none -z-10" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-white/5 border border-[#A18CD1]/30 backdrop-blur-md mb-4 shadow-sm">
-            <MessageSquare className="w-4 h-4 text-[#A18CD1]" />
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
-              Konsultasi & Penjadwalan
-            </span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4 text-slate-900 dark:text-white">
-            Wujudkan Desain Impian{" "}
-            <span className="gradient-zan-text">Bersama Tim Zan</span>
-          </h2>
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
-            Diskusikan kebutuhan stiker dan decal kendaraan Anda langsung dengan lead designer kami. 
-            Mulai dari konsep sketsa, pemilihan warna, hingga fitting mockup digital.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* Left Column: Form Brief (7 cols) */}
-          <div className="lg:col-span-7 rounded-3xl p-7 sm:p-10 bg-white/90 dark:bg-[#0C091A]/90 border border-slate-200/80 dark:border-white/12 shadow-2xl backdrop-blur-xl">
-            <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mb-2">
-              Kirim Brief Desain Anda
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-6">
-              Pilih spesifikasi awal kendaraan dan tim kami akan menghubungi Anda untuk pembahasan mockup 3D.
-            </p>
-
-            <form onSubmit={handleSubmit} className="space-y-5">
-              
-              {/* Tipe Kendaraan */}
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
-                  Tipe / Model Kendaraan
-                </label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {[
-                    "Mobil Sport / Coupe",
-                    "Superbike / Motor Sport",
-                    "Sedan / Hatchback",
-                    "SUV / Crossover",
-                    "Armada Bisnis / Fleet",
-                    "Lainnya",
-                  ].map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => setVehicleType(item)}
-                      className={`p-2.5 rounded-xl border text-xs font-semibold transition-all text-left truncate cursor-pointer ${
-                        vehicleType === item
-                          ? "bg-slate-100 dark:bg-white/10 border-[#A18CD1] text-slate-900 dark:text-white shadow-sm ring-1 ring-[#A18CD1]/40"
-                          : "bg-slate-50 dark:bg-white/[0.03] border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:border-slate-300"
-                      }`}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Layanan yang Diinginkan */}
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
-                  Jenis Layanan Decal
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    "Full Wrap Livery",
-                    "Custom Striping & Racing Decal",
-                    "Precision Die-Cut Cutting Sticker",
-                    "Paint Protection Film (PPF)",
-                  ].map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => setServiceType(item)}
-                      className={`p-2.5 rounded-xl border text-xs font-semibold transition-all text-left truncate cursor-pointer ${
-                        serviceType === item
-                          ? "bg-slate-100 dark:bg-white/10 border-[#A18CD1] text-slate-900 dark:text-white shadow-sm ring-1 ring-[#A18CD1]/40"
-                          : "bg-slate-50 dark:bg-white/[0.03] border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:border-slate-300"
-                      }`}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Finishing Diinginkan */}
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
-                  Karakter Finishing
-                </label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {[
-                    "Signature Chameleon",
-                    "Ultra High-Gloss",
-                    "Satin Stealth Matte",
-                    "Prismatic Holo",
-                  ].map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => setFinishType(item)}
-                      className={`p-2.5 rounded-xl border text-xs font-semibold transition-all text-center truncate cursor-pointer ${
-                        finishType === item
-                          ? "bg-slate-100 dark:bg-white/10 border-[#A18CD1] text-slate-900 dark:text-white shadow-sm ring-1 ring-[#A18CD1]/40"
-                          : "bg-slate-50 dark:bg-white/[0.03] border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:border-slate-300"
-                      }`}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Catatan Tambahan */}
-              <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
-                  Ide / Catatan Konsep Khusus (Opsional)
-                </label>
-                <textarea
-                  rows={3}
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Contoh: Honda CBR 250RR livery balap aksen ungu lavender, atau Porsche 911 decal sponsor minimalis..."
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#A18CD1]"
-                />
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                className="w-full inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl font-bold text-sm sm:text-base text-white bg-gradient-to-r from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4] shadow-lg shadow-[#A18CD1]/30 hover:shadow-xl hover:shadow-[#A18CD1]/45 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
-              >
-                <Send className="w-4 h-4" />
-                <span>Kirim & Mulai Konsultasi Langsung via WhatsApp</span>
-              </button>
-
-              {isSubmitted && (
-                <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-semibold flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Membuka obrolan konsultasi WhatsApp studio...</span>
-                </div>
-              )}
-
-            </form>
-          </div>
-
-          {/* Right Column: Studio Information & Quality Guarantees (5 cols) */}
-          <div className="lg:col-span-5 space-y-6">
-            
-            {/* Studio Info Card */}
-            <div className="rounded-3xl p-7 bg-white/90 dark:bg-[#0C091A]/90 border border-slate-200/80 dark:border-white/12 shadow-xl backdrop-blur-xl space-y-5">
-              <h4 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-[#A18CD1]" />
-                Zan Decal Studio Experience
-              </h4>
-
-              <div className="space-y-4 text-xs sm:text-sm">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-[#FF9A9E] shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-bold text-slate-800 dark:text-slate-100">Studio & Clean Room:</div>
-                    <div className="text-slate-500 dark:text-slate-400 leading-relaxed">
-                      Jl. Otomotif Raya No. 88, Kawasan Modifikasi Terpadu, Jakarta / Tangerang
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-[#A18CD1] shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-bold text-slate-800 dark:text-slate-100">Jam Operasional Studio:</div>
-                    <div className="text-slate-500 dark:text-slate-400 leading-relaxed">
-                      Senin - Sabtu: 09:00 - 18:00 WIB (Instalasi Berdasarkan Reservasi)
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-[#8FD3F4] shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-bold text-slate-800 dark:text-slate-100">Direct Contact:</div>
-                    <div className="text-slate-500 dark:text-slate-400 leading-relaxed">
-                      WhatsApp Studio: +62 812-3456-7890 • Email: studio@zandecal.id
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Studio Clean Room Standards */}
-            <div className="rounded-3xl p-7 bg-white/90 dark:bg-[#0C091A]/90 border border-slate-200/80 dark:border-white/12 shadow-xl backdrop-blur-xl space-y-4">
-              <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" /> Standar Keamanan & Mutu
-              </h4>
-              <ul className="space-y-2.5 text-xs text-slate-600 dark:text-slate-300">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#A18CD1] shrink-0" />
-                  Ruang instalasi ber-AC tertutup bebas debu & partikel pasir.
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#A18CD1] shrink-0" />
-                  Teknik pemasangan pisau knifeless tape untuk menjaga cat aman dari goresan cutter.
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#A18CD1] shrink-0" />
-                  Heat gun thermal profiling menjamin vinyl menempel sempurna di lekukan ekstrem.
-                </li>
-              </ul>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-  );
+  return <section id="konsultasi" className="editorial-consultation">
+    <ScrollStage distance={.55} className="consultation-stage"><div className="consultation-hero">
+      <div className="consultation-hero-copy"><span className="editorial-kicker">07 / KOMISI BARU</span>
+        <MotionHead className="consultation-headline"><span>WARNA</span><span>PUNYA</span><span>SUARA<span className="headline-period">.</span></span></MotionHead>
+        <p>LEBIH DARI WARNA.<br/>INI CARA ANDA DIDENGAR.</p>
+      </div><div className="consultation-art"><Image src="/images/consultation-vinyl.png" alt="Lembaran vinyl lavender dengan refleksi mobil sport hitam" fill sizes="(max-width:760px) 100vw, 65vw"/></div>
+      <span className="consultation-side-note">IDE<br/>MATERIAL<br/>TEKNIK<br/>KARAKTER<br/>DI JALAN.</span>
+    </div></ScrollStage>
+    <form onSubmit={handleSubmit} className="consultation-form">
+      <div className="consultation-form-title"><span className="editorial-kicker">KONSULTASI</span><h3>MULAI<br/>PROYEK<br/>KAMU.</h3><p>Ceritakan kendaraan, pilih layanan, dan bagikan ide. Kita susun arah desainnya bersama.</p></div>
+      <fieldset><legend><span>01</span> Kendaraan</legend><p className="field-hint">PILIH JENIS DAN DETAIL KENDARAAN</p>
+        <label className="sr-only" htmlFor="consult-vehicle">Jenis kendaraan</label><select id="consult-vehicle" value={vehicleType} onChange={event=>{setVehicleType(event.target.value);setIsSubmitted(false);}}>{VEHICLES.map(item=><option key={item}>{item}</option>)}</select>
+        <label className="sr-only" htmlFor="consult-make">Merek kendaraan</label><input id="consult-make" value={make} onChange={event=>setMake(event.target.value)} placeholder="Merek" maxLength={80}/>
+        <label className="sr-only" htmlFor="consult-model">Model kendaraan</label><input id="consult-model" value={model} onChange={event=>setModel(event.target.value)} placeholder="Model" maxLength={80}/>
+        <label className="sr-only" htmlFor="consult-year">Tahun kendaraan</label><input id="consult-year" value={year} onChange={event=>setYear(event.target.value)} placeholder="Tahun" inputMode="numeric" pattern="[0-9]{4}" title="Masukkan tahun dalam empat angka" maxLength={4}/>
+      </fieldset>
+      <fieldset><legend><span>02</span> Layanan</legend><p className="field-hint">PILIH LAYANAN YANG DIINGINKAN</p>
+        {SERVICES.map(item=><label className="service-checkbox" key={item}><input type="checkbox" checked={services.includes(item)} onChange={event=>{setServices(current=>event.target.checked?[...current,item]:current.filter(service=>service!==item));setIsSubmitted(false);}}/>{item}</label>)}
+        <label className="finish-label" htmlFor="consult-finish">Karakter finishing</label><select id="consult-finish" value={finishType} onChange={event=>setFinishType(event.target.value)}>{FINISHES.map(item=><option key={item}>{item}</option>)}</select>
+        {!services.length&&<p className="field-error" role="status">Pilih minimal satu layanan.</p>}
+      </fieldset>
+      <fieldset className="consultation-notes"><legend><span>03</span> Ceritakan ide</legend><label className="field-hint" htmlFor="consult-notes">JELASKAN KONSEP, REFERENSI, ATAU PERTANYAAN</label>
+        <textarea id="consult-notes" value={notes} onChange={event=>{setNotes(event.target.value);setIsSubmitted(false);}} placeholder="Tulis ide, gaya, referensi, atau pertanyaan kamu di sini…" rows={5} maxLength={1000}/><small className="note-count">{notes.length}/1000</small>
+        <button type="submit" disabled={!services.length} className="consultation-submit">MULAI PROYEK <ArrowUpRight size={24}/></button><p className="submit-caption">Brief dibuka di WhatsApp. Kirim setelah Anda meninjaunya.</p>
+        {isSubmitted&&<p className="submit-status" role="status"><CheckCircle2 size={16}/> Tautan konsultasi WhatsApp telah dibuka.</p>}
+      </fieldset>
+    </form>
+    <details className="consultation-studio"><summary>Informasi studio & standar pengerjaan <ArrowUpRight size={16}/></summary><div>
+      <p><MapPin size={18}/><span><strong>Studio & Clean Room</strong>Jl. Otomotif Raya No. 88, Kawasan Modifikasi Terpadu, Jakarta / Tangerang</span></p>
+      <p><Clock size={18}/><span><strong>Jam operasional</strong>Senin–Sabtu, 09:00–18:00 WIB. Instalasi berdasarkan reservasi.</span></p>
+      <p><Phone size={18}/><span><strong>Direct contact</strong><a href="https://wa.me/6281234567890" target="_blank" rel="noreferrer">+62 812-3456-7890</a><br/><a href="mailto:studio@zandecal.id">studio@zandecal.id</a></span></p>
+      <p><ShieldCheck size={18}/><span><strong>Standar keamanan & mutu</strong>Ruang instalasi tertutup ber-AC, teknik knifeless tape untuk menjaga cat, dan heat gun thermal profiling pada lekukan panel.</span></p>
+    </div></details>
+  </section>;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useSyncExternalStore } from "react";
 
 type Theme = "light" | "dark";
 
@@ -12,45 +12,40 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: "dark",
+  theme: "light",
   toggleTheme: () => {},
   setTheme: () => {},
   isMounted: false,
 });
 
+function readTheme(): Theme {
+  return localStorage.getItem("zan-decal-theme") === "dark" ? "dark" : "light";
+}
+
+function subscribeTheme(notify: () => void) {
+  window.addEventListener("storage", notify);
+  window.addEventListener("zan-theme-change", notify);
+  return () => {
+    window.removeEventListener("storage", notify);
+    window.removeEventListener("zan-theme-change", notify);
+  };
+}
+
+const serverTheme = (): Theme => "light";
+const clientMounted = () => true;
+const serverMounted = () => false;
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("dark");
-  const [isMounted, setIsMounted] = useState(false);
+  const theme = useSyncExternalStore(subscribeTheme, readTheme, serverTheme);
+  const isMounted = useSyncExternalStore(subscribeTheme, clientMounted, serverMounted);
 
   useEffect(() => {
-    setIsMounted(true);
-    // Check saved theme or system preference
-    const saved = localStorage.getItem("zan-decal-theme") as Theme | null;
-    if (saved === "light" || saved === "dark") {
-      setThemeState(saved);
-      applyTheme(saved);
-    } else {
-      // Default to dark mode for the iconic "Midnight Garage" aesthetic
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      const initialTheme = prefersDark ? "dark" : "dark";
-      setThemeState(initialTheme);
-      applyTheme(initialTheme);
-    }
-  }, []);
-
-  const applyTheme = (newTheme: Theme) => {
-    const root = document.documentElement;
-    if (newTheme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-  };
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
     localStorage.setItem("zan-decal-theme", newTheme);
-    applyTheme(newTheme);
+    window.dispatchEvent(new Event("zan-theme-change"));
   };
 
   const toggleTheme = () => {

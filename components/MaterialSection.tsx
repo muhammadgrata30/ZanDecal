@@ -92,12 +92,12 @@ const VINYL_LAYERS = [
   },
 ];
 
-export function MaterialSection() {
+export function MaterialSection({ id = "material" }: { id?: string } = {}) {
   const [activeBrand, setActiveBrand] = useState(BRAND_MATERIALS[0]);
   const [activeLayer, setActiveLayer] = useState(0);
 
   return (
-    <section id="material" className="py-24 relative overflow-hidden">
+    <section id={id} className="py-24 relative overflow-hidden">
       {/* Background ambient radial glow */}
       <div className="absolute top-1/3 -right-32 w-[500px] h-[500px] bg-[#8FD3F4]/12 blur-[160px] rounded-full pointer-events-none -z-10" />
       <div className="absolute bottom-10 -left-32 w-[500px] h-[500px] bg-[#FF9A9E]/12 blur-[160px] rounded-full pointer-events-none -z-10" />

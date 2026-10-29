@@ -1,22 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Palette,
-  MessageSquare,
-  Printer,
-  ShieldCheck,
-  CheckCircle2,
-  ChevronRight,
-  ChevronLeft,
-  ArrowRight,
-  Clock,
-  Sparkles,
-  Wand2,
-  Cpu,
-  Layers,
-  Flame,
-} from "lucide-react";
+import { Palette, MessageSquare, Printer, ShieldCheck, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import { MotionHead, ScrollStage } from "./ScrollStage";
 
 interface StepDetail {
   number: string;
@@ -122,193 +109,31 @@ const ORDER_STEPS: StepDetail[] = [
 ];
 
 export function WorkflowSection() {
-  const [activeStep, setActiveStep] = useState(1);
-  const currentStep = ORDER_STEPS.find((s) => s.id === activeStep) || ORDER_STEPS[0];
-  const IconComponent = currentStep.icon;
-
-  const handleNext = () => {
-    if (activeStep < 4) setActiveStep(activeStep + 1);
-  };
-
-  const handlePrev = () => {
-    if (activeStep > 1) setActiveStep(activeStep - 1);
-  };
-
-  return (
-    <section id="cara-order" className="py-24 relative overflow-hidden">
-      {/* Background ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[950px] h-[550px] bg-gradient-to-r from-[#FF9A9E]/10 via-[#A18CD1]/15 to-[#8FD3F4]/10 blur-[170px] rounded-full pointer-events-none -z-10" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/80 dark:bg-white/5 border border-[#A18CD1]/40 backdrop-blur-md mb-4 shadow-sm">
-            <Wand2 className="w-4 h-4 text-[#A18CD1]" />
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-slate-800 dark:text-slate-200">
-              ATELIER PRODUCTION LINE
-            </span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight mb-5 text-slate-900 dark:text-white">
-            4 Langkah Mudah{" "}
-            <span className="gradient-zan-text">Alur Pemesanan</span>
-          </h2>
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-            Klik setiap langkah di bawah untuk melihat rincian proses, persiapan kendaraan, dan waktu pengerjaan dari awal hingga serah terima.
-          </p>
+  const [activeStep,setActiveStep]=useState(1);
+  const current=ORDER_STEPS[activeStep-1];
+  return <section id="cara-order" className="editorial-workflow">
+    <ScrollStage distance={.95} className="workflow-stage">
+      <div className="workflow-layout">
+        <div className="workflow-copy"><span className="editorial-kicker">06 / CARA ORDER</span>
+          <MotionHead><span><i>Dirancang</i> bersama.</span><span>Dikerjakan presisi.</span></MotionHead>
+          <p>Dari ide sederhana hingga hasil akhir yang menonjol. Kami mendampingi setiap proses dengan detail dan standar kerja yang konsisten.</p>
+          <div className="workflow-counter" aria-hidden="true"><span>0{activeStep}</span><small>/ 04<br/>TAHAP PENGERJAAN</small></div>
         </div>
-
-        {/* INTERACTIVE STEPPER TABS & PROGRESS BAR */}
-        <div className="max-w-4xl mx-auto mb-14">
-          
-          {/* Progress bar background line */}
-          <div className="relative mb-8">
-            <div className="absolute top-1/2 left-0 right-0 h-1.5 -translate-y-1/2 bg-slate-200 dark:bg-white/10 rounded-full" />
-            <div
-              className="absolute top-1/2 left-0 h-1.5 -translate-y-1/2 bg-gradient-to-r from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4] rounded-full transition-all duration-500 shadow-md shadow-[#A18CD1]/40"
-              style={{ width: `${((activeStep - 1) / 3) * 100}%` }}
-            />
-
-            {/* 4 Clickable Step Nodes */}
-            <div className="relative flex items-center justify-between">
-              {ORDER_STEPS.map((step) => {
-                const isPassed = step.id <= activeStep;
-                const isCurrent = step.id === activeStep;
-                const StepIcon = step.icon;
-
-                return (
-                  <button
-                    key={step.id}
-                    type="button"
-                    onClick={() => setActiveStep(step.id)}
-                    className="group flex flex-col items-center focus:outline-none cursor-pointer"
-                  >
-                    <div
-                      className={`w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center font-bold text-sm sm:text-base transition-all duration-300 shadow-lg ${
-                        isCurrent
-                          ? "bg-gradient-to-tr from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4] text-white scale-110 ring-4 ring-[#A18CD1]/40"
-                          : isPassed
-                          ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900"
-                          : "bg-white dark:bg-[#0C091A] border border-slate-300 dark:border-white/15 text-slate-400"
-                      }`}
-                    >
-                      <StepIcon className="w-5 h-5 sm:w-7 sm:h-7" />
-                    </div>
-
-                    <span
-                      className={`mt-3 text-xs font-bold transition-colors hidden sm:block font-mono ${
-                        isCurrent
-                          ? "text-[#A18CD1]"
-                          : isPassed
-                          ? "text-slate-800 dark:text-slate-200"
-                          : "text-slate-400 dark:text-slate-500"
-                      }`}
-                    >
-                      {step.shortTitle}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
+        <div className="workflow-steps">
+          {ORDER_STEPS.map((step,index)=><div className={activeStep===step.id?"workflow-row is-active":"workflow-row"} key={step.id}>
+            <button type="button" onClick={()=>setActiveStep(step.id)} aria-expanded={activeStep===step.id} aria-controls={"order-panel-"+step.id}>
+              <span>{step.number}</span><div><h3>{["Konsultasi & eksplorasi","Mockup","Produksi","Pemasangan"][index]}</h3><p>{["Diskusikan ide, kebutuhan, dan referensi Anda.","Visualisasi desain sebelum diproduksi.","Pengerjaan presisi dengan material premium.","Hasil rapi oleh tim berpengalaman."][index]}</p></div><ArrowRight size={20}/>
+            </button>
+            {activeStep===step.id&&<div className="workflow-panel" id={"order-panel-"+step.id}>
+              <p>{current.description}</p><ul>{current.checklist.map(item=><li key={item}>{item}</li>)}</ul>
+              <p className="workflow-tip"><strong>Tips studio.</strong> {current.tips}</p><small>Estimasi: {current.duration}</small>
+              <a href={current.ctaHref} className="editorial-link">{current.ctaText}<ArrowRight size={16}/></a>
+            </div>}
+          </div>)}
+          <div className="workflow-nav"><button type="button" disabled={activeStep===1} onClick={()=>setActiveStep(step=>step-1)}><ChevronLeft size={16}/> Sebelumnya</button><button type="button" disabled={activeStep===4} onClick={()=>setActiveStep(step=>step+1)}>Selanjutnya <ChevronRight size={16}/></button></div>
         </div>
-
-        {/* ACTIVE STEP CARD DEEP DIVE */}
-        <div className="max-w-4xl mx-auto rounded-[2.2rem] p-7 sm:p-11 bg-white/95 dark:bg-[#0C091A]/95 border border-slate-200/80 dark:border-white/12 shadow-2xl backdrop-blur-2xl transition-all duration-300">
-          
-          {/* Card Top Metadata Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-white/10">
-            <div className="flex items-center gap-4">
-              <span className="text-4xl sm:text-6xl font-black font-mono text-[#A18CD1]">
-                {currentStep.number}
-              </span>
-              <div>
-                <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#A18CD1] block">
-                  {currentStep.stationCode}
-                </span>
-                <h3 className="text-xl sm:text-3xl font-black text-slate-900 dark:text-white">
-                  {currentStep.title}
-                </h3>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-xs font-mono font-bold text-slate-700 dark:text-slate-300">
-              <Clock className="w-4 h-4 text-[#8FD3F4]" />
-              <span>EST: {currentStep.duration}</span>
-            </div>
-          </div>
-
-          {/* Description & Details */}
-          <div className="py-7 space-y-6">
-            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-              {currentStep.description}
-            </p>
-
-            {/* Checklist */}
-            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/5">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 block mb-3.5">
-                Ceklist & Yang Anda Dapatkan:
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {currentStep.checklist.map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-medium">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Pro Tip Box */}
-            <div className="flex items-start gap-3 p-4.5 rounded-2xl bg-purple-500/10 border border-[#A18CD1]/30 text-xs text-slate-700 dark:text-slate-300">
-              <Sparkles className="w-4 h-4 text-[#A18CD1] shrink-0 mt-0.5" />
-              <div>
-                <strong className="text-slate-900 dark:text-white font-mono uppercase">Tips Studio:</strong> {currentStep.tips}
-              </div>
-            </div>
-          </div>
-
-          {/* Card Footer Navigation & Action CTA */}
-          <div className="pt-6 border-t border-slate-100 dark:border-white/10 flex flex-wrap items-center justify-between gap-4">
-            
-            {/* Step Controls (Prev & Next) */}
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handlePrev}
-                disabled={activeStep === 1}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-white/5 transition-all cursor-pointer"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                <span>Sebelumnya</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleNext}
-                disabled={activeStep === 4}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-100 dark:hover:bg-white/5 transition-all cursor-pointer"
-              >
-                <span>Selanjutnya</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Quick Action Button for this step */}
-            <a
-              href={currentStep.ctaHref}
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-[#FF9A9E] via-[#A18CD1] to-[#8FD3F4] shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all"
-            >
-              <span>{currentStep.ctaText}</span>
-              <ArrowRight className="w-4 h-4" />
-            </a>
-
-          </div>
-
-        </div>
-
       </div>
-    </section>
-  );
+    </ScrollStage>
+    <div className="workflow-image motion-reveal"><Image src="/images/workflow-install.png" alt="Teknisi merapikan vinyl lavender pada panel mobil menggunakan squeegee" fill sizes="100vw"/><span>KETELITIAN<br/>DI SETIAP LAPISAN.</span></div>
+  </section>;
 }
