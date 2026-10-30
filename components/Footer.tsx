@@ -17,7 +17,7 @@ export function Footer() {
     measure();
     return () => { observer.disconnect(); window.removeEventListener("resize", measure); };
   }, []);
-  return <div ref={ref} className="footer-curtain"><footer className="editorial-footer">
+  return <div ref={ref} className="footer-curtain" data-arrival="footer"><footer className="editorial-footer">
     <div className="footer-wordmark" aria-label="Zan Decal">ZAN DECAL</div>
     <div className="footer-columns">
       <div className="footer-statement"><span>AUTOMOTIVE WRAP STUDIO<br/>INDONESIA</span><p>Warna punya suara.<br/>Kami bantu mengucapkannya.</p><p>Decal, full wrap, livery motor sport,<br/>dan cutting sticker presisi.</p></div>
@@ -26,6 +26,9 @@ export function Footer() {
       <div className="footer-contact"><a className="footer-top" href="#beranda">Kembali ke atas <ArrowUpRight size={22}/></a><p>ZAN DECAL<br/>Jakarta / Tangerang<br/>Indonesia</p><a href="mailto:studio@zandecal.id">studio@zandecal.id</a></div>
     </div>
     <div className="footer-guarantees"><p><strong>100% Paint-Safe Formula.</strong> Vinyl otomotif untuk menjaga kondisi cat pabrikan.</p><p><strong>Clean Room Studio Installation.</strong> Pengerjaan dalam ruang tertutup berfilter udara.</p></div>
-    <div className="footer-bottom"><span>© {new Date().getFullYear()} ZAN DECAL. HAK CIPTA DILINDUNGI.</span><span>WRAP. PERSONAL EXPRESSION.</span></div>
+    <div className="footer-bottom"><span>© {new Date().getFullYear()} ZAN DECAL. HAK CIPTA DILINDUNGI.</span><span>WRAP. PERSONAL EXPRESSION.</span>
+      {/* A document navigation avoids sharing the departing WebGL root with admin. */}
+      <a href="/admin" className="footer-admin-link">Masuk Admin <ArrowUpRight size={14}/></a>
+    </div>
   </footer></div>;
 }

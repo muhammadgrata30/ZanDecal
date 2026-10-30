@@ -9,57 +9,11 @@ import {
   Sparkles,
   CheckCircle2,
   Award,
-  Zap,
-  Flame,
   ArrowUpRight,
-  Cpu,
   BadgeCheck,
-  Thermometer,
-  Eye,
-  Sliders,
 } from "lucide-react";
 
-const BRAND_MATERIALS = [
-  {
-    id: "oracal",
-    name: "Oracal 970RA Premium Cast",
-    origin: "Made in Germany",
-    type: "Cast Vinyl Film",
-    features: ["RapidAir® Bubble-Free System", "Daya tahan 5-7 Tahun Luar Ruang", "Ketebalan presisi 110 micron"],
-    badge: "OEM Grade",
-    gradient: "from-[#FF9A9E] to-[#A18CD1]",
-    desc: "Material legendaris asal Jerman dengan kelenturan tinggi untuk lekukan bodi mobil ekstrem dan pelepasan lem tanpa residu.",
-    specCode: "GER // 970RA-CAST",
-    elongation: "150% Elasticity",
-    tempRange: "-50°C to +110°C",
-  },
-  {
-    id: "maxdecal",
-    name: "Maxdecal 9700 Series Pro",
-    origin: "Special Automotive Grade",
-    type: "High Gloss & Satin Cast",
-    features: ["Super Glue Low-Tack Repositionable", "Tahan suhu tropis hingga 85°C", "Finishing wet-look berkilau"],
-    badge: "Showroom Spec",
-    gradient: "from-[#A18CD1] to-[#8FD3F4]",
-    desc: "Formula vinyl kelas kompetisi yang menghadirkan efek kedalaman warna luar biasa dan kilap setara cat pabrikan.",
-    specCode: "AUTO // 9700-PRO",
-    elongation: "140% Elasticity",
-    tempRange: "-40°C to +95°C",
-  },
-  {
-    id: "teckwrap",
-    name: "TeckWrap Supergloss & Satin",
-    origin: "USA Designed",
-    type: "Polymeric Multi-Layer",
-    features: ["High-Polymer Protective Cap", "Anti gores halus self-recovery", "Karakteristik warna bunglon/chrome"],
-    badge: "Supergloss Tech",
-    gradient: "from-[#8FD3F4] via-[#A18CD1] to-[#FF9A9E]",
-    desc: "Pilihan utama para pecinta warna chameleon, chrome satin, dan warna-warna eksotis dengan lapisan pelindung anti silau.",
-    specCode: "USA // SUPERGLOSS",
-    elongation: "130% Elasticity",
-    tempRange: "-40°C to +90°C",
-  },
-];
+import { useSiteContent } from "./SiteContentContext";
 
 const VINYL_LAYERS = [
   {
@@ -93,8 +47,11 @@ const VINYL_LAYERS = [
 ];
 
 export function MaterialSection({ id = "material" }: { id?: string } = {}) {
-  const [activeBrand, setActiveBrand] = useState(BRAND_MATERIALS[0]);
+  const {materials}=useSiteContent();
+  const [activeBrandId,setActiveBrandId]=useState("");
+  const activeBrand=materials.find(item=>item.id===activeBrandId)||materials[0];
   const [activeLayer, setActiveLayer] = useState(0);
+  if(!activeBrand)return <section id={id} className="py-16"><p>Informasi bahan sedang diperbarui.</p></section>;
 
   return (
     <section id={id} className="py-24 relative overflow-hidden">
@@ -182,13 +139,13 @@ export function MaterialSection({ id = "material" }: { id?: string } = {}) {
 
               {/* Brand Selector Tabs */}
               <div className="grid grid-cols-3 gap-3 mb-8">
-                {BRAND_MATERIALS.map((brand) => {
+                {materials.map((brand) => {
                   const isSelected = activeBrand.id === brand.id;
                   return (
                     <button
                       key={brand.id}
                       type="button"
-                      onClick={() => setActiveBrand(brand)}
+                      onClick={() => setActiveBrandId(brand.id)}
                       className={`p-3.5 rounded-2xl border text-center transition-all duration-200 cursor-pointer ${
                         isSelected
                           ? "bg-slate-100 dark:bg-white/10 border-[#A18CD1] ring-2 ring-[#A18CD1]/40 shadow-sm"

@@ -1,0 +1,230 @@
+{
+  "revision": 0,
+  "materials": [
+    {
+      "id": "oracal",
+      "name": "Oracal 970RA Premium Cast",
+      "origin": "Made in Germany",
+      "type": "Cast Vinyl Film",
+      "features": [
+        "RapidAir® Bubble-Free System",
+        "Daya tahan 5-7 Tahun Luar Ruang",
+        "Ketebalan presisi 110 micron"
+      ],
+      "badge": "OEM Grade",
+      "gradient": "from-[#FF9A9E] to-[#A18CD1]",
+      "desc": "Material legendaris asal Jerman dengan kelenturan tinggi untuk lekukan bodi mobil ekstrem dan pelepasan lem tanpa residu.",
+      "specCode": "GER // 970RA-CAST",
+      "elongation": "150% Elasticity",
+      "tempRange": "-50°C to +110°C"
+    },
+    {
+      "id": "maxdecal",
+      "name": "Maxdecal 9700 Series Pro",
+      "origin": "Special Automotive Grade",
+      "type": "High Gloss & Satin Cast",
+      "features": [
+        "Super Glue Low-Tack Repositionable",
+        "Tahan suhu tropis hingga 85°C",
+        "Finishing wet-look berkilau"
+      ],
+      "badge": "Showroom Spec",
+      "gradient": "from-[#A18CD1] to-[#8FD3F4]",
+      "desc": "Formula vinyl kelas kompetisi yang menghadirkan efek kedalaman warna luar biasa dan kilap setara cat pabrikan.",
+      "specCode": "AUTO // 9700-PRO",
+      "elongation": "140% Elasticity",
+      "tempRange": "-40°C to +95°C"
+    },
+    {
+      "id": "teckwrap",
+      "name": "TeckWrap Supergloss & Satin",
+      "origin": "USA Designed",
+      "type": "Polymeric Multi-Layer",
+      "features": [
+        "High-Polymer Protective Cap",
+        "Anti gores halus self-recovery",
+        "Karakteristik warna bunglon/chrome"
+      ],
+      "badge": "Supergloss Tech",
+      "gradient": "from-[#8FD3F4] via-[#A18CD1] to-[#FF9A9E]",
+      "desc": "Pilihan utama para pecinta warna chameleon, chrome satin, dan warna-warna eksotis dengan lapisan pelindung anti silau.",
+      "specCode": "USA // SUPERGLOSS",
+      "elongation": "130% Elasticity",
+      "tempRange": "-40°C to +90°C"
+    }
+  ],
+  "portfolio": [
+    {
+      "id": 1,
+      "title": "Ferrari 488 GTB / Magenta Edition",
+      "category": "mobil",
+      "categoryLabel": "Mobil",
+      "mediaType": "photo",
+      "materialBrand": "Premium Cast Vinyl",
+      "finishType": "Cyber Magenta & Stealth Black",
+      "gradient": "",
+      "vehicleModel": "Ferrari 488 GTB",
+      "description": "Eksplorasi cyber magenta dengan detail hitam pada bodi Ferrari.",
+      "transformationHighlights": [
+        "Wrapping panel bodi",
+        "Aksen hitam pada detail kendaraan"
+      ],
+      "mediaSrc": "/images/gallery-ferrari-magenta.png",
+      "posterSrc": ""
+    },
+    {
+      "id": 2,
+      "title": "Ford F-150 Raptor / Stealth Edition",
+      "category": "mobil",
+      "categoryLabel": "Mobil",
+      "mediaType": "photo",
+      "materialBrand": "Premium Cast Vinyl",
+      "finishType": "Matte Black & Sky Blue",
+      "gradient": "",
+      "vehicleModel": "Ford F-150 Raptor",
+      "description": "Matte black dengan aksen sky blue untuk karakter pickup yang tegas.",
+      "transformationHighlights": [
+        "Wrapping panel pickup",
+        "Grafis sky blue pada sisi bodi"
+      ],
+      "mediaSrc": "/images/gallery-raptor-black.png",
+      "posterSrc": ""
+    },
+    {
+      "id": 3,
+      "title": "KTM 1290 Super Duke R / Street Edition",
+      "category": "motor",
+      "categoryLabel": "Motor",
+      "mediaType": "photo",
+      "materialBrand": "Premium Cast Vinyl",
+      "finishType": "Stealth Black & Lavender",
+      "gradient": "",
+      "vehicleModel": "KTM 1290 Super Duke R",
+      "description": "Panel hitam dan detail lavender berpadu dengan rangka oranye KTM.",
+      "transformationHighlights": [
+        "Custom decal panel tangki",
+        "Aksen lavender pada panel hitam"
+      ],
+      "mediaSrc": "/images/gallery-ktm-black.png",
+      "posterSrc": ""
+    },
+    {
+      "id": 4,
+      "title": "Yamaha YZF-R1 / Sky Edition",
+      "category": "motor",
+      "categoryLabel": "Motor",
+      "mediaType": "photo",
+      "materialBrand": "Premium Cast Vinyl",
+      "finishType": "Sky Blue & Soft Pink",
+      "gradient": "",
+      "vehicleModel": "Yamaha YZF-R1",
+      "description": "Fairing sky blue dengan garis soft pink untuk tampilan R1 yang berbeda.",
+      "transformationHighlights": [
+        "Custom livery fairing",
+        "Striping soft pink"
+      ],
+      "mediaSrc": "/images/gallery-yamaha-r1-blue.png",
+      "posterSrc": ""
+    }
+  ],
+  "colors": [
+    {
+      "name": "Soft Pink",
+      "hex": "#FF9A9E",
+      "accent": "from-[#FF9A9E] to-[#FECFEF]",
+      "desc": "Zan Signature Pastel Pink",
+      "pantone": "PANTONE 13-1510",
+      "id": "color-1"
+    },
+    {
+      "name": "Lavender Purple",
+      "hex": "#A18CD1",
+      "accent": "from-[#A18CD1] to-[#FBC2EB]",
+      "desc": "Cyber Studio Lavender",
+      "pantone": "PANTONE 15-3817",
+      "id": "color-2"
+    },
+    {
+      "name": "Sky Blue",
+      "hex": "#8FD3F4",
+      "accent": "from-[#8FD3F4] to-[#84FAB0]",
+      "desc": "Aerodynamic Sky Cyan",
+      "pantone": "PANTONE 14-4318",
+      "id": "color-3"
+    },
+    {
+      "name": "Cyber Magenta",
+      "hex": "#F43F5E",
+      "accent": "from-[#F43F5E] to-[#FB7185]",
+      "desc": "Vibrant Motorsport Magenta",
+      "pantone": "PANTONE 18-1763",
+      "id": "color-4"
+    },
+    {
+      "name": "Stealth Black",
+      "hex": "#1E1E24",
+      "accent": "from-[#1E1E24] to-[#2E2E38]",
+      "desc": "Midnight Satin Stealth",
+      "pantone": "PANTONE 19-4007",
+      "id": "color-5"
+    },
+    {
+      "name": "Racing Red",
+      "hex": "#D52232",
+      "accent": "from-[#D52232] to-[#F45A55]",
+      "desc": "Merah balap",
+      "pantone": "",
+      "id": "color-6"
+    },
+    {
+      "name": "Burnt Orange",
+      "hex": "#E56B2F",
+      "accent": "from-[#E56B2F] to-[#F6AE63]",
+      "desc": "Oranye tembaga",
+      "pantone": "",
+      "id": "color-7"
+    },
+    {
+      "name": "Solar Yellow",
+      "hex": "#F2CC38",
+      "accent": "from-[#F2CC38] to-[#FFE99C]",
+      "desc": "Kuning terang",
+      "pantone": "",
+      "id": "color-8"
+    },
+    {
+      "name": "British Green",
+      "hex": "#165B46",
+      "accent": "from-[#165B46] to-[#439C75]",
+      "desc": "Hijau klasik",
+      "pantone": "",
+      "id": "color-9"
+    },
+    {
+      "name": "Cobalt Blue",
+      "hex": "#244CBB",
+      "accent": "from-[#244CBB] to-[#668DEB]",
+      "desc": "Biru kobalt",
+      "pantone": "",
+      "id": "color-10"
+    },
+    {
+      "name": "Pearl White",
+      "hex": "#EEEDE5",
+      "accent": "from-[#EEEDE5] to-[#FFFFFF]",
+      "desc": "Putih mutiara",
+      "pantone": "",
+      "id": "color-11"
+    },
+    {
+      "name": "Titanium Silver",
+      "hex": "#929CA6",
+      "accent": "from-[#929CA6] to-[#DCE2E7]",
+      "desc": "Abu titanium",
+      "pantone": "",
+      "id": "color-12"
+    }
+  ],
+  "showcaseVideo": "/videos/gallery-showcase-web.mp4",
+  "showcasePoster": "/videos/gallery-showcase-poster.jpg"
+}

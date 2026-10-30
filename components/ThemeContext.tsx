@@ -1,6 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useSyncExternalStore } from "react";
+import React, { createContext, useContext, useEffect, useRef, useSyncExternalStore } from "react";
+import { flushSync } from "react-dom";
 
 type Theme = "light" | "dark";
 
@@ -36,6 +37,7 @@ const clientMounted = () => true;
 const serverMounted = () => false;
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const activeTransition = useRef<ViewTransition | null>(null);
   const theme = useSyncExternalStore(subscribeTheme, readTheme, serverTheme);
   const isMounted = useSyncExternalStore(subscribeTheme, clientMounted, serverMounted);
 
@@ -44,8 +46,19 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
-    localStorage.setItem("zan-decal-theme", newTheme);
-    window.dispatchEvent(new Event("zan-theme-change"));
+    const commit = () => {
+      localStorage.setItem("zan-decal-theme", newTheme);
+      document.documentElement.classList.toggle("dark", newTheme === "dark");
+      window.dispatchEvent(new Event("zan-theme-change"));
+    };
+    activeTransition.current?.skipTransition();
+    if (!document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) { commit(); return; }
+    document.documentElement.dataset.themeDirection = newTheme;
+    const transition = document.startViewTransition(() => flushSync(commit));
+    activeTransition.current = transition;
+    void transition.finished.catch(() => {}).finally(() => {
+      if (activeTransition.current === transition) { activeTransition.current = null; delete document.documentElement.dataset.themeDirection; }
+    });
   };
 
   const toggleTheme = () => {

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Palette, MessageSquare, Printer, ShieldCheck, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { MotionHead, ScrollStage } from "./ScrollStage";
+import { TransitionVeil } from "./experience/SectionTransitions";
 
 interface StepDetail {
   number: string;
@@ -110,30 +111,30 @@ const ORDER_STEPS: StepDetail[] = [
 
 export function WorkflowSection() {
   const [activeStep,setActiveStep]=useState(1);
-  const current=ORDER_STEPS[activeStep-1];
-  return <section id="cara-order" className="editorial-workflow">
+  return <section id="cara-order" className="editorial-workflow" data-arrival="workflow">
+    <TransitionVeil/>
     <ScrollStage distance={.95} className="workflow-stage">
       <div className="workflow-layout">
         <div className="workflow-copy"><span className="editorial-kicker">06 / CARA ORDER</span>
-          <MotionHead><span><i>Dirancang</i> bersama.</span><span>Dikerjakan presisi.</span></MotionHead>
+          <MotionHead><span>Dirancang bersama.</span><span>Dikerjakan presisi.</span></MotionHead>
           <p>Dari ide sederhana hingga hasil akhir yang menonjol. Kami mendampingi setiap proses dengan detail dan standar kerja yang konsisten.</p>
           <div className="workflow-counter" aria-hidden="true"><span>0{activeStep}</span><small>/ 04<br/>TAHAP PENGERJAAN</small></div>
         </div>
         <div className="workflow-steps">
-          {ORDER_STEPS.map((step,index)=><div className={activeStep===step.id?"workflow-row is-active":"workflow-row"} key={step.id}>
-            <button type="button" onClick={()=>setActiveStep(step.id)} aria-expanded={activeStep===step.id} aria-controls={"order-panel-"+step.id}>
+          {ORDER_STEPS.map((step,index)=><div className={activeStep===step.id?"workflow-row is-active":"workflow-row"} key={step.id} onMouseEnter={()=>{if(window.matchMedia("(hover: hover) and (pointer: fine)").matches)setActiveStep(step.id);}}>
+            <button type="button" onFocus={()=>setActiveStep(step.id)} onClick={()=>setActiveStep(step.id)} aria-expanded={activeStep===step.id} aria-controls={"order-panel-"+step.id}>
               <span>{step.number}</span><div><h3>{["Konsultasi & eksplorasi","Mockup","Produksi","Pemasangan"][index]}</h3><p>{["Diskusikan ide, kebutuhan, dan referensi Anda.","Visualisasi desain sebelum diproduksi.","Pengerjaan presisi dengan material premium.","Hasil rapi oleh tim berpengalaman."][index]}</p></div><ArrowRight size={20}/>
             </button>
-            {activeStep===step.id&&<div className="workflow-panel" id={"order-panel-"+step.id}>
-              <p>{current.description}</p><ul>{current.checklist.map(item=><li key={item}>{item}</li>)}</ul>
-              <p className="workflow-tip"><strong>Tips studio.</strong> {current.tips}</p><small>Estimasi: {current.duration}</small>
-              <a href={current.ctaHref} className="editorial-link">{current.ctaText}<ArrowRight size={16}/></a>
-            </div>}
+            <div className="workflow-panel-shell" data-open={activeStep===step.id} inert={activeStep!==step.id}><div className="workflow-panel" id={"order-panel-"+step.id}>
+              <p>{step.description}</p><ul>{step.checklist.map(item=><li key={item}>{item}</li>)}</ul>
+              <p className="workflow-tip"><strong>Tips studio.</strong> {step.tips}</p><small>Estimasi: {step.duration}</small>
+              <a href={step.ctaHref} className="editorial-link">{step.ctaText}<ArrowRight size={16}/></a>
+            </div></div>
           </div>)}
           <div className="workflow-nav"><button type="button" disabled={activeStep===1} onClick={()=>setActiveStep(step=>step-1)}><ChevronLeft size={16}/> Sebelumnya</button><button type="button" disabled={activeStep===4} onClick={()=>setActiveStep(step=>step+1)}>Selanjutnya <ChevronRight size={16}/></button></div>
         </div>
       </div>
     </ScrollStage>
-    <div className="workflow-image motion-reveal"><Image src="/images/workflow-install.png" alt="Teknisi merapikan vinyl lavender pada panel mobil menggunakan squeegee" fill sizes="100vw"/><span>KETELITIAN<br/>DI SETIAP LAPISAN.</span></div>
+    <div className="workflow-image motion-reveal"><Image src="/images/workflow-install.png" alt="Teknisi merapikan vinyl lavender pada panel mobil menggunakan squeegee" width={1536} height={1024} sizes="100vw"/><span>KETELITIAN<br/>DI SETIAP LAPISAN.</span></div>
   </section>;
 }

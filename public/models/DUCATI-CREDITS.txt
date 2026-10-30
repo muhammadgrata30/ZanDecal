@@ -1,0 +1,10 @@
+2024 Ducati StreetFighter V4 S
+Author: OUTPISTON (https://sketchfab.com/outpiston)
+Source: https://sketchfab.com/3d-models/2024-ducati-streetfighter-v4-s-c501252f8af64c559bf91dc306c3a550
+License recorded in the supplied GLB: CC BY-NC-SA 4.0
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+The source GLB is unchanged. ducati-paint-neutral.png is a modified version of
+the original red body texture: red pixels were neutralized for color selection,
+and lettering was retained. The derivative texture uses the same CC BY-NC-SA 4.0
+license. Runtime color and finish changes affect the three Carpaint_Red materials.

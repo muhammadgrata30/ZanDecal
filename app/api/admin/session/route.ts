@@ -1,0 +1,5 @@
+import { COOKIE, errorResponse, getAdminSession, jsonBody, login, sameOrigin, sessionCookie, setup } from "../../../../lib/admin-auth";
+export const runtime="nodejs";
+export async function GET(request:Request){try{return Response.json(await getAdminSession(request.headers.get("cookie")||""),{headers:{"Cache-Control":"no-store"}});}catch(error){return errorResponse(error);}}
+export async function POST(request:Request){try{sameOrigin(request);const body=await jsonBody(request);const user=body.action==="setup"?await setup(request,body.username,body.password):await login(request,body.username,body.password);return Response.json({username:user.username,setupRequired:false},{headers:{"Set-Cookie":sessionCookie(user),"Cache-Control":"no-store"}});}catch(error){return errorResponse(error);}}
+export async function DELETE(request:Request){try{sameOrigin(request);return Response.json({ok:true},{headers:{"Set-Cookie":`${COOKIE}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0`,"Cache-Control":"no-store"}});}catch(error){return errorResponse(error);}}

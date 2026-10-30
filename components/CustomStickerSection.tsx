@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { MotionHead, ScrollStage } from "./ScrollStage";
 import { Scissors, Trophy, Truck, Sparkles } from "lucide-react";
+import { TransitionVeil } from "./experience/SectionTransitions";
 
 const STICKER_SERVICES = [
   {
@@ -65,7 +66,8 @@ const STICKER_SERVICES = [
 ];
 
 export function CustomStickerSection() {
-  return <section id="custom-sticker" className="editorial-custom">
+  return <section id="custom-sticker" className="editorial-custom" data-arrival="sticker">
+    <TransitionVeil/>
     <ScrollStage className="vehicle-stage" distance={3.2}>
       <div className="custom-scene">
         <div className="custom-copy"><span className="editorial-kicker">04 / CUSTOM STICKER</span>

@@ -1,0 +1,10 @@
+Temporary gallery background video
+Title: Blue Sports Car Close-Up with Detailed Features
+Creator: Gaurav Kumar / Pexels
+Source: https://www.pexels.com/video/blue-sports-car-close-up-with-detailed-features-30626055/
+Download: https://videos.pexels.com/video-files/30626055/13110504_3840_2160_24fps.mp4
+License: https://www.pexels.com/license/
+Downloaded: 2026-10-30
+Locally resized to 1280px, muted, and compressed for web playback.
+Poster extracted from the same video.
+Replace the GallerySection showcaseVideoSrc and showcasePoster props with admin media URLs when the admin media backend is implemented.

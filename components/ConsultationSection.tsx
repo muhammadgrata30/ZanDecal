@@ -3,6 +3,7 @@ import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import { ArrowUpRight, CheckCircle2, Clock, MapPin, Phone, ShieldCheck } from "lucide-react";
 import { MotionHead, ScrollStage } from "./ScrollStage";
+import { TransitionVeil } from "./experience/SectionTransitions";
 const VEHICLES = ["Mobil Sport / Coupe", "Superbike / Motor Sport", "Sedan / Hatchback", "SUV / Crossover", "Armada Bisnis / Fleet", "Lainnya"];
 const SERVICES = ["Full Wrap Livery", "Custom Striping & Racing Decal", "Precision Die-Cut Cutting Sticker", "Paint Protection Film (PPF)"];
 const FINISHES = ["Signature Chameleon", "Ultra High-Gloss", "Satin Stealth Matte", "Prismatic Holo"];
@@ -24,14 +25,15 @@ export function ConsultationSection() {
     window.open(`https://wa.me/6281234567890?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
     setIsSubmitted(true);
   };
-  return <section id="konsultasi" className="editorial-consultation">
-    <ScrollStage distance={.55} className="consultation-stage"><div className="consultation-hero">
+  return <section id="konsultasi" className="editorial-consultation" data-arrival="consultation">
+    <TransitionVeil/>
+    <ScrollStage distance={1.2} className="consultation-stage"><div className="consultation-hero">
       <div className="consultation-hero-copy"><span className="editorial-kicker">07 / KOMISI BARU</span>
         <MotionHead className="consultation-headline"><span>WARNA</span><span>PUNYA</span><span>SUARA<span className="headline-period">.</span></span></MotionHead>
         <p>LEBIH DARI WARNA.<br/>INI CARA ANDA DIDENGAR.</p>
       </div><div className="consultation-art"><Image src="/images/consultation-vinyl.png" alt="Lembaran vinyl lavender dengan refleksi mobil sport hitam" fill sizes="(max-width:760px) 100vw, 65vw"/></div>
       <span className="consultation-side-note">IDE<br/>MATERIAL<br/>TEKNIK<br/>KARAKTER<br/>DI JALAN.</span>
-    </div></ScrollStage>
+    </div>
     <form onSubmit={handleSubmit} className="consultation-form">
       <div className="consultation-form-title"><span className="editorial-kicker">KONSULTASI</span><h3>MULAI<br/>PROYEK<br/>KAMU.</h3><p>Ceritakan kendaraan, pilih layanan, dan bagikan ide. Kita susun arah desainnya bersama.</p></div>
       <fieldset><legend><span>01</span> Kendaraan</legend><p className="field-hint">PILIH JENIS DAN DETAIL KENDARAAN</p>
@@ -50,7 +52,7 @@ export function ConsultationSection() {
         <button type="submit" disabled={!services.length} className="consultation-submit">MULAI PROYEK <ArrowUpRight size={24}/></button><p className="submit-caption">Brief dibuka di WhatsApp. Kirim setelah Anda meninjaunya.</p>
         {isSubmitted&&<p className="submit-status" role="status"><CheckCircle2 size={16}/> Tautan konsultasi WhatsApp telah dibuka.</p>}
       </fieldset>
-    </form>
+    </form></ScrollStage>
     <details className="consultation-studio"><summary>Informasi studio & standar pengerjaan <ArrowUpRight size={16}/></summary><div>
       <p><MapPin size={18}/><span><strong>Studio & Clean Room</strong>Jl. Otomotif Raya No. 88, Kawasan Modifikasi Terpadu, Jakarta / Tangerang</span></p>
       <p><Clock size={18}/><span><strong>Jam operasional</strong>Senin–Sabtu, 09:00–18:00 WIB. Instalasi berdasarkan reservasi.</span></p>

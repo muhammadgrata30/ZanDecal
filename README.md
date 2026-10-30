@@ -4,6 +4,8 @@ Website landing page modern untuk studio otomotif spesialis decal, full body wra
 
 Dibangun menggunakan stack mutakhir: **Next.js 16 (App Router)**, **React 19**, **Tailwind CSS v4**, dan **Three.js** untuk 3D visualizer interaktif.
 
+Admin dinamis tersedia di `/admin` untuk bahan, portofolio foto/video, preset warna studio, dan video latar galeri. Akun pertama dibuat oleh pemilik saat kunjungan pertama. Panduan penggunaan, penyimpanan data, pengujian dan batasan hosting ada di [ADMIN.md](ADMIN.md).
+
 ---
 
 ## ✨ Fitur Unggulan
