@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import "./atelier.css";
@@ -12,14 +11,18 @@ import { readContent } from "../lib/content-store";
 
 export const dynamic = "force-dynamic";
 
-const geistSans = Geist({
+const geistSans = localFont({
+  src: "../public/fonts/geist-latin.woff2",
+  weight: "100 900",
+  display: "swap",
   variable: "--font-geist-sans",
-  subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const geistMono = localFont({
+  src: "../public/fonts/geist-mono-latin.woff2",
+  weight: "100 900",
+  display: "swap",
   variable: "--font-geist-mono",
-  subsets: ["latin"],
 });
 
 const display = localFont({ variable: "--font-display", src: [
@@ -56,6 +59,7 @@ export default async function RootLayout({
   const content = await readContent();
   return (
     <html lang="id" suppressHydrationWarning className="scroll-smooth">
+      <head><script dangerouslySetInnerHTML={{__html:"try{if(localStorage.getItem('zan-decal-theme')==='dark')document.documentElement.classList.add('dark')}catch{}"}}/></head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${display.variable} ${editorial.variable} antialiased min-h-screen flex flex-col font-sans transition-colors duration-300 selection:bg-[#A18CD1]/30 selection:text-white`}
       >

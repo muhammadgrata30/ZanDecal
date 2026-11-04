@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import { ArrowUpRight, CheckCircle2, Clock, MapPin, Phone, ShieldCheck } from "lucide-react";
@@ -31,7 +31,7 @@ export function ConsultationSection() {
       <div className="consultation-hero-copy"><span className="editorial-kicker">07 / KOMISI BARU</span>
         <MotionHead className="consultation-headline"><span>WARNA</span><span>PUNYA</span><span>SUARA<span className="headline-period">.</span></span></MotionHead>
         <p>LEBIH DARI WARNA.<br/>INI CARA ANDA DIDENGAR.</p>
-      </div><div className="consultation-art"><Image src="/images/consultation-vinyl.png" alt="Lembaran vinyl lavender dengan refleksi mobil sport hitam" fill sizes="(max-width:760px) 100vw, 65vw"/></div>
+      </div><div className="consultation-art"><Image src="/images/consultation-vinyl.lossless.webp" alt="Lembaran vinyl lavender dengan refleksi mobil sport hitam" fill sizes="(max-width:760px) 100vw, 65vw"/></div>
       <span className="consultation-side-note">IDE<br/>MATERIAL<br/>TEKNIK<br/>KARAKTER<br/>DI JALAN.</span>
     </div>
     <form onSubmit={handleSubmit} className="consultation-form">

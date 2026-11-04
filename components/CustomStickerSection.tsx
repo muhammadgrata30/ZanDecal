@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import { MotionHead, ScrollStage } from "./ScrollStage";
+import { ScrollStage } from "./ScrollStage";
 import { Scissors, Trophy, Truck, Sparkles } from "lucide-react";
-import { TransitionVeil } from "./experience/SectionTransitions";
+import studio from "./StudioSections.module.css";
+import cinema from "./StickerCinema.module.css";
 
 const STICKER_SERVICES = [
   {
@@ -66,23 +66,40 @@ const STICKER_SERVICES = [
 ];
 
 export function CustomStickerSection() {
-  return <section id="custom-sticker" className="editorial-custom" data-arrival="sticker">
-    <TransitionVeil/>
-    <ScrollStage className="vehicle-stage" distance={3.2}>
-      <div className="custom-scene">
-        <div className="custom-copy"><span className="editorial-kicker">04 / CUSTOM STICKER</span>
-          <MotionHead><span><i>Karakter</i> baru.</span><span>Standar yang sama.</span></MotionHead>
-          <p>Premium automotive wrap untuk kendaraan yang lebih personal. Pilih warna, eksplorasi desain, dan wujudkan karakter baru bersama Zan Decal.</p>
-          <a href="#konsultasi" className="editorial-link">Rancang livery Anda <ArrowUpRight size={18}/></a>
+  return <section id="custom-sticker" className={`${studio.custom} ${cinema.section} editorial-custom`} aria-labelledby="sticker-title">
+    <ScrollStage className={cinema.scroll} distance={1.4}>
+      <div className={cinema.scene}>
+        <div className={cinema.lightSweep} aria-hidden="true"/>
+        <div className={cinema.orbit} aria-hidden="true"><span/><span/><span/></div>
+        <div className={cinema.topline}><span>04 / CUSTOM STICKER</span><span>ZAN DECAL — INDEPENDENT BY DESIGN</span><span className={cinema.registration} aria-hidden="true">＋</span></div>
+        <svg className={cinema.contours} viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="currentColor" strokeWidth="1">{Array.from({length:12},(_,i)=><path key={i} d={`M ${-100+i*28} 950 C ${540+i*22} 600, ${-200+i*45} 260, ${580+i*50} -100 S 1300 0, 1500 280`}/>)}</g></svg>
+        <div className={cinema.intro}>
+          <span className={cinema.eyebrow}><i/> IDEMU. POTONGANMU. IDENTITASMU.</span>
+          <h2 id="sticker-title" className={cinema.headline}><span>BUAT</span><span className={cinema.vinylWord}>JEJAK<span className={cinema.period}>.</span></span></h2>
+          <p>Dari satu logo sampai satu set livery.<br/>Kami potong, cetak, dan bentuk<br/>karakter yang cuma punya kamu.</p>
+          <a href="#konsultasi" className={cinema.cta}>Rancang stiker kamu <ArrowUpRight size={21}/></a>
         </div>
-        <div className="vehicle-runway" aria-label="Eksplorasi wrapping motor dan mobil">
-          <div className="vehicle-motor"><Image src="/images/sticker-r6-blue.png" alt="Yamaha YZF-R6 dengan livery sky blue dan hitam" fill sizes="94vw"/></div>
-          <div className="vehicle-car"><Image src="/images/sticker-ferrari-pink.png" alt="Ferrari 488 GTB dengan wrapping soft pink dan hitam" fill sizes="94vw"/></div>
-        </div><span className="scene-caption">DETAIL YANG<br/>MEMBENTUK KARAKTER.</span>
-        <div className="scene-progress" aria-hidden="true"><span/></div>
+        <div className={cinema.art} role="img" aria-label="Lembar konsep stiker Zan: nomor balap 27, wordmark Zan, emblem orisinal, dan striping presisi dengan ujung vinyl terkelupas">
+          <div className={cinema.sheet}>
+            <div className={cinema.sheetHeader}><span>Z/D® — GRAPHIC DEPT.</span><span>COLLECTION 01</span></div>
+            <div className={cinema.sheetGrid}>
+              <div className={cinema.number}><span>RACE NUMBER / PERSONAL SERIES</span><strong>27</strong><small>MAKE YOUR OWN LINE ↗</small></div>
+              <div className={cinema.emblem}><span className={cinema.star}>Z</span><small>ORIGINAL<br/>BY ZAN DECAL</small></div>
+              <div className={cinema.wordmark}><strong>ZAN<span>®</span></strong><small>STICK WITH YOUR INSTINCT.</small><i className={cinema.peel}/></div>
+              <div className={cinema.stripes}><i/><i/><i/><span>PRECISION / CUT TO FIT</span></div>
+              <div className={cinema.oval}><strong>one of one.</strong><span>CUSTOM MADE / NEVER THE SAME</span></div>
+              <div className={cinema.mini}><span>YOUR<br/>NEXT<br/><b>MARK.</b></span><ArrowUpRight size={36}/></div>
+            </div>
+            <div className={cinema.sheetFooter}><span>＋</span><span>DESIGNED TO BE YOURS.</span><span>＋</span></div>
+          </div>
+          <div className={cinema.artCaption}><div className={cinema.chapter}><span>01 — THE STICKER SHEET</span><span>02 — BREAK THE OUTLINE</span></div><span>DIE-CUT / LETTERING / STRIPING</span></div>
+        </div>
+        <div className={cinema.sceneFooter}><a href="#sticker-services">SCROLL UNTUK EKSPLORASI <span>↓</span></a><span>ORIGINAL GRAPHICS.<br/>PERSONAL EXPRESSION.</span></div>
+        <div className={cinema.progress} aria-hidden="true"><i/></div>
       </div>
     </ScrollStage>
-    <div className="custom-services"><span className="editorial-kicker">LAYANAN KAMI</span>
+    <div className={cinema.typeBand} aria-hidden="true"><span>YOUR STYLE.</span><span>YOUR <i>SIGNATURE.</i> ↗</span></div>
+    <div className="custom-services" id="sticker-services"><div className={studio.serviceIntro}><span className="editorial-kicker">DARI DETAIL SAMPAI TOTAL.</span><h2>Empat cara.<br/><em>Satu karakter.</em></h2><p>Pilih ruang ekspresimu. Kami kerjakan sampai ke detail terakhir.</p></div>
       {STICKER_SERVICES.map((service,index)=><details key={service.title} className="service-item motion-reveal">
         <summary><span>0{index+1}</span><h3>{["Cutting Sticker","Custom Livery","Branding Armada","Full Wrap"][index]}</h3><ArrowUpRight size={18}/></summary>
         <div><p>{service.description}</p><ul>{service.points.map(point=><li key={point}>{point}</li>)}</ul><a className="editorial-link" href="#konsultasi">Konsultasikan kebutuhan ini <ArrowUpRight size={16}/></a></div>

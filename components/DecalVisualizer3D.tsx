@@ -7,7 +7,9 @@ import type * as THREE from "three";
 import type { StudioVehicle } from "./vehiclePaint";
 import { ArrowRight, Check, MessageCircle, MousePointerClick, RefreshCw, RotateCw } from "lucide-react";
 
-export type FinishType = "Glossy" | "Matte" | "Satin" | "Metallic";
+import { FINISH_SPECS, type FinishType } from "../lib/studio-finishes";
+export { FINISH_SPECS };
+export type { FinishType };
 
 export interface DecalColor {
   name: string;
@@ -32,13 +34,6 @@ export const DECAL_COLORS: DecalColor[] = [
   { name: "Pearl White", hex: "#EEEDE5", accent: "from-[#EEEDE5] to-[#FFFFFF]", desc: "Putih mutiara", pantone: "" },
   { name: "Titanium Silver", hex: "#929CA6", accent: "from-[#929CA6] to-[#DCE2E7]", desc: "Abu titanium", pantone: "" },
 ];
-
-export const FINISH_SPECS: Record<FinishType, { roughness: number; metalness: number; label: string; desc: string; coat: number }> = {
-  Glossy: { roughness: 0.1, metalness: 0.2, label: "Glossy", desc: "Refleksi jernih cermin wet-look", coat: 1.0 },
-  Matte: { roughness: 0.7, metalness: 0.05, label: "Matte", desc: "Doff beludru anti-silau", coat: 0.0 },
-  Satin: { roughness: 0.35, metalness: 0.25, label: "Satin", desc: "Semi-gloss mewah sentuhan sutra", coat: 0.4 },
-  Metallic: { roughness: 0.2, metalness: 0.85, label: "Metallic", desc: "Pendaran butiran kristal metalik", coat: 0.8 },
-};
 
 function VisualizerLoader() {
   return <div className="atelier-canvas-loading"><span/><p>Menyiapkan model 3D…</p></div>;
