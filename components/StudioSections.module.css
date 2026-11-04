@@ -187,3 +187,8 @@
 :global(html.dark) .material :global(.hm-material-list>button[aria-pressed=true] small),:global(html.dark) .material :global(.hm-material-list>button[aria-pressed=true]>span),:global(html.dark) .material :global(.hm-material-list>button[aria-pressed=true]>svg){color:#0c0a14}
 :global(html.dark) .material :global(.hm-finishes button[aria-pressed=true]){background:#a18cd1;color:#0c0a14}
 :global(html.dark) .material :global(.hm-image-stage),:global(html.dark) .material :global(.hm-collection),:global(html.dark) .material :global(.hm-note),:global(html.dark) .material :global(.hm-finishes>div),:global(html.dark) .material :global(.hm-finishes button){border-color:#a18cd140}
+.material :global(.hm-explorer-stage){grid-column:1/-1;min-width:0}
+.material :global(.hm-explorer-layout){display:grid;grid-template-columns:minmax(0,1fr) 310px}
+.material :global(.hm-explorer-stage>.scroll-stage-panel){background:var(--bg-primary)}
+@media(max-width:1000px){.material :global(.hm-explorer-layout){grid-template-columns:minmax(0,1fr) 250px}}
+@media(max-width:760px){.material :global(.hm-explorer-layout){grid-template-columns:1fr}}

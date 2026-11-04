@@ -5,6 +5,7 @@ import { ScrollStage } from "./ScrollStage";
 import { Scissors, Trophy, Truck, Sparkles } from "lucide-react";
 import studio from "./StudioSections.module.css";
 import cinema from "./StickerCinema.module.css";
+import { HoverDetails } from "./HoverDetails";
 
 const STICKER_SERVICES = [
   {
@@ -67,7 +68,7 @@ const STICKER_SERVICES = [
 
 export function CustomStickerSection() {
   return <section id="custom-sticker" className={`${studio.custom} ${cinema.section} editorial-custom`} aria-labelledby="sticker-title">
-    <ScrollStage className={cinema.scroll} distance={1.4}>
+    <ScrollStage className={cinema.scroll} distance={1.8}>
       <div className={cinema.scene}>
         <div className={cinema.lightSweep} aria-hidden="true"/>
         <div className={cinema.orbit} aria-hidden="true"><span/><span/><span/></div>
@@ -100,10 +101,10 @@ export function CustomStickerSection() {
     </ScrollStage>
     <div className={cinema.typeBand} aria-hidden="true"><span>YOUR STYLE.</span><span>YOUR <i>SIGNATURE.</i> ↗</span></div>
     <div className="custom-services" id="sticker-services"><div className={studio.serviceIntro}><span className="editorial-kicker">DARI DETAIL SAMPAI TOTAL.</span><h2>Empat cara.<br/><em>Satu karakter.</em></h2><p>Pilih ruang ekspresimu. Kami kerjakan sampai ke detail terakhir.</p></div>
-      {STICKER_SERVICES.map((service,index)=><details key={service.title} className="service-item motion-reveal">
+      {STICKER_SERVICES.map((service,index)=><HoverDetails key={service.title} className="service-item motion-reveal" group="sticker-services">
         <summary><span>0{index+1}</span><h3>{["Cutting Sticker","Custom Livery","Branding Armada","Full Wrap"][index]}</h3><ArrowUpRight size={18}/></summary>
         <div><p>{service.description}</p><ul>{service.points.map(point=><li key={point}>{point}</li>)}</ul><a className="editorial-link" href="#konsultasi">Konsultasikan kebutuhan ini <ArrowUpRight size={16}/></a></div>
-      </details>)}
+      </HoverDetails>)}
     </div>
   </section>;
 }

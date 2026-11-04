@@ -58,7 +58,7 @@ export function GallerySection({ showcaseVideoSrc: suppliedVideo, showcasePoster
     window.open('https://wa.me/6281234567890?text='+encodeURIComponent(text),'_blank','noopener,noreferrer');
   };
   return <section id="galeri" className={`${gallery.section} editorial-gallery`} aria-labelledby="gallery-title">
-    <ScrollStage distance={.65} className={gallery.stage}><div className={gallery.hero}>
+    <ScrollStage distance={.9} className={gallery.stage}><div className={gallery.hero}>
       <div className={gallery.masthead}><span>05 / THE ZAN ARCHIVE</span><span>SELECTED WORK. DISTINCT PERSONALITIES.</span><span>© ZAN DECAL</span></div>
       <div className={gallery.heroMedia} aria-hidden="true"><video ref={showcaseVideo} src={showcaseVideoSrc || undefined} poster={showcasePoster || publicImage(content.portfolio.find(item=>item.mediaType==="photo")?.mediaSrc || "") || undefined} muted loop playsInline preload="metadata" onPlay={()=>setVideoPaused(false)} onPause={()=>setVideoPaused(true)}/></div>
       <div className={gallery.heroCopy}><span className={gallery.kicker}>KARAKTER YANG TERLIHAT.</span><h2 id="gallery-title"><span>BUKAN</span><span><em>BIASA.</em><i>↗</i></span></h2><p>Setiap garis punya maksud.<br/>Setiap karya punya pemiliknya.</p><a href="#gallery-collection">Masuk ke arsip <ArrowUpRight size={18}/></a></div>

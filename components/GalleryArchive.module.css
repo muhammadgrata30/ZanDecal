@@ -114,3 +114,10 @@
 :global(html.dark) .dialog{border-color:#a18cd140}
 :global(html.dark) .close{border-color:#a18cd150}
 @media(hover:hover){:global(html.dark) .order:hover{background:#bda3e8;color:#0c0a14}}
+:global(html:not(.dark)) .hero,:global(html:not(.dark)) .stage :global(.scroll-stage-panel){background:#ece8f5;color:#0c0a14}
+:global(html:not(.dark)) .heroCopy,:global(html:not(.dark)) .heroFooter,:global(html:not(.dark)) .heroIndex{color:#0c0a14}
+:global(html:not(.dark)) .heroCopy>p,:global(html:not(.dark)) .heroIndex>span,:global(html:not(.dark)) .masthead>span:nth-child(2){color:#514b61}
+:global(html:not(.dark)) .heroCopy>.kicker,:global(html:not(.dark)) .heroFooter>span:first-child>span{color:#7654aa}
+:global(html:not(.dark)) .masthead{border-color:#0c0a1430}
+:global(html:not(.dark)) .heroMedia::after{background:linear-gradient(90deg,#f8f9fecc,transparent 80%),linear-gradient(0deg,#f8f9fe90,transparent 35%)}
+:global(html:not(.dark)) .heroFooter>button{background:#f8f9fecc;color:#0c0a14;border-color:#0c0a1440}

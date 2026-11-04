@@ -161,3 +161,20 @@
 :global(html.dark) .star{color:#0c0a14}
 :global(html.dark) .mini b,:global(html.dark) .mini>svg{color:#bda3e8}
 :global(html.dark) .peel{background:linear-gradient(135deg,#504460,#9281a9 46%,#32263e 49%,#211a30 51%)}
+/* Theme-aware chapter surfaces; sticker ink and paper keep their own material colors. */
+.section{--chapter-bg:#f8f9fe;--chapter-text:#0c0a14;--chapter-muted:#676276;--chapter-line:#0c0a1430;--service-surface:#eeebf5;--vinyl-text:#8060ac;--text-main:var(--chapter-text);--text-muted:var(--chapter-muted);background:var(--chapter-bg);color:var(--chapter-text)}
+.scene,.scroll :global(.scroll-stage-panel){background:var(--chapter-bg);color:var(--chapter-text)}
+.topline{border-color:var(--chapter-line)}
+.topline>span:nth-child(2),.eyebrow,.intro>p,.artCaption,.sceneFooter{color:var(--chapter-muted)}
+.vinylWord{color:var(--vinyl-text);text-shadow:1px 2px #a18cd160,2px 4px #0c0a1420}
+.period,.cta,.sceneFooter>a{color:var(--chapter-text)}
+.section :global(.custom-services){background:var(--chapter-bg);color:var(--chapter-text)}
+.section :global(.custom-services) :is(p,li){color:var(--chapter-muted)}
+.section :global(.service-item){border-color:var(--chapter-line)}
+.section :global(.service-item[open]){padding-inline:20px;margin-inline:-20px;background:var(--service-surface)}
+.section :global(.service-item .editorial-link){color:var(--chapter-text)}
+.section :global(.service-item summary>span),.section :global(.custom-services .editorial-kicker){color:var(--vinyl-text)}
+.section :is(a,summary):focus-visible{outline-color:var(--vinyl-text)}
+:global(html.dark) .section{--chapter-bg:#0c0a14;--chapter-text:#f4f3fa;--chapter-muted:#b9b1cc;--chapter-line:#a18cd140;--service-surface:#1d162c;--vinyl-text:#8fd3f4}
+:global(html.dark) .typeBand{background:#1d162c;color:#a18cd1}
+:global(html.dark) .typeBand i{color:#8fd3f4}

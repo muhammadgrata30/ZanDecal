@@ -15,12 +15,14 @@ import { HeroStudioSequence } from "../components/experience/HeroStudioSequence"
 import { SectionTransitions } from "../components/experience/SectionTransitions";
 import { MaterialCurtain } from "../components/MaterialCurtain";
 import { MotorStudio } from "../components/experience/MotorStudio";
+import { GentleScroll } from "../components/GentleScroll";
 
 const links = [["3D Studio", "3d-studio"], ["Material", "material"], ["Custom Sticker", "custom-sticker"], ["Galeri", "galeri"], ["Cara Order", "cara-order"]];
 
 export default function Home() {
   const [menu, setMenu] = useState(false);
   return <div className="atelier-site split-home">
+    <GentleScroll/>
     <MotionObserver/>
     <SectionTransitions/>
     <a className="atelier-skip" href="#main">Lewati ke konten</a>

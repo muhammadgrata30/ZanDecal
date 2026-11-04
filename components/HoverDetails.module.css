@@ -1,0 +1,4 @@
+.root{transition:padding .3s ease,margin .3s ease,background .3s ease}
+.root[open]>:not(summary){animation:detail-arrive .3s ease both}
+@keyframes detail-arrive{from{opacity:.35;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.root,.root[open]>:not(summary){animation:none!important;transition:none!important}}

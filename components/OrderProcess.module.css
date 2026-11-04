@@ -24,3 +24,4 @@
 :global(html.dark) .tabs>button[aria-selected=true]{background:#302341}
 :global(html.dark) .ticket,:global(html.dark) .preparation{background:#1b1629}
 @media(hover:hover){:global(html.dark) .tabs>button:hover:not([aria-selected=true]){background:#241c35}}
+.faq details[open]{background:var(--bg-surface-elevated);padding-inline:18px;margin-inline:-18px}

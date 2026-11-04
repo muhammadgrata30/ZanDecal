@@ -3,8 +3,8 @@
 import { useEffect, useRef, type ReactNode } from "react";
 
 /** Native sticky stages: scroll is never intercepted, and tall panels remain reachable. */
-export function ScrollStage({ children, className = "", distance = 0.35, id }: {
-  children: ReactNode; className?: string; distance?: number; id?: string;
+export function ScrollStage({ children, className = "", distance = 0.35, id, top }: {
+  children: ReactNode; className?: string; distance?: number; id?: string; top?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -45,7 +45,7 @@ export function ScrollStage({ children, className = "", distance = 0.35, id }: {
       // Sticky needs real parent content height, not trailing padding: otherwise it
       // releases immediately and leaves the animation's scroll distance empty.
       element.style.setProperty("--stage-height", `${height + space}px`);
-      const inset = element.classList.contains("hero-stage") || element.classList.contains("vehicle-stage") ? 0 : 88;
+      const inset = top ?? (element.classList.contains("hero-stage") || element.classList.contains("vehicle-stage") ? 0 : 88);
       element.style.setProperty("--stage-top", `${Math.min(inset, window.innerHeight - height)}px`);
       update();
     };
@@ -66,7 +66,7 @@ export function ScrollStage({ children, className = "", distance = 0.35, id }: {
       window.removeEventListener("resize", measure);
       reduced.removeEventListener("change", measure);
     };
-  }, [distance]);
+  }, [distance,top]);
   return <div ref={ref} id={id} className={`scroll-stage ${className}`}><div className="scroll-stage-panel">{children}</div></div>;
 }
 

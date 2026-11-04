@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ArrowUpRight, CheckCircle2, Clock, MapPin, Phone, ShieldCheck } from "lucide-react";
 import { MotionHead, ScrollStage } from "./ScrollStage";
 import { TransitionVeil } from "./experience/SectionTransitions";
+import { HoverDetails } from "./HoverDetails";
 const VEHICLES = ["Mobil Sport / Coupe", "Superbike / Motor Sport", "Sedan / Hatchback", "SUV / Crossover", "Armada Bisnis / Fleet", "Lainnya"];
 const SERVICES = ["Full Wrap Livery", "Custom Striping & Racing Decal", "Precision Die-Cut Cutting Sticker", "Paint Protection Film (PPF)"];
 const FINISHES = ["Signature Chameleon", "Ultra High-Gloss", "Satin Stealth Matte", "Prismatic Holo"];
@@ -53,11 +54,11 @@ export function ConsultationSection() {
         {isSubmitted&&<p className="submit-status" role="status"><CheckCircle2 size={16}/> Tautan konsultasi WhatsApp telah dibuka.</p>}
       </fieldset>
     </form></ScrollStage>
-    <details className="consultation-studio"><summary>Informasi studio & standar pengerjaan <ArrowUpRight size={16}/></summary><div>
+    <HoverDetails className="consultation-studio"><summary>Informasi studio & standar pengerjaan <ArrowUpRight size={16}/></summary><div>
       <p><MapPin size={18}/><span><strong>Studio & Clean Room</strong>Jl. Otomotif Raya No. 88, Kawasan Modifikasi Terpadu, Jakarta / Tangerang</span></p>
       <p><Clock size={18}/><span><strong>Jam operasional</strong>Senin–Sabtu, 09:00–18:00 WIB. Instalasi berdasarkan reservasi.</span></p>
       <p><Phone size={18}/><span><strong>Direct contact</strong><a href="https://wa.me/6281234567890" target="_blank" rel="noreferrer">+62 812-3456-7890</a><br/><a href="mailto:studio@zandecal.id">studio@zandecal.id</a></span></p>
       <p><ShieldCheck size={18}/><span><strong>Standar keamanan & mutu</strong>Ruang instalasi tertutup ber-AC, teknik knifeless tape untuk menjaga cat, dan heat gun thermal profiling pada lekukan panel.</span></p>
-    </div></details>
+    </div></HoverDetails>
   </section>;
 }

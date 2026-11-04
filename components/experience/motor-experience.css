@@ -12,3 +12,4 @@ html.dark .motor-preview{background:#100d1c}html.dark .motor-interaction-hint{co
 .motor-preview-tools{justify-content:flex-end}
 html.dark .split-image-hero[data-theme-choice=split] .split-surface-light{transform:translate3d(100%,0,0)}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}
+.motor-vehicle-select{display:flex;gap:5px;margin-bottom:15px}.motor-vehicle-select button{flex:1;border:1px solid var(--border-strong);padding:12px 8px;min-height:46px;font-size:11px}.motor-vehicle-select button[aria-pressed=true]{background:#a18cd1;color:#0c0a14}

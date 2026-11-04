@@ -1,4 +1,4 @@
 .transition{position:relative;isolation:isolate;background:var(--bg-primary)}
 .pinned{position:sticky;top:var(--studio-pin-top,0px);min-height:100svh;display:flex;flex-direction:column;justify-content:center;z-index:0;background:var(--bg-primary)}
-.material{position:relative;z-index:2;margin-top:clamp(150px,28svh,300px);background:var(--bg-primary);border-top:1px solid var(--border-strong);box-shadow:0 -28px 65px -35px #08061088}
+.material{position:relative;z-index:2;margin-top:clamp(190px,38svh,380px);background:var(--bg-primary);border-top:1px solid var(--border-strong);box-shadow:0 -28px 65px -35px #08061088}
 @media(prefers-reduced-motion:reduce){.pinned{position:relative;top:auto;min-height:0}.material{margin-top:0;box-shadow:none}}

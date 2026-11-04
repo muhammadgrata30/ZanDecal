@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { memo, useEffect, useId, useRef } from "react";
 import type { PreviewFinish } from "../../lib/material-preview";
 
 // A lightweight vector image: one animated outline shared by the color and light layers.
@@ -10,7 +10,7 @@ const shapes = [
   "M80 100 C260 55 400 155 570 100 S850 55 940 110 L940 470 C760 415 650 515 470 465 S220 420 80 470 Z",
 ];
 
-export default function DecalImage({ color, colorName, finish, paused, reduced }: {
+export default memo(function DecalImage({ color, colorName, finish, paused, reduced }: {
   color: string; colorName: string; finish: PreviewFinish; paused: boolean; reduced: boolean;
 }) {
   const id = useId().replaceAll(":", "");
@@ -41,4 +41,4 @@ export default function DecalImage({ color, colorName, finish, paused, reduced }
       <use href={`#${id}-sheet`} fill="none" stroke="#fff" strokeOpacity=".16" strokeWidth="1" />
     </svg>
   </div>;
-}
+});

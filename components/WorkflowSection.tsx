@@ -4,6 +4,7 @@ import React, { useRef, useState, type CSSProperties } from "react";
 import { Palette, MessageSquare, Printer, ShieldCheck, ArrowUpRight, Check, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import process from "./OrderProcess.module.css";
+import { HoverDetails } from "./HoverDetails";
 
 interface StepDetail {
   number: string;
@@ -126,7 +127,7 @@ export function WorkflowSection() {
     <div className={process.workspace} id="order-stations" style={{"--order-progress":activeStep/4} as CSSProperties}>
       <div className={process.workspaceHeading}><span className={process.eyebrow}>THE PROCESS / PILIH TAHAP UNTUK MELIHAT DETAIL</span><span aria-live="polite">TAHAP {active.number} DARI 04 — {stageNames[activeStep-1]}</span></div>
       <div className={process.tabs} role="tablist" aria-label="Tahap pemesanan">
-        {ORDER_STEPS.map((step,index)=><button ref={node=>{tabs.current[index]=node;}} key={step.id} type="button" role="tab" id={`order-tab-${step.id}`} aria-controls={`order-panel-${step.id}`} aria-selected={activeStep===step.id} tabIndex={activeStep===step.id?0:-1} onClick={()=>setActiveStep(step.id)} onKeyDown={event=>{
+        {ORDER_STEPS.map((step,index)=><button ref={node=>{tabs.current[index]=node;}} key={step.id} type="button" role="tab" id={`order-tab-${step.id}`} aria-controls={`order-panel-${step.id}`} aria-selected={activeStep===step.id} tabIndex={activeStep===step.id?0:-1} onPointerEnter={event=>{if(event.pointerType==="mouse"&&matchMedia("(hover:hover) and (pointer:fine)").matches)setActiveStep(step.id);}} onClick={()=>setActiveStep(step.id)} onKeyDown={event=>{
           let next=index;
           if(event.key==="ArrowRight") next=(index+1)%4;
           else if(event.key==="ArrowLeft") next=(index+3)%4;
@@ -151,6 +152,6 @@ export function WorkflowSection() {
       ["Belum punya desain, bisa konsultasi?","Bisa. Bawa foto kendaraan dan referensi yang kamu suka. Tim membantu menyusun arah desain, warna, dan pilihan finishing bersama kamu."],
       ["Kapan desain mulai diproduksi?","Alurnya dimulai dari eksplorasi dan konsultasi. Mockup dibahas serta disepakati terlebih dahulu sebelum masuk ke tahap produksi."],
       ["Bagaimana menentukan biaya dan jadwal?","Sampaikan model kendaraan, jenis layanan, area yang ingin dikerjakan, dan pilihan material. Tim mengonfirmasi biaya serta jadwal berdasarkan lingkup proyek saat konsultasi."]
-    ].map(([question,answer],index)=><details key={question}><summary><span>0{index+1}</span><h3>{question}</h3><Plus size={19}/></summary><p>{answer}</p></details>)}</div></div>
+    ].map(([question,answer],index)=><HoverDetails key={question} group="order-faq"><summary><span>0{index+1}</span><h3>{question}</h3><Plus size={19}/></summary><p>{answer}</p></HoverDetails>)}</div></div>
   </section>;
 }

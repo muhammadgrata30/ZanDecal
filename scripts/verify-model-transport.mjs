@@ -13,7 +13,8 @@ async function load(relative,dependencies){
   const exports={};new Function("require","exports",output)(name=>{assert.ok(name in dependencies,name);return dependencies[name];},exports);return exports;
 }
 const {decodeModelBytes}=await load("../lib/model-transport.ts",{"three/examples/jsm/libs/fflate.module.js":fflate});
-const archive=await readFile(new URL("../public/models/transport/2024_ducati_streetfighter_v4_s.glb.gz",import.meta.url));
+for(const asset of ["2024_ducati_streetfighter_v4_s","byd-seal"]){
+const archive=await readFile(new URL(`../public/models/transport/${asset}.glb.gz`,import.meta.url));
 const original=gunzipSync(archive);
 const buffer=bytes=>bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength);
 assert.deepEqual(Buffer.from(await decodeModelBytes(buffer(archive))),original,"Raw gzip, as served by Netlify, preserves every model byte");
@@ -32,5 +33,6 @@ await new Promise(resolve=>server.listen(0,"127.0.0.1",resolve));
 try{
   const result=await new PortableModelLoader().loadAsync(`http://127.0.0.1:${server.address().port}/motor.glb.gz`);
   let meshes=0;result.scene.traverse(node=>{if(node.isMesh)meshes++;});assert.ok(meshes>0);
-  console.log(`PASS: raw gzip, decoded GLB, older-browser fallback and invalid responses; real loader parsed ${meshes} meshes without Content-Encoding.`);
+  console.log(`PASS ${asset}: raw gzip, decoded GLB, older-browser fallback and invalid responses; real loader parsed ${meshes} meshes without Content-Encoding.`);
 }finally{await new Promise(resolve=>server.close(resolve));}
+}
