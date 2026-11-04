@@ -14,6 +14,7 @@ import { PortfolioHandoff } from "../components/PortfolioHandoff";
 import { HeroStudioSequence } from "../components/experience/HeroStudioSequence";
 import { SectionTransitions } from "../components/experience/SectionTransitions";
 import { MaterialCurtain } from "../components/MaterialCurtain";
+import { MotorStudio } from "../components/experience/MotorStudio";
 
 const links = [["3D Studio", "3d-studio"], ["Material", "material"], ["Custom Sticker", "custom-sticker"], ["Galeri", "galeri"], ["Cara Order", "cara-order"]];
 
@@ -32,7 +33,7 @@ export default function Home() {
     </header>
     <main id="main">
       <HeroStudioSequence/>
-      <MaterialCurtain><HomeMaterialSection/></MaterialCurtain>
+      <MaterialCurtain studio={<MotorStudio/>}><HomeMaterialSection/></MaterialCurtain>
       <CustomStickerSection/>
       <PortfolioHandoff>
         <GallerySection/>

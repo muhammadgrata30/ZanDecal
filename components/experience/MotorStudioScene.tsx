@@ -1,14 +1,15 @@
 "use client";
 import { Suspense, useEffect, useMemo, useRef } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
-import { Environment, Lightformer, OrbitControls, useGLTF, useTexture } from "@react-three/drei";
+import { Canvas, useLoader, useThree } from "@react-three/fiber";
+import { Environment, Lightformer, OrbitControls, useTexture } from "@react-three/drei";
 import type { OrbitControls as Controls } from "three-stdlib";
 import * as THREE from "three";
 import { buildVehicleRig } from "./vehicleRig";
 import { FINISH_SPECS, type FinishType } from "../../lib/studio-finishes";
+import { PortableModelLoader } from "./PortableModelLoader";
 interface Props{color:string;finish:FinishType;dark:boolean;active:boolean;view:string;zoom:number;onReady:()=>void}
 function Motor({color,finish,onReady}:Props){
-  const {scene}=useGLTF("/models/transport/2024_ducati_streetfighter_v4_s.glb.gz");
+  const {scene}=useLoader(PortableModelLoader,"/models/transport/2024_ducati_streetfighter_v4_s.glb.gz");
   const neutral=useTexture("/models/ducati-paint-neutral.png");
   const rig=useMemo(()=>buildVehicleRig(scene,"ducati",neutral),[scene,neutral]);
   const invalidate=useThree(state=>state.invalidate);
