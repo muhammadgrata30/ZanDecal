@@ -11,7 +11,7 @@ import { ConsultationSection } from "../components/ConsultationSection";
 import { Footer } from "../components/Footer";
 import { MotionObserver } from "../components/ScrollStage";
 import { PortfolioHandoff } from "../components/PortfolioHandoff";
-import { HeroStudioSequence } from "../components/experience/HeroStudioSequence";
+import { PerfectApplyHero } from "../components/experience/PerfectApplyHero";
 import { SectionTransitions } from "../components/experience/SectionTransitions";
 import { MaterialCurtain } from "../components/MaterialCurtain";
 import { MotorStudio } from "../components/experience/MotorStudio";
@@ -21,7 +21,7 @@ const links = [["3D Studio", "3d-studio"], ["Material", "material"], ["Custom St
 
 export default function Home() {
   const [menu, setMenu] = useState(false);
-  return <div className="atelier-site split-home">
+  return <div className="atelier-site apply-home">
     <GentleScroll/>
     <MotionObserver/>
     <SectionTransitions/>
@@ -34,7 +34,7 @@ export default function Home() {
       <div className="atelier-nav-actions"><button className="atelier-menu" onClick={() => setMenu(!menu)} aria-label={menu ? "Tutup menu" : "Buka menu"} aria-expanded={menu} aria-controls="atelier-navigation">{menu ? <X/> : <Menu/>}</button></div>
     </header>
     <main id="main">
-      <HeroStudioSequence/>
+      <PerfectApplyHero typography="11"/>
       <MaterialCurtain studio={<MotorStudio/>}><HomeMaterialSection/></MaterialCurtain>
       <CustomStickerSection/>
       <PortfolioHandoff>

@@ -1,0 +1,49 @@
+/* Animate inner glyphs only: the existing intro owns the outer letter transforms. */
+.headline-lab .perfect-apply:is([data-typography="9"],[data-typography="10"],[data-typography="11"],[data-typography="12"]) .hero-type{top:30%;width:38%;max-width:540px;perspective:900px}
+.headline-lab .perfect-apply:is([data-typography="9"],[data-typography="10"],[data-typography="11"],[data-typography="12"]) .title-line{overflow:visible;position:relative}
+.headline-lab .perfect-apply:is([data-typography="9"],[data-typography="10"],[data-typography="11"],[data-typography="12"]) .title-word{perspective:700px}
+.headline-lab .perfect-apply:is([data-typography="9"],[data-typography="10"],[data-typography="11"],[data-typography="12"]) .glyph{position:relative;transform-origin:50% 85%}
+.headline-lab .perfect-apply:is([data-typography="9"],[data-typography="10"],[data-typography="11"],[data-typography="12"]).settled .glyph{animation-duration:7s;animation-timing-function:cubic-bezier(.45,0,.25,1);animation-iteration-count:infinite;animation-delay:calc(var(--i)*85ms)}
+.headline-lab .perfect-apply[data-typography="9"] h1{font:900 clamp(40px,4.6vw,74px)/.95 var(--font-geist-sans),sans-serif;letter-spacing:-.08em}
+.headline-lab .perfect-apply[data-typography="9"].settled .glyph{animation-name:zan-peel}
+.headline-lab .perfect-apply[data-typography="9"] .line-two{color:transparent;-webkit-text-stroke:1.3px var(--ink)}
+.headline-lab .perfect-apply[data-typography="9"] .glyph::after{content:'';position:absolute;left:8%;right:8%;bottom:-.05em;height:2px;background:var(--ink);opacity:.15;transform:scaleX(0);transform-origin:left}
+.headline-lab .perfect-apply[data-typography="9"].settled .glyph::after{animation:zan-underline 7s ease-in-out infinite;animation-delay:calc(var(--i)*85ms)}
+.headline-lab .perfect-apply[data-typography="10"] h1{font:italic 400 clamp(66px,6.2vw,100px)/.84 var(--font-editorial),serif;letter-spacing:-.065em}
+.headline-lab .perfect-apply[data-typography="10"] .line-two{font-style:italic;padding-top:.16em;margin-left:.22em}
+.headline-lab .perfect-apply[data-typography="10"].settled .glyph{animation-name:zan-liquid;animation-duration:5.5s;animation-delay:calc(var(--i)*-150ms)}
+.headline-lab .perfect-apply[data-typography="10"] .eyebrow{font-family:var(--font-geist-mono),monospace;letter-spacing:.18em}
+.headline-lab .perfect-apply[data-typography="11"] .hero-type{width:46%;max-width:700px;top:28%}
+.headline-lab .perfect-apply[data-typography="11"] h1{font:800 clamp(76px,8.1vw,138px)/.88 var(--font-display),sans-serif;letter-spacing:-.045em;margin:28px 0 32px}
+.headline-lab .perfect-apply[data-typography="11"] .line-two{margin-left:.24em;padding-top:.05em}
+.headline-lab .perfect-apply[data-typography="11"] .title-word{perspective:1100px}
+.headline-lab .perfect-apply[data-typography="11"] .letter{perspective:800px}
+.headline-lab .perfect-apply[data-typography="11"] .glyph{color:transparent;animation:none!important}
+.headline-lab .perfect-apply[data-typography="11"] .glyph::before,.headline-lab .perfect-apply[data-typography="11"] .glyph::after{content:attr(data-letter);position:absolute;inset:0;color:var(--ink);transform-origin:50% 54%;backface-visibility:hidden}
+.headline-lab .perfect-apply[data-typography="11"] .glyph::before{clip-path:polygon(-20% 0,120% 0,120% 47%,-20% 60%)}
+.headline-lab .perfect-apply[data-typography="11"] .glyph::after{clip-path:polygon(-20% 60%,120% 47%,120% 100%,-20% 100%)}
+.headline-lab .perfect-apply[data-typography="11"].settled .glyph::before{animation:zan-slice-top 7s cubic-bezier(.22,.68,.18,1) infinite;animation-delay:calc(var(--i)*75ms)}
+.headline-lab .perfect-apply[data-typography="11"].settled .glyph::after{animation:zan-slice-bottom 7s cubic-bezier(.22,.68,.18,1) infinite;animation-delay:calc(var(--i)*75ms)}
+/* A single text-clipped highlight crosses each line after its pieces reunite. */
+.headline-lab .perfect-apply[data-typography="11"] .title-line::after{content:attr(data-text);position:absolute;inset:0;white-space:nowrap;color:transparent;background:linear-gradient(108deg,transparent 35%,var(--bg) 47%,var(--ink) 50%,var(--bg) 53%,transparent 65%);background-size:300% 100%;background-position:150% 0;background-clip:text;-webkit-background-clip:text;pointer-events:none;opacity:0}
+.headline-lab .perfect-apply[data-typography="11"].settled .title-line::after{animation:zan-cut-lustre 7s ease-in-out infinite}
+.headline-lab .perfect-apply[data-typography="11"].settled .line-two::after{animation-delay:.3s}
+.headline-lab .perfect-apply[data-typography="12"] h1{font:900 clamp(48px,5.5vw,88px)/.94 var(--font-geist-sans),sans-serif;letter-spacing:-.085em}
+.headline-lab .perfect-apply[data-typography="12"] .title-line{isolation:isolate}
+.headline-lab .perfect-apply[data-typography="12"].settled .glyph{animation-name:zan-orbit-letter}
+.headline-lab .perfect-apply[data-typography="12"] .title-line::before,.headline-lab .perfect-apply[data-typography="12"] .title-line::after{content:attr(data-text);position:absolute;inset:0;white-space:nowrap;color:transparent;-webkit-text-stroke:1px var(--ink);pointer-events:none;z-index:-1;opacity:0}
+.headline-lab .perfect-apply[data-typography="12"].settled .title-line::before{opacity:.23;animation:zan-orbit-echo 7s ease-in-out infinite}
+.headline-lab .perfect-apply[data-typography="12"].settled .title-line::after{opacity:.12;animation:zan-orbit-echo 7s ease-in-out infinite reverse}
+@keyframes zan-peel{0%,16%,68%,100%{transform:none}30%{transform:translate3d(0,-.1em,32px) rotateX(-45deg) rotateZ(-5deg) scaleY(1.09)}44%{transform:translate3d(0,.025em,0) rotateX(12deg) scaleY(.95)}54%{transform:none}}
+@keyframes zan-underline{0%,17%,65%,100%{transform:scaleX(0)}30%,45%{transform:scaleX(1)}}
+@keyframes zan-liquid{0%,100%{transform:translateY(0) rotate(-2deg) scale(1,1)}25%{transform:translateY(-.09em) rotate(3deg) scale(.96,1.1)}60%{transform:translateY(.055em) rotate(-3deg) scale(1.04,.94)}}
+@keyframes zan-slice-top{0%,12%,64%,100%{transform:none;opacity:1}27%{transform:translate3d(-.11em,-.045em,24px) rotateY(-13deg) rotateZ(-2deg);opacity:.78}35%{transform:translate3d(-.11em,-.045em,24px) rotateY(-13deg) rotateZ(-2deg);opacity:.78}49%{transform:translate3d(.012em,0,0) rotateY(2deg);opacity:1}58%{transform:none;opacity:1}}
+@keyframes zan-slice-bottom{0%,12%,64%,100%{transform:none;opacity:1}27%{transform:translate3d(.11em,.045em,14px) rotateY(13deg) rotateZ(2deg);opacity:.9}35%{transform:translate3d(.11em,.045em,14px) rotateY(13deg) rotateZ(2deg);opacity:.9}49%{transform:translate3d(-.012em,0,0) rotateY(-2deg);opacity:1}58%{transform:none;opacity:1}}
+@keyframes zan-cut-lustre{0%,65%,95%,100%{opacity:0;background-position:150% 0}70%{opacity:.65;background-position:150% 0}87%{opacity:.65;background-position:-50% 0}94%{opacity:0;background-position:-50% 0}}
+@keyframes zan-orbit-letter{0%,18%,72%,100%{transform:none}33%{transform:translate3d(0,-.07em,22px) rotateY(-26deg) rotateX(12deg)}49%{transform:translate3d(0,.025em,0) rotateY(10deg)}62%{transform:none}}
+@keyframes zan-orbit-echo{0%,100%{transform:translate(5px,-7px) skewY(0)}35%{transform:translate(-9px,9px) skewY(-2deg)}70%{transform:translate(13px,-12px) skewY(2deg)}}
+@media(max-width:999px){.headline-lab .perfect-apply:is([data-typography="9"],[data-typography="10"],[data-typography="11"],[data-typography="12"]) .hero-type{top:23%;width:86%;max-width:365px}.headline-lab .perfect-apply[data-typography="9"] h1{font-size:clamp(39px,10.5vw,55px)}.headline-lab .perfect-apply[data-typography="10"] h1{font-size:clamp(60px,16vw,82px)}.headline-lab .perfect-apply[data-typography="11"] h1{font-size:clamp(51px,14vw,72px)}.headline-lab .perfect-apply[data-typography="12"] h1{font-size:clamp(44px,12vw,63px)}}
+.headline-lab .perfect-apply:is(.paused,.offscreen) *::before,.headline-lab .perfect-apply:is(.paused,.offscreen) *::after{animation-play-state:paused!important}
+@media(max-width:999px){.headline-lab .perfect-apply[data-typography="11"] .hero-type{top:23%;width:86%;max-width:460px}.headline-lab .perfect-apply[data-typography="11"] h1{font-size:clamp(64px,17.5vw,88px);margin:24px 0 26px}.headline-lab .perfect-apply[data-typography="11"] .line-two{margin-left:.12em}}
+@media(max-width:380px){.headline-lab .perfect-apply[data-typography="11"] h1{font-size:17.5vw}}
+@media(prefers-reduced-motion:reduce){.headline-lab .perfect-apply[data-typography] .glyph,.headline-lab .perfect-apply[data-typography] .glyph::before,.headline-lab .perfect-apply[data-typography] .glyph::after,.headline-lab .perfect-apply[data-typography] .title-line::before,.headline-lab .perfect-apply[data-typography] .title-line::after{animation:none!important}}

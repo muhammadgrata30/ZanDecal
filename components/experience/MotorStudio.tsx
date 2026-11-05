@@ -7,6 +7,7 @@ import { FINISH_SPECS, type FinishType } from "../../lib/studio-finishes";
 import { useTheme } from "../ThemeContext";
 import type { StudioVehicle } from "../vehiclePaint";
 import { STUDIO_VEHICLES } from "../../lib/studio-vehicles";
+import "./motor-experience.css";
 const Scene=dynamic(()=>import("./MotorStudioScene"),{ssr:false,loading:()=>null});
 class MotorBoundary extends Component<{children:ReactNode;onFailure:()=>void},{failed:boolean}>{
   state={failed:false};
