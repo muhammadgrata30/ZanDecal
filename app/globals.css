@@ -13,6 +13,7 @@
 }
 
 :root {
+  --story-background: #f5f3ef;
   --bg-primary: #F8F9FE;
   --bg-surface: #FFFFFF;
   --bg-surface-elevated: #F1F3FA;
@@ -27,6 +28,7 @@
 }
 
 html.dark {
+  --story-background: #17141d;
   --bg-primary: #07050E;
   --bg-surface: #0E0B1A;
   --bg-surface-elevated: #141026;

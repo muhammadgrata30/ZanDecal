@@ -2,5 +2,13 @@
   command = "npm run build -- --webpack && node scripts/verify-server-bundle.mjs"
   publish = ".next"
 
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+[build.environment]
+  NODE_VERSION = "24"
+
+# Netlify applies its current OpenNext adapter automatically.
+[[headers]]
+  for = "/models/transport/*.glb.gz"
+  [headers.values]
+    Content-Encoding = "gzip"
+    Content-Type = "model/gltf-binary"
+    Vary = "Accept-Encoding"

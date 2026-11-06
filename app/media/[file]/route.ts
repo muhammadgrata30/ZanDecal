@@ -3,11 +3,13 @@ import { stat } from "node:fs/promises";
 import { Readable } from "node:stream";
 import path from "node:path";
 import { UPLOAD_DIR } from "../../../lib/content-store";
+import { cloudConfigured, publicMediaUrl } from "../../../lib/supabase-server";
 export const runtime="nodejs";
 const TYPES:Record<string,string>={png:"image/png",jpg:"image/jpeg",gif:"image/gif",webp:"image/webp",mp4:"video/mp4",webm:"video/webm"};
 async function serve(request:Request,params:Promise<{file:string}>,head=false){
   const {file}=await params;
   if(!/^[0-9a-f-]{36}\.(png|jpg|webp|gif|mp4|webm)$/.test(file))return new Response(null,{status:404});
+  if(cloudConfigured())return Response.redirect(publicMediaUrl(file),307);
   const filename=path.join(UPLOAD_DIR,file);let size:number;
   try{size=(await stat(filename)).size;}catch{return new Response(null,{status:404});}
   const headers:Record<string,string>={"Content-Type":TYPES[file.split(".").pop()!],"Accept-Ranges":"bytes","Cache-Control":"public, max-age=31536000, immutable","X-Content-Type-Options":"nosniff"};

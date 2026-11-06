@@ -1,0 +1,38 @@
+﻿.racing-nav{--nav-ink:#0c0a14;--nav-paper:#f8f9fe;position:fixed;inset:0 0 auto;z-index:40;height:76px;display:flex;align-items:center;gap:24px;padding:0 clamp(24px,3vw,56px);background:var(--nav-paper);color:var(--nav-ink);border-bottom:1px solid #0c0a141c}
+.racing-brand{flex:0 0 118px;padding-right:0;border-right:0;display:flex;align-items:center;height:42px}
+.racing-brand img{display:block;width:100%;height:38px;object-fit:contain}
+.racing-links{display:flex;flex:0 1 auto;margin-inline:auto;align-self:stretch;align-items:center;justify-content:center;gap:34px;min-width:0}
+.racing-links>a{display:flex;flex-direction:column;align-items:flex-start;position:relative;gap:5px;white-space:nowrap;padding:8px 0 12px;color:inherit}
+.racing-index{font:500 9px/1 var(--font-geist-mono),monospace;letter-spacing:.04em}
+.racing-label{font:800 italic clamp(20px,1.55vw,24px)/1 var(--font-display),sans-serif;text-transform:uppercase;letter-spacing:-.025em}
+.racing-links>a::after{content:"";position:absolute;bottom:6px;left:0;right:0;height:3px;background:#a18cd1;transform:scaleX(0);transform-origin:left;transition:transform .2s ease}
+.racing-links>a:hover::after,.racing-links>a[aria-current]::after{transform:scaleX(1)}
+.racing-consult{display:flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;background:var(--nav-ink);color:var(--nav-paper);padding:12px 15px;font:700 italic 20px/1 var(--font-display),sans-serif;text-transform:uppercase;transition:background .2s,color .2s}
+.racing-consult:hover{background:#a18cd1;color:#0c0a14}.racing-consult svg{transition:transform .2s}.racing-consult:hover svg{transform:translateX(3px)}
+.racing-toggle,.racing-links>.racing-mobile-consult{display:none}
+.racing-nav :focus-visible{outline:2px solid #76609f;outline-offset:6px}
+.apply-home section[id]{scroll-margin-top:76px}
+.apply-home>.racing-nav~main>.perfect-apply .apply-header{top:96px}
+.apply-home>.racing-nav~main>.perfect-apply .intro-kicker{top:136px}
+@media(max-width:1199px){.racing-nav{height:72px;gap:24px;padding-inline:28px}.racing-brand{flex-basis:118px}.racing-consult{margin-left:auto}.racing-toggle{display:flex;align-items:center;gap:8px;padding:12px 0 12px 12px;border:0;background:none;color:inherit;font:700 20px/1 var(--font-display),sans-serif;text-transform:uppercase}.racing-links{display:none;margin-inline:0;justify-content:flex-start;position:absolute;inset:72px 0 auto;padding:18px 28px 26px;background:var(--nav-paper);border-bottom:1px solid #0c0a1430;box-shadow:0 24px 40px #07050e14}.racing-links.is-open{display:flex;flex-direction:column;align-items:stretch;gap:0}.racing-links>a{flex-direction:row;align-items:center;gap:25px;padding:18px 0;border-bottom:1px solid #0c0a1420}.racing-label{font-size:32px}.racing-links>a::after{bottom:0}.apply-home section[id]{scroll-margin-top:72px}.apply-home>.racing-nav~main>.perfect-apply .apply-header{top:92px}.apply-home>.racing-nav~main>.perfect-apply .intro-kicker{top:140px}}
+@media(max-width:600px){.racing-nav{height:64px;padding-inline:20px;gap:16px}.racing-brand{flex-basis:104px;border:0;padding-right:0;height:38px}.racing-consult{display:none}.racing-toggle{margin-left:auto;font-size:18px}.racing-links{top:64px;padding-inline:24px;max-height:calc(100svh - 64px);overflow:auto}.racing-links>.racing-mobile-consult{display:flex;justify-content:space-between;margin-top:20px;padding:16px 18px;background:#0c0a14;color:#f8f9fe;font:700 24px/1 var(--font-display),sans-serif;text-transform:uppercase}.racing-label{font-size:29px}.apply-home section[id]{scroll-margin-top:64px}.apply-home>.racing-nav~main>.perfect-apply .apply-header{top:84px}.apply-home>.racing-nav~main>.perfect-apply .intro-kicker{top:132px}}
+@media(prefers-reduced-motion:reduce){.racing-nav *,.racing-nav *::after{transition:none!important}}
+
+
+
+
+/* Let the hero surface run continuously behind the navigation. */
+.racing-nav{--nav-ink:#302e32;--nav-paper:#f5f3ef;transition:background-color .2s,border-color .2s}
+.racing-nav[data-over-hero=true]{background:transparent;border-bottom-color:transparent}
+html.dark .racing-nav{--nav-ink:#f0eaf4;--nav-paper:#17141d}
+html.dark .racing-brand img{filter:brightness(0) invert(1)}
+@media(min-width:1200px){.racing-nav{display:grid;grid-template-columns:minmax(140px,1fr) auto minmax(140px,1fr)}.racing-brand{width:118px;justify-self:start}.racing-consult{justify-self:end}}
+
+.racing-actions{display:flex;align-items:center;justify-content:flex-end;gap:18px;margin-left:auto}
+.racing-theme{display:flex;align-items:center;gap:12px;color:var(--nav-ink)}
+.racing-theme button{display:flex;align-items:center;gap:5px;position:relative;min-height:44px;padding:8px 0;border:0;background:transparent;color:inherit;opacity:.55;font:700 16px/1 var(--font-display),sans-serif;text-transform:uppercase;cursor:pointer}
+.racing-theme button[aria-pressed=true]{opacity:1}
+.racing-theme button::after{content:"";position:absolute;bottom:5px;left:0;right:0;height:2px;background:#a18cd1;transform:scaleX(0);transition:transform .2s}
+.racing-theme button[aria-pressed=true]::after,.racing-theme button:hover::after{transform:scaleX(1)}
+@media(min-width:1200px){.racing-actions{justify-self:end;margin-left:0}}
+@media(max-width:600px){.racing-actions{gap:14px}.racing-theme{gap:8px}.racing-theme button{padding-inline:4px;min-width:30px;justify-content:center}.racing-theme button span{display:none}}

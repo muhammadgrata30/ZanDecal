@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, type CSSProperties } from "react";
 import { useTheme } from "../ThemeContext";
@@ -11,7 +11,7 @@ interface ApplyRuntime {
 }
 
 function HeadlineLine({ text, row }: { text: string; row: number }) {
-  return <span className={`title-line ${row === 0 ? "line-one" : "line-two"}`} data-text={text} aria-hidden="true">
+  return <span className={`title-line ${row === 0 ? "line-one" : row === 1 ? "line-two" : "line-three"}`} data-text={text} aria-hidden="true">
     <span className="title-word">{[...text].map((letter, index) => <span className="letter" key={`${row}-${index}`} style={{ "--i": index + row * 4 } as CSSProperties}>
       <span className="glyph" data-letter={letter}>{letter === " " ? "\u00a0" : letter}</span>
     </span>)}</span>
@@ -28,7 +28,7 @@ export function PerfectApplyHero({ typography }: { typography?: string } = {}) {
   const headline = headlines[typography ?? ""] ?? ["Satu sapuan.", "Karakter baru."];
   const root = useRef<HTMLElement>(null);
   const runtime = useRef<ApplyRuntime | null>(null);
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
   const latestTheme = useRef(theme);
 
   useEffect(() => {
@@ -62,34 +62,31 @@ export function PerfectApplyHero({ typography }: { typography?: string } = {}) {
 
   return <section ref={root} id="beranda" className="perfect-apply" data-theme={theme} data-typography={typography} aria-labelledby="apply-title">
     <div className="atmosphere" aria-hidden="true" />
+    <div className="hero-drafting" aria-hidden="true">
+      <div className="hero-brand-imprint" />
+      <div className="hero-measure-line" />
+      <div className="hero-scan-line" />
+      <span className="hero-detail-label">PRECISION IN EVERY CUT.</span>
+      <span className="hero-detail-edition">ZAN / SURFACE STUDIO</span>
+    </div>
     <canvas id="apply-canvas" aria-label="Vinyl ZAN diratakan dengan squeegee, lalu menyapu otomatis setiap tujuh detik" />
     <div className="cinema cinema-top" aria-hidden="true" /><div className="cinema cinema-bottom" aria-hidden="true" />
     <div className="apply-header">
       <div className="header-actions">
-        <div className="theme-switch" role="group" aria-label="Tema website">
-          <button type="button" data-theme-choice="light" aria-pressed={theme === "light"} aria-label="Tema terang" onClick={() => setTheme("light")}><span aria-hidden="true">☼</span><small>Light</small></button>
-          <button type="button" data-theme-choice="dark" aria-pressed={theme === "dark"} aria-label="Tema gelap" onClick={() => setTheme("dark")}><span aria-hidden="true">☾</span><small>Dark</small></button>
-        </div>
-        <button type="button" id="motion" aria-pressed="true" aria-label="Jeda gerakan hero">Motion <span id="motion-state">on</span></button>
         <button type="button" id="skip">Lewati intro ↗</button>
-        <a id="craft-nav" href="#material">Material ↗</a>
       </div>
     </div>
     <div className="intro-kicker" aria-hidden="true"><span>ZAN DECAL</span><i /><span>PRECISION IN EVERY PASS.</span></div>
     <div className="hero-type">
       <div className="eyebrow"><span>DECAL & WRAPPING STUDIO</span></div>
-      <h1 id="apply-title" aria-label={headline.join(" ")}><HeadlineLine text={headline[0]} row={0} /><HeadlineLine text={headline[1]} row={1} /></h1>
+      <h1 id="apply-title" aria-label={headline.join(" ")}>
+        <HeadlineLine text={headline[0]} row={0} />
+        {typography === "11" ? <><HeadlineLine text="STAND" row={1}/><HeadlineLine text="OUT." row={2}/></> : <HeadlineLine text={headline[1]} row={1} />}
+      </h1>
       <div className="hero-support"><p>Decal & wrapping, dikerjakan<br />sampai detail terakhir.</p><a className="hero-cta" href="#konsultasi"><span>Buat karaktermu</span><i aria-hidden="true">↗</i></a></div>
-    </div>
-    <div className="craft-controls" id="craft-controls" aria-label="Pilihan finishing">
-      <div className="finish-options" role="group" aria-label="Finishing material">
-        <button type="button" data-finish="gloss" aria-pressed="true">Gloss</button><button type="button" data-finish="satin" aria-pressed="false">Satin</button><button type="button" data-finish="matte" aria-pressed="false">Matte</button>
-      </div>
-      <button type="button" id="replay-sweep" className="sweep-button"><span aria-hidden="true">↻</span> Ulangi sapuan</button>
     </div>
     <div className="apply-footer">
       <div className="chapter"><span id="chapter" role="status">01 / THE SURFACE</span><div className="timeline"><i id="timeline-fill" /></div></div>
-      <button type="button" id="replay-intro">↻ Ulangi intro</button><a href="#material">Eksplorasi material ↗</a><span className="footer-signature">Perfectly personal.</span>
     </div>
     <span id="surface-state" className="sr-only" role="status">A single, considered pass.</span><span id="theme-status" className="sr-only" role="status">Tema {theme}</span>
     <div id="fallback" role="status" hidden>Preview 3D belum bisa ditampilkan. <a href="#konsultasi">Konsultasikan konsep decal kamu ↗</a></div>

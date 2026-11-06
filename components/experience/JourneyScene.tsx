@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer, OrbitControls, useGLTF, useTexture } from "@react-three/drei";
 import type { OrbitControls as Controls } from "three-stdlib";
@@ -11,16 +11,19 @@ import { buildVehicleRig } from "./vehicleRig";
 import { journeyPose, phase, pinchScale } from "./journeyMath";
 
 import { GarageRoom } from "./GarageRoom";
+import { StudioFrameBudget } from "./StudioFrameBudget";
+import { MATERIAL_QUALITY, initialMaterialQuality, effectiveMaterialQuality, lowerMaterialQuality, type MaterialQuality } from "../../lib/material-quality";
 
 interface Props {
   progress: { current: number }; vehicle: StudioVehicle; color: DecalColor; finish: FinishType;
   dark: boolean; running: boolean; active: boolean; studio: boolean; view: string;
   onReady: (wheels: number) => void;
   palette?: {hex:string}[];
+  readyToken?: number;
 }
 
 function Vehicle({ progress, vehicle, color, finish, running, onReady }: Props) {
-  const { scene } = useGLTF(vehicle === "ducati" ? "/models/2024_ducati_streetfighter_v4_s.glb" : "/models/byd-seal.glb");
+  const { scene } = useGLTF(vehicle === "ducati" ? "/models/transport/2024_ducati_streetfighter_v4_s.glb.gz" : "/models/transport/byd-seal.glb.gz");
   const neutral = useTexture("/models/ducati-paint-neutral.png");
   const rig = useMemo(() => buildVehicleRig(scene, vehicle, neutral), [scene, vehicle, neutral]);
   const group = useRef<THREE.Group>(null);
@@ -59,8 +62,7 @@ function Camera({ progress, studio, view, vehicle }: Pick<Props, "progress" | "s
   const controls = useRef<Controls>(null);
   const last = useRef({ view: "", vehicle: "", settling: false });
   const target = useMemo(() => new THREE.Vector3(), []);
-  const { camera, size, setDpr } = useThree();
-  const perf = useRef({ time: 0, frames: 0, adjusted: false });
+  const { camera, size } = useThree();
   useEffect(() => {
     const orbit = controls.current;
     const element = orbit?.domElement;
@@ -125,27 +127,33 @@ function Camera({ progress, studio, view, vehicle }: Pick<Props, "progress" | "s
       if (studio && camera.position.distanceToSquared(target) < .002) last.current.settling = false;
     }
     if (controls.current) controls.current.enabled = studio && !last.current.settling;
-    if (!perf.current.adjusted) {
-      perf.current.time += delta; perf.current.frames++;
-      if (perf.current.frames === 100) { if (perf.current.time > 2.7) setDpr(1); perf.current.adjusted = true; }
-    }
   }, -1);
   return <OrbitControls ref={controls} makeDefault enabled={false} target={[size.width < 760 ? .8 : -.35, .95, 0]} enablePan={false} enableZoom={false} touches={{ ONE: THREE.TOUCH.ROTATE }} enableDamping dampingFactor={.075} minDistance={5} maxDistance={14} maxPolarAngle={Math.PI / 2 - .06} minPolarAngle={.2}/>;
 }
 
-function Lighting({ dark }: Pick<Props, "dark">) {
+function Lighting({ dark, quality }: Pick<Props, "dark"> & { quality: MaterialQuality }) {
   return <><ambientLight intensity={dark ? .65 : 1.2}/><directionalLight position={[3, 6, 4]} intensity={2.8}/><pointLight position={[-3, 4, -3]} color="#c6deff" intensity={18} distance={16}/>
-    <Environment resolution={128} frames={1}>
+    <Environment key={quality} resolution={MATERIAL_QUALITY[quality].environment} frames={1}>
       <Lightformer position={[0, 5, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[9, 5, 1]} intensity={3}/>
       <Lightformer position={[-5, 2, 0]} rotation={[0, Math.PI / 2, 0]} scale={[6, 3, 1]} intensity={2}/>
       <Lightformer position={[4, 3, -3]} rotation={[0, -Math.PI / 4, 0]} scale={[5, 2, 1]} intensity={2} color="#c8b5ec"/>
     </Environment></>;
 }
 
+function subscribeDevice(callback: () => void) { window.addEventListener("resize", callback); return () => window.removeEventListener("resize", callback); }
+function readDevice(): MaterialQuality {
+  const device = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } };
+  return initialMaterialQuality(matchMedia("(max-width:900px), (pointer:coarse)").matches, device.hardwareConcurrency, device.deviceMemory, device.connection?.saveData);
+}
+const serverDevice = (): MaterialQuality => "mobile";
 export default function JourneyScene(props: Props) {
-  return <Canvas dpr={[1, 1.35]} frameloop={props.active ? "always" : "demand"} camera={{ position: [7.8, 2.5, 7.2], fov: 36 }} gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}>
+  const initial = useSyncExternalStore(subscribeDevice, readDevice, serverDevice);
+  const [limit, setLimit] = useState<MaterialQuality>("desktop");
+  const quality = effectiveMaterialQuality(initial, limit);
+  return <Canvas dpr={[1, Math.min(1.35, MATERIAL_QUALITY[quality].dpr)]} frameloop="demand" camera={{ position: [7.8, 2.5, 7.2], fov: 36 }} gl={{ antialias: initial === "desktop", alpha: false, powerPreference: "default" }}>
+    <StudioFrameBudget active={props.active} running={props.running} progress={props.progress} quality={quality} appearance={`${props.color.hex}/${props.finish}/${props.dark}/${props.view}/${props.vehicle}/${props.studio}/${props.readyToken}`} onSlow={() => setLimit(current => lowerMaterialQuality(effectiveMaterialQuality(initial, current)))} />
     <color attach="background" args={[props.dark ? "#090a0e" : "#f5f3ef"]}/>
-    <Lighting {...props}/><GarageRoom {...props}/><Camera {...props}/>
+    <Lighting {...props} quality={quality}/><GarageRoom {...props}/><Camera {...props}/>
     <Suspense fallback={null}><Vehicle {...props}/></Suspense>
   </Canvas>;
 }

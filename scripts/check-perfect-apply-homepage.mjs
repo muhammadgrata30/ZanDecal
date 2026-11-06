@@ -4,7 +4,7 @@ const origin=process.env.PERFECT_APPLY_ORIGIN||'http://127.0.0.1:3000';
 const response=await fetch(origin+'/',{signal:AbortSignal.timeout(45000)});
 const html=await response.text();
 assert.equal(response.status,200);
-for(const value of ['class="perfect-apply"','CUT TO STAND OUT.','data-typography="11"','id="material"','id="konsultasi"','data-theme-choice="dark"'])assert(html.includes(value),`Missing homepage content: ${value}`);
+for(const value of ['class="perfect-apply"','CUT TO STAND OUT.','data-typography="11"','id="material"','id="konsultasi"','aria-label="Tema gelap"'])assert(html.includes(value),`Missing homepage content: ${value}`);
 assert(!html.includes('split-image-hero'),'Previous hero is absent on the homepage');
 const styles=[...html.matchAll(/<link[^>]+href="([^"]+\.css[^\"]*)"[^>]*>/g)].map(match=>match[1].replaceAll('&amp;','&'));
 const results=await Promise.all(styles.map(async resource=>{const result=await fetch(new URL(resource,origin));assert.equal(result.status,200);return result.text();}));

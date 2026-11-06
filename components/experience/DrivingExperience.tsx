@@ -59,7 +59,7 @@ export function DrivingExperience({ studioOnly = false, sequence }: { studioOnly
     const element = root.current;
     const pin = element?.querySelector<HTMLElement>(".journey-pin");
     if (!element || !pin) return;
-    let frame = 0, visible = true, previousTime = 0;
+    let frame = 0, visible = false, previousTime = 0;
     const updateActivity=()=>{
       const next=visible&&!document.hidden&&(!sequence||sequence.progress.current>.001);
       if(activeFlag.current!==next){activeFlag.current=next;setActive(next);}
@@ -98,7 +98,7 @@ export function DrivingExperience({ studioOnly = false, sequence }: { studioOnly
     const syncSequence=()=>{
       entranceProgress.current=measure();
       progress.current=studioOnly?studioEntrancePose(entranceProgress.current).journey:entranceProgress.current;
-      if(entranceProgress.current>.02)setLoadScene(true);
+      if(entranceProgress.current>.02&&visible)setLoadScene(true);
       updateActivity();
       write();
     };
@@ -106,7 +106,7 @@ export function DrivingExperience({ studioOnly = false, sequence }: { studioOnly
     const observer = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
       updateActivity();
-      if (visible) setLoadScene(true);
+      if (visible&&(!sequence||sequence.progress.current>.001)) setLoadScene(true);
       if (visible) schedule();
     }, { rootMargin: studioOnly ? "300px" : "0px" });
     observer.observe(element);
@@ -135,7 +135,7 @@ export function DrivingExperience({ studioOnly = false, sequence }: { studioOnly
   return <div ref={root} id={studioOnly ? undefined : "beranda"} className={`driving-journey${reduced ? " is-reduced" : ""}${studioOnly ? " is-studio-only" : ""}${sequence?" is-sequenced":""}`} data-stage={stage} data-wheel-count={wheels}>
     {!sequence&&<div id="3d-studio" className="journey-studio-anchor" aria-hidden="true"/>}
     <div className="journey-pin">
-      <div className="journey-canvas">{wheels === 0 && <div className="journey-model-loading" role="status">Menyiapkan {vehicle === "ducati" ? "Ducati" : "BYD Seal"}?</div>}<SceneBoundary>{loadScene && <Scene progress={progress} vehicle={vehicle} palette={colors} color={color} finish={finish} dark={theme === "dark"} running={!paused && !reduced} active={active} studio={stage === "studio"} view={view} onReady={onReady}/>}</SceneBoundary></div>
+      <div className="journey-canvas">{wheels === 0 && <div className="journey-model-loading" role="status">Menyiapkan {vehicle === "ducati" ? "Ducati" : "BYD Seal"}?</div>}<SceneBoundary>{loadScene && <Scene progress={progress} vehicle={vehicle} palette={colors} color={color} finish={finish} dark={theme === "dark"} running={!paused && !reduced} active={active} studio={stage === "studio"} view={view} onReady={onReady} readyToken={wheels}/>}</SceneBoundary></div>
       <div className="journey-garage-shutter" aria-hidden="true"><div><span>AUTOMOTIVE WRAP & CUSTOM DECAL</span><strong>ZAN DECAL</strong><span>COLOUR · CRAFT · CHARACTER</span></div></div>
       <div className="journey-model-switch" role="group" aria-label="Pilih kendaraan 3D">
         <span>ZAN DECAL / STUDIO</span><div>{([["ducati", "Ducati V4 S"], ["car", "BYD Seal"]] as const).map(([id, name]) => <button type="button" key={id} aria-pressed={vehicle === id} onClick={() => { setWheels(0); setVehicle(id); }}>{name}</button>)}</div>

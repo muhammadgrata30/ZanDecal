@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { RacingNavbar } from "../components/RacingNavbar";
 import HomeMaterialSection from "../components/material-motion/HomeMaterialSection";
 import "./home-material.css";
 import { GallerySection } from "../components/GallerySection";
@@ -17,22 +16,13 @@ import { MaterialCurtain } from "../components/MaterialCurtain";
 import { MotorStudio } from "../components/experience/MotorStudio";
 import { GentleScroll } from "../components/GentleScroll";
 
-const links = [["3D Studio", "3d-studio"], ["Material", "material"], ["Custom Sticker", "custom-sticker"], ["Galeri", "galeri"], ["Cara Order", "cara-order"]];
-
 export default function Home() {
-  const [menu, setMenu] = useState(false);
   return <div className="atelier-site apply-home">
     <GentleScroll/>
     <MotionObserver/>
     <SectionTransitions/>
     <a className="atelier-skip" href="#main">Lewati ke konten</a>
-    <header className="atelier-nav">
-      <a href="#beranda" className="atelier-wordmark" aria-label="Zan Decal beranda"><strong>ZAN</strong> DECAL</a>
-      <nav className={menu ? "atelier-nav-links is-open" : "atelier-nav-links"} aria-label="Navigasi utama" id="atelier-navigation">
-        {links.map(([name,id]) => <a key={id} href={`#${id}`} onClick={() => setMenu(false)}>{name}</a>)}
-      </nav>
-      <div className="atelier-nav-actions"><button className="atelier-menu" onClick={() => setMenu(!menu)} aria-label={menu ? "Tutup menu" : "Buka menu"} aria-expanded={menu} aria-controls="atelier-navigation">{menu ? <X/> : <Menu/>}</button></div>
-    </header>
+    <RacingNavbar/>
     <main id="main">
       <PerfectApplyHero typography="11"/>
       <MaterialCurtain studio={<MotorStudio/>}><HomeMaterialSection/></MaterialCurtain>

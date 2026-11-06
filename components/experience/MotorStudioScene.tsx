@@ -43,7 +43,7 @@ function Camera({view,active}:Props){
 }
 export default function MotorStudioScene(props:Props){
   return <Canvas frameloop="demand" resize={{scroll:false,debounce:{resize:100,scroll:100}}} dpr={[1,1.75]} camera={{position:[5.4,2.7,6.7],fov:36}} gl={{antialias:true,alpha:false,powerPreference:"default"}}>
-    <color attach="background" args={[props.dark?"#100d1c":"#eeedf5"]}/><ambientLight intensity={1.2}/><directionalLight position={[3,6,4]} intensity={2.8}/>
+    <color attach="background" args={[props.dark?"#17141d":"#f5f3ef"]}/><ambientLight intensity={1.2}/><directionalLight position={[3,6,4]} intensity={2.8}/>
     <Environment resolution={128} frames={1}><Lightformer position={[0,5,0]} rotation={[Math.PI/2,0,0]} scale={[8,4,1]} intensity={3}/><Lightformer position={[-5,3,2]} rotation={[0,Math.PI/2,0]} scale={[5,3,1]} intensity={2}/></Environment>
     <Camera {...props}/><Suspense fallback={null}><Vehicle {...props}/></Suspense>
   </Canvas>;

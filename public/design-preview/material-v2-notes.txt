@@ -1,0 +1,12 @@
+Zan Decal — material section visual studies, 2026-11-04
+Generated using built-in Imagegen, with public/images/atelier-material.png as material/palette reference.
+Static UI mockups with motion storyboards. No live animation implementation or browser QA is claimed.
+Images are ordered by their actual display order in the conversation.
+
+1. material-v2-1.png — Unroll the Possibilities: monumental foil unroll, edge-to-edge sheet, surface dive.
+2. material-v2-2.png — Material Orbit: draggable spatial specimen carousel, full-screen material passage.
+3. material-v2-3.png — The Material Gallery: architectural hanging-sheet portals, camera dolly through rooms.
+4. material-v2-4.png — Surface Anatomy: illustrative exploded layers, scroll separation and detail dive.
+5. material-v2-5.png — Touch the Difference: draggable full-width peel and elastic finish reveal.
+
+Shared prompt brief: production-quality 1440x1200 desktop design board; upper focused section plus lower three-keyframe storyboard of the same concept. Indonesian automotive wrapping studio, section Jenis Bahan. Realistic vinyl, intentional typography, strong hierarchy, spacious compositions, lavender/coral/sky-blue identity, Light/Dark and pause controls. One clear action. No generic dashboard/card grid, vehicles, invented performance specifications or hero replacement. Large reversible spatial movement rather than small idle effects. Existing hero, studio and old material-lab previews remain unchanged. All material names/finish labels are illustrative and must be mapped to actual admin content during implementation.

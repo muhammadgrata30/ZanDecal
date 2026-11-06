@@ -1,0 +1,49 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight, Check, Moon, Sun } from "lucide-react";
+import { useTheme } from "../ThemeContext";
+import { useSiteContent } from "../SiteContentContext";
+import type { Material } from "../../lib/content-types";
+
+const concepts = ["Buku Sampel", "Editorial", "Galeri Hasil", "Perbandingan", "Karakter"];
+const moods = [{ name: "Mengilap", pattern: /gloss|kilap|chrome|krom/i }, { name: "Kalem", pattern: /satin|matte|dof/i }, { name: "Berani", pattern: /chameleon|bunglon|eksotis|chrome|krom/i }];
+function Specs({ material }: { material: Material }) {
+  return <dl className="mi-specs">{[["Jenis", material.type], ["Asal", material.origin], ["Elastisitas", material.elongation], ["Rentang suhu", material.tempRange], ["Kode", material.specCode]].filter(([, value]) => value).map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>;
+}
+function MaterialDetail({ material }: { material?: Material }) {
+  if (!material) return <p className="mi-empty">Belum ada bahan diterbitkan.</p>;
+  return <article className="mi-detail"><span className="mi-label">{material.origin || "PILIHAN STUDIO"}</span><h2>{material.name}</h2><p>{material.desc}</p><details><summary>Kenali spesifikasinya</summary><Specs material={material} /><ul>{material.features.map((feature, index) => <li key={index}><Check size={15} />{feature}</li>)}</ul></details><Link className="mi-cta" href="/#konsultasi">Konsultasikan pilihan ini <ArrowUpRight size={18} /></Link></article>;
+}
+
+export default function MaterialIdeas({ initialOption }: { initialOption: number }) {
+  const { materials, portfolio } = useSiteContent();
+  const { theme, toggleTheme } = useTheme();
+  const [option, setOption] = useState(initialOption);
+  const [selected, setSelected] = useState("");
+  const [rightId, setRightId] = useState("");
+  const [category, setCategory] = useState("semua");
+  const [mood, setMood] = useState(0);
+  const material = materials.find(item => item.id === selected) || materials[0];
+  const right = materials.find(item => item.id === rightId) || materials[1] || materials[0];
+  const candidates = materials.filter(item => moods[mood].pattern.test([item.name, item.type, item.desc, ...item.features].join(" ")));
+  const picker = <div className="mi-picker" aria-label="Pilih bahan">{materials.map((item, index) => <button key={item.id} type="button" aria-pressed={item.id === material?.id} onClick={() => setSelected(item.id)}><span>{String(index + 1).padStart(2, "0")}</span><strong>{item.name}</strong><ArrowUpRight size={18} /></button>)}</div>;
+  function choose(next: number) {
+    setOption(next);
+    const url = new URL(window.location.href); url.searchParams.set("option", String(next));
+    window.history.replaceState(null, "", url);
+  }
+
+  return <main className={`mi-page mi-option-${option}`}>
+    <header className="mi-header"><Link href="/" className="mi-brand">ZAN DECAL<span>MATERIAL COLLECTION</span></Link><button type="button" onClick={toggleTheme} aria-label="Ganti tema">{theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}<span>{theme === "dark" ? "Light" : "Dark"}</span></button></header>
+    <nav className="mi-tabs" aria-label="Lima ide tanpa 3D">{concepts.map((name, index) => <button key={name} type="button" onClick={() => choose(index + 1)} aria-pressed={option === index + 1}><span>0{index + 1}</span>{name}</button>)}</nav>
+    {option === 1 && <section className="mi-section"><div className="mi-intro"><div><span className="mi-label">01 / BUKU SAMPEL DIGITAL</span><h1>Karakter dimulai<br />dari <em>permukaan.</em></h1></div><p>Pilih sampel. Kenali bahannya.<br />Temukan pilihan untuk kendaraanmu.</p></div><div className="mi-samples">{materials.map((item, index) => <button key={item.id} type="button" aria-pressed={material?.id === item.id} onClick={() => setSelected(item.id)}><div className="mi-sample-photo"><Image src="/images/atelier-material.png" alt="Ilustrasi lembar vinyl berwarna pastel" fill sizes="(max-width:600px) 50vw, 33vw" style={{ objectFit: "cover", objectPosition: `${index % 3 * 50}% center` }} /><span className="mi-sample-index">0{index + 1}</span>{material?.id === item.id && <Check className="mi-sample-check" size={22} />}</div><small>{item.origin || "KOLEKSI STUDIO"}</small><h2>{item.name}</h2><span className="mi-sample-type">{item.type}</span></button>)}</div><p className="mi-photo-note">Foto permukaan merupakan ilustrasi visual. Spesifikasi mengikuti bahan yang dipilih.</p><div className="mi-bottom-detail"><span className="mi-label">SAMPEL PILIHAN</span><MaterialDetail material={material} /></div></section>}
+    {option === 2 && <section className="mi-editorial"><div className="mi-editorial-heading"><span className="mi-label">02 / THE MATERIAL JOURNAL</span><h1>Bukan cuma<br /><em>warna.</em></h1><p>Di balik tampilan yang kamu suka,<br />ada bahan yang perlu kamu kenali.</p></div><div className="mi-editorial-photo"><Image src="/images/consultation-vinyl.png" alt="Ilustrasi studio vinyl lavender" fill sizes="(max-width:760px) 100vw, 60vw" priority style={{ objectFit: "cover" }} /><span>SURFACE / DETAIL / CHARACTER</span></div><div className="mi-editorial-info">{picker}<MaterialDetail material={material} /></div></section>}
+    {option === 3 && <section className="mi-section"><div className="mi-intro"><div><span className="mi-label">03 / INSPIRASI HASIL</span><h1>Lihat tampilannya.<br /><em>Temukan arahnya.</em></h1></div><p>Eksplorasi referensi kendaraan dan warna,<br />lalu bicarakan pilihan bahan dengan studio.</p></div><div className="mi-filters" aria-label="Kategori inspirasi">{[["semua", "Semua"], ["mobil", "Mobil"], ["motor", "Motor"], ["sticker", "Custom Sticker"]].map(([value, label]) => <button key={value} type="button" aria-pressed={category === value} onClick={() => setCategory(value)}>{label}</button>)}</div><div className="mi-gallery">{portfolio.filter(item => category === "semua" || item.category === category).map(item => <article key={item.id}><div className="mi-project-photo">{item.mediaType === "video" ? <video src={item.mediaSrc} poster={item.posterSrc || undefined} controls playsInline preload="none" /> : <Image src={item.mediaSrc} alt={item.title} fill sizes="(max-width:600px) 100vw, 50vw" style={{ objectFit: "cover" }} />}</div><small>{item.categoryLabel}</small><h2>{item.title}</h2><p>{item.finishType}</p></article>)}</div>{!portfolio.some(item => category === "semua" || item.category === category) && <p className="mi-empty">Belum ada inspirasi untuk kategori ini.</p>}<div className="mi-gallery-bottom">{picker}<MaterialDetail material={material} /></div></section>}
+    {option === 4 && <section className="mi-section"><div className="mi-intro"><div><span className="mi-label">04 / SIDE BY SIDE</span><h1>Dua pilihan.<br /><em>Lebih jelas.</em></h1></div><p>Bandingkan informasi bahan<br />tanpa membuka halaman bergantian.</p></div>{material && right ? <><div className="mi-compare-select">{[["Bahan pertama", material.id, setSelected], ["Bahan kedua", right.id, setRightId]].map(([label, id, setter], index) => <div key={index}><label htmlFor={`compare-${index}`}>{label as string}</label><select id={`compare-${index}`} value={id as string} onChange={event => (setter as (value: string) => void)(event.target.value)}>{materials.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</select></div>)}</div><div className="mi-compare" role="table" aria-label="Perbandingan spesifikasi bahan">{([ ["Jenis", material.type, right.type], ["Asal", material.origin, right.origin], ["Karakter", material.desc, right.desc], ["Elastisitas", material.elongation, right.elongation], ["Rentang suhu", material.tempRange, right.tempRange], ["Kode", material.specCode, right.specCode] ]).map(([label, leftValue, rightValue]) => <div role="row" className="mi-compare-row" key={label}><h2 role="rowheader">{label}</h2><p role="cell">{leftValue || "Belum dicantumkan"}</p><p role="cell">{rightValue || "Belum dicantumkan"}</p></div>)}</div><Link className="mi-cta" href="/#konsultasi">Bantu saya memilih <ArrowUpRight size={18} /></Link></> : <p className="mi-empty">Bahan belum tersedia untuk dibandingkan.</p>}</section>}
+    {option === 5 && <section className="mi-section"><div className="mi-intro"><div><span className="mi-label">05 / FIND YOUR CHARACTER</span><h1>Kamu lebih<br /><em>yang mana?</em></h1></div><p>Mulai dari karakter tampilan,<br />bukan istilah teknis.</p></div><div className="mi-moods" aria-label="Pilih karakter tampilan">{moods.map((item, index) => <button key={item.name} type="button" aria-pressed={mood === index} onClick={() => setMood(index)}><span>0{index + 1}</span><strong>{item.name}</strong><ArrowUpRight size={26} /></button>)}</div><div className="mi-character-body"><div className="mi-character-photo"><Image src="/images/atelier-material.png" alt="Ilustrasi karakter permukaan vinyl" fill sizes="(max-width:760px) 100vw, 50vw" style={{ objectFit: "cover" }} /></div><div><span className="mi-label">BAHAN DENGAN KETERANGAN TERKAIT</span>{candidates.length ? <div className="mi-picker">{candidates.map(item => <button key={item.id} type="button" onClick={() => setSelected(item.id)} aria-pressed={material?.id === item.id}><strong>{item.name}</strong><ArrowUpRight size={18} /></button>)}</div> : <p className="mi-empty">Belum ada bahan dengan keterangan karakter ini. Konsultasikan pilihanmu dengan studio.</p>}<MaterialDetail material={candidates.find(item => item.id === selected) || candidates[0]} /></div></div></section>}
+    <footer className="mi-footer"><p>Lima pendekatan tanpa Canvas, animasi 3D, atau gerakan otomatis.</p><Link href="/">Kembali ke website <ArrowUpRight size={16} /></Link></footer>
+  </main>;
+}

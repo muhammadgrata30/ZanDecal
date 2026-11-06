@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { PerfectApplyHero } from "../../components/experience/PerfectApplyHero";
 import "./preview.css";
 import "./kinetic.css";
@@ -28,7 +29,7 @@ export function HeadlineLab({ initial }: { initial: string }) {
     window.history.replaceState(null, "", `?type=${id}`);
   }
   return <main className="headline-lab">
-    <header className="headline-lab-nav"><a href="/">ZAN<span> / HEADLINE LAB</span></a><span>12 TYPE DIRECTIONS</span></header>
+    <header className="headline-lab-nav"><Link href="/">ZAN<span> / HEADLINE LAB</span></Link><span>12 TYPE DIRECTIONS</span></header>
     <PerfectApplyHero typography={selected} />
     <aside className="headline-picker" aria-label="Pilih desain headline">
       <div className="headline-picker-options" role="group" aria-label="Opsi font">

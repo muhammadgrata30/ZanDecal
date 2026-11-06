@@ -28,10 +28,30 @@ const sessions=load(path.join(root,'app/api/admin/session/route.ts'));
 const content=load(path.join(root,'app/api/content/route.ts'));
 const upload=load(path.join(root,'app/api/admin/upload/route.ts'));
 const media=load(path.join(root,'app/media/[file]/route.ts'));
+const {sameOrigin}=load(path.join(root,'lib/admin-auth.ts'));
+const {createDraft,contentWithDraft}=load(path.join(root,'lib/admin-draft.ts'));
 const BASE='http://localhost:3000';
 let cookie='';
 function request(url,method='GET',body,origin=BASE){return new Request(BASE+url,{method,headers:{Origin:origin,...(cookie?{Cookie:cookie}:{}),...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});}
 try{
+  const originVars=['ZAN_SITE_URL','URL','DEPLOY_URL','DEPLOY_PRIME_URL','ZAN_ALLOWED_ORIGINS','NETLIFY'];
+  const previousOrigins=Object.fromEntries(originVars.map(key=>[key,process.env[key]]));
+  try{
+    for(const key of originVars)delete process.env[key];
+    process.env.NETLIFY='true';process.env.URL='https://zan-test.netlify.app';process.env.DEPLOY_PRIME_URL='https://deploy-preview-12--zan-test.netlify.app';
+    const proxy=(origin,extra={})=>new Request('http://internal-netlify-server/api/content',{headers:{Origin:origin,...extra}});
+    assert.doesNotThrow(()=>sameOrigin(proxy('https://zan-test.netlify.app')));
+    assert.doesNotThrow(()=>sameOrigin(proxy('https://deploy-preview-12--zan-test.netlify.app')));
+    assert.doesNotThrow(()=>sameOrigin(proxy('https://zan-custom.example',{host:'zan-custom.example'})));
+    assert.throws(()=>sameOrigin(proxy('https://unrelated.netlify.app')));
+    assert.throws(()=>sameOrigin(proxy('https://attacker.example',{'x-forwarded-host':'attacker.example','x-forwarded-proto':'https'})));
+    assert.throws(()=>sameOrigin(proxy('https://zan-test.netlify.app',{'sec-fetch-site':'cross-site'})));
+    assert.throws(()=>sameOrigin(proxy('null')));
+    assert.throws(()=>sameOrigin(proxy('https://zan-test.netlify.app.attacker.example')));
+    process.env.ZAN_SITE_URL='https://wrap.example';
+    assert.doesNotThrow(()=>sameOrigin(proxy('https://wrap.example')));
+  }finally{for(const key of originVars){if(previousOrigins[key]===undefined)delete process.env[key];else process.env[key]=previousOrigins[key];}}
+  console.log('Origin regression passed: Netlify internal URL, production/preview/custom domains, unrelated tenants, spoofed forwarded headers and cross-site rejection.');
   assert.equal((await (await sessions.GET(request('/api/admin/session'))).json()).setupRequired,true);
   const seeded=await (await content.GET()).json();
   assert.equal((await content.PUT(request('/api/content','PUT',seeded))).status,401);
@@ -78,6 +98,28 @@ try{
   const invalid=structuredClone(published);invalid.colors[0].hex='bad';assert.equal((await content.PUT(request('/api/content','PUT',invalid))).status,400);
   const deleted=structuredClone(published);deleted.portfolio=deleted.portfolio.filter(item=>item.id!==999);deleted.colors=deleted.colors.filter(item=>item.id!=='added-color');deleted.materials=deleted.materials.filter(item=>item.id!=='added-material');assert.equal((await content.PUT(request('/api/content','PUT',deleted))).status,200);
   const afterDelete=await (await content.GET()).json();assert.ok(!afterDelete.colors.some(v=>v.id==='added-color'));assert.ok(!afterDelete.materials.some(v=>v.id==='added-material'));assert.ok(!afterDelete.portfolio.some(v=>v.id===999));
+  let drawerContent=afterDelete;
+  for(const kind of ['materials','colors','portfolio']){
+    const before=structuredClone(drawerContent);
+    const draft=createDraft(kind,drawerContent);
+    assert.throws(()=>contentWithDraft(drawerContent,draft),'Incomplete drawer must not publish');
+    assert.deepEqual(drawerContent,before,'Opening/cancelling drawer must leave content unchanged');
+    if(kind==='materials')Object.assign(draft.value,{name:'Drawer material',desc:'Added through creation flow'});
+    if(kind==='colors')Object.assign(draft.value,{name:'Drawer color',hex:'#AB2345'});
+    if(kind==='portfolio'){
+      Object.assign(draft.value,{title:'Drawer customer',vehicleModel:'Ducati',category:'motor'});
+      assert.throws(()=>contentWithDraft(drawerContent,draft),'Portfolio requires uploaded media');
+      draft.value.mediaSrc=asset.url;
+    }
+    const candidate=contentWithDraft(drawerContent,draft);
+    assert.deepEqual(drawerContent,before,'Preparing publish must not mutate current content');
+    const response=await content.PUT(request('/api/content','PUT',candidate));assert.equal(response.status,200);
+    drawerContent=await response.json();
+    const visible=await (await content.GET()).json();
+    assert.equal(visible[kind][0].id,draft.value.id,'New drawer content must be visible to public readers');
+    if(kind==='portfolio')assert.equal(visible.portfolio[0].categoryLabel,'Motor');
+  }
+  console.log('Drawer creation passed: isolated drafts, required fields/media, all three publish flows, public visibility and category normalization.');
   const logout=await sessions.DELETE(request('/api/admin/session','DELETE'));assert.ok(logout.headers.get('set-cookie').includes('Max-Age=0'));cookie='';
   assert.equal((await content.PUT(request('/api/content','PUT',deleted))).status,401);
   console.log('Admin integration passed: setup/login, signed cookie, auth/CSRF, photo/video uploads, media byte ranges, invalid-file rejection, publish/edit/delete, background video, validation, revision conflict and persistence.');
