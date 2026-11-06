@@ -25,3 +25,6 @@
 :global(html.dark) .ticket,:global(html.dark) .preparation{background:#1b1629}
 @media(hover:hover){:global(html.dark) .tabs>button:hover:not([aria-selected=true]){background:#241c35}}
 .faq details[open]{background:var(--bg-surface-elevated);padding-inline:18px;margin-inline:-18px}
+/* The order workspace belongs to the same light/dark page surface. */
+.section,:global(html.dark) .section{--paper:var(--story-background);--ink:var(--story-ink);--muted:var(--story-muted);--line:var(--border-strong)}
+.ticket,.preparation,:global(html.dark) .ticket,:global(html.dark) .preparation{background:var(--paper)}

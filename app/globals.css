@@ -14,9 +14,13 @@
 
 :root {
   --story-background: #f5f3ef;
-  --bg-primary: #F8F9FE;
-  --bg-surface: #FFFFFF;
-  --bg-surface-elevated: #F1F3FA;
+  --story-ink: #17131e;
+  --story-muted: #535164;
+  --story-overlay-strong: rgba(245, 243, 239, .85);
+  --story-overlay-soft: rgba(245, 243, 239, .56);
+  --bg-primary: var(--story-background);
+  --bg-surface: var(--story-background);
+  --bg-surface-elevated: var(--story-background);
   --bg-card-glass: rgba(255, 255, 255, 0.85);
   --border-subtle: rgba(161, 140, 209, 0.18);
   --border-strong: rgba(161, 140, 209, 0.35);
@@ -29,9 +33,13 @@
 
 html.dark {
   --story-background: #17141d;
-  --bg-primary: #07050E;
-  --bg-surface: #0E0B1A;
-  --bg-surface-elevated: #141026;
+  --story-ink: #f8f9fe;
+  --story-muted: #b9b3c4;
+  --story-overlay-strong: rgba(23, 20, 29, .85);
+  --story-overlay-soft: rgba(23, 20, 29, .56);
+  --bg-primary: var(--story-background);
+  --bg-surface: var(--story-background);
+  --bg-surface-elevated: var(--story-background);
   --bg-card-glass: rgba(14, 11, 26, 0.72);
   --border-subtle: rgba(161, 140, 209, 0.15);
   --border-strong: rgba(161, 140, 209, 0.32);

@@ -121,3 +121,9 @@
 :global(html:not(.dark)) .masthead{border-color:#0c0a1430}
 :global(html:not(.dark)) .heroMedia::after{background:linear-gradient(90deg,#f8f9fecc,transparent 80%),linear-gradient(0deg,#f8f9fe90,transparent 35%)}
 :global(html:not(.dark)) .heroFooter>button{background:#f8f9fecc;color:#0c0a14;border-color:#0c0a1440}
+/* Match both themes without changing the portfolio media. */
+.section,:global(html.dark) .section{--paper:var(--story-background);--ink:var(--story-ink);--muted:var(--story-muted)}
+.hero,.stage :global(.scroll-stage-panel),:global(html.dark) .hero,:global(html.dark) .stage :global(.scroll-stage-panel),:global(html:not(.dark)) .hero,:global(html:not(.dark)) .stage :global(.scroll-stage-panel){background:var(--paper);color:var(--ink)}
+.heroMedia,.image,.dialogImage,:global(html.dark) .image,:global(html.dark) .dialogImage{background:var(--paper)}
+.heroMedia::after,:global(html:not(.dark)) .heroMedia::after{background:linear-gradient(90deg,var(--story-overlay-strong),transparent 80%),linear-gradient(0deg,var(--story-overlay-soft),transparent 35%)}
+.heroFooter>button,:global(html:not(.dark)) .heroFooter>button{background:var(--paper);color:var(--ink);border-color:var(--border-strong)}

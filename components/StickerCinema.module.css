@@ -178,3 +178,9 @@
 :global(html.dark) .section{--chapter-bg:#0c0a14;--chapter-text:#f4f3fa;--chapter-muted:#b9b1cc;--chapter-line:#a18cd140;--service-surface:#1d162c;--vinyl-text:#8fd3f4}
 :global(html.dark) .typeBand{background:#1d162c;color:#a18cd1}
 :global(html.dark) .typeBand i{color:#8fd3f4}
+/* Sticker artwork keeps its own ink; the surrounding chapter follows the page. */
+.section,:global(html.dark) .section{
+  --chapter-bg:var(--story-background);--chapter-text:var(--story-ink);--chapter-muted:var(--story-muted);
+  --chapter-line:var(--border-strong);--service-surface:var(--story-background);
+}
+.typeBand,:global(html.dark) .typeBand{background:var(--story-background);color:var(--chapter-text);border-block:1px solid var(--chapter-line)}
