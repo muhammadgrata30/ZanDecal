@@ -184,3 +184,5 @@
   --chapter-line:var(--border-strong);--service-surface:var(--story-background);
 }
 .typeBand,:global(html.dark) .typeBand{background:var(--story-background);color:var(--chapter-text);border-block:1px solid var(--chapter-line)}
+/* Desktop artwork fits the pin. Tall touch layouts keep their original height. */
+@media(min-width:761px){.scroll .scene{height:100svh;min-height:0;max-height:none}.scroll .art{width:min(43%,calc((100svh - 240px)*.85),590px)}}

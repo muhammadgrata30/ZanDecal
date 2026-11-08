@@ -7,7 +7,9 @@ export function navigateToSection(id:string){
  if(document.documentElement.classList.contains("zan-intro-locked"))document.querySelector<HTMLButtonElement>("#beranda #skip")?.click();
  requestAnimationFrame(()=>{
   const header=document.querySelector<HTMLElement>(".racing-nav");
-  const inset=(header?.getBoundingClientRect().height??72)+12;
+  // These full-surface sections already reserve room for the fixed header
+  // inside their content. Offsetting their surface exposes the previous scene.
+  const inset=section.dataset?.navAlign==="viewport"?0:(header?.getBoundingClientRect().height??72)+12;
   const position=()=>{
    if(id==="beranda")return 0;
    let top=section.getBoundingClientRect().top+window.scrollY;

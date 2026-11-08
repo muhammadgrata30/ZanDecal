@@ -2,7 +2,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { ScrollStage } from "./ScrollStage";
+import { PinnedScrollScene } from "./PinnedScrollScene";
 
 import { ArrowUpRight, X, CheckCircle2, Send, Pause, Play } from "lucide-react";
 
@@ -58,14 +58,14 @@ export function GallerySection({ showcaseVideoSrc: suppliedVideo, showcasePoster
     window.open('https://wa.me/6281234567890?text='+encodeURIComponent(text),'_blank','noopener,noreferrer');
   };
   return <section id="galeri" className={`${gallery.section} editorial-gallery`} aria-labelledby="gallery-title">
-    <ScrollStage distance={.9} className={gallery.stage}><div className={gallery.hero}>
+    <PinnedScrollScene distance={1.15} className={gallery.stage}><div className={gallery.hero}>
       
       <div className={gallery.heroMedia} aria-hidden="true"><video ref={showcaseVideo} src={showcaseVideoSrc || undefined} poster={showcasePoster || publicImage(content.portfolio.find(item=>item.mediaType==="photo")?.mediaSrc || "") || undefined} muted loop playsInline preload="metadata" onPlay={()=>setVideoPaused(false)} onPause={()=>setVideoPaused(true)}/></div>
       <div className={gallery.heroCopy}><h2 id="gallery-title"><span>BUKAN</span><span><em>BIASA.</em><i>↗</i></span></h2><a href="#gallery-collection">Masuk ke arsip <ArrowUpRight size={18}/></a></div>
       
       <div className={gallery.heroFooter}><button type="button" disabled={!showcaseVideoSrc} aria-label={videoPaused?"Putar video latar":"Jeda video latar"} aria-pressed={!videoPaused} onClick={()=>{const video=showcaseVideo.current;if(!video) return;userPausedVideo.current=!video.paused;if(video.paused) void video.play().catch(()=>{});else video.pause();}}>{videoPaused?<Play size={15}/>:<Pause size={15}/>}<span>{videoPaused?"Putar":"Jeda"}</span></button></div>
       <div className={gallery.heroProgress} aria-hidden="true"><i/></div>
-    </div></ScrollStage>
+    </div></PinnedScrollScene>
     <div className={gallery.collection} id="gallery-collection">
       <div className={gallery.archiveHeader}><div><h2>Arsip <em>karakter.</em><sup>({String(content.portfolio.length).padStart(2,"0")})</sup></h2></div><p>Dari konsep ke permukaan.<br/>Temukan arah yang terasa seperti kamu.</p></div>
       <div className={gallery.toolbar}><div role="group" aria-label="Filter galeri">{([["semua","Semua"],["mobil","Mobil"],["motor","Motor"],["sticker","Custom Sticker"]] as const).map(([id,label])=><button type="button" key={id} aria-pressed={activeFilter===id} onClick={()=>setActiveFilter(id)}>{label}<sup>{String(id==="semua"?content.portfolio.length:content.portfolio.filter(item=>item.category===id).length).padStart(2,"0")}</sup></button>)}</div><span role="status" aria-live="polite">{String(filtered.length).padStart(2,"0")} KARYA DITAMPILKAN</span></div>

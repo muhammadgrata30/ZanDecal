@@ -53,3 +53,5 @@ html.dark .motor-interaction-hint{color:var(--studio-ink)}
  .motor-preview-tools{left:6%;right:6%;bottom:80px}.motor-interaction-hint{bottom:18px;max-width:96%}.motor-palette{max-height:160px}.motor-credit{font-size:11px}
 }
 @media(max-width:420px){.motor-canvas{height:470px}.motor-studio-heading h2{font-size:clamp(34px,8.5vw,42px)}}
+/* The section surface reaches the top; its heading clears the fixed navbar. */
+.motor-studio[data-nav-align="viewport"]{padding-top:max(55px,var(--nav-offset,88px));scroll-margin-top:0}

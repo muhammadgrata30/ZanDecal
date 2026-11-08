@@ -49,7 +49,7 @@ export function MotorStudio(){
     const message=`Halo Zan Decal, saya ingin konsultasi konsep 3D:\nKendaraan: ${selectedVehicle.name}\nWarna cat utama: ${color?.name||"Belum dipilih"} (${color?.hex||"#A18CD1"})\nFinishing: ${finish}`;
     window.open(`https://wa.me/6281234567890?text=${encodeURIComponent(message)}`,"_blank","noopener,noreferrer");
   };
-  return <section ref={root} id="3d-studio" className="motor-studio" data-entered={entered} aria-labelledby="motor-studio-title">
+  return <section ref={root} id="3d-studio" className="motor-studio" data-nav-align="viewport" data-entered={entered} aria-labelledby="motor-studio-title">
     <header className="motor-studio-heading"><div><h2 id="motor-studio-title"><span>Detailnya</span><br/>bicara sendiri.</h2><div className="motor-gallery-rule" aria-hidden="true"/></div></header>
     <div className="motor-workspace">
       <div className="motor-preview" role="group" aria-label={`Preview 3D ${selectedVehicle.name}`}>

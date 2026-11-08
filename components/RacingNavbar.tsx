@@ -7,7 +7,7 @@ import { ArrowRight, Menu, Moon, Sun, X } from "lucide-react";
 import { useTheme } from "./ThemeContext";
 import "./racing-navbar.css";
 
-const links = [["3D Studio", "3d-studio"], ["Material", "material"], ["Custom Sticker", "custom-sticker"], ["Galeri", "galeri"], ["Cara Order", "cara-order"]] as const;
+const links = [["Material", "material"], ["3D Studio", "3d-studio"], ["Custom Sticker", "custom-sticker"], ["Galeri", "galeri"], ["Cara Order", "cara-order"]] as const;
 
 export function RacingNavbar() {
   const { theme, setTheme } = useTheme();

@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowUpRight } from "lucide-react";
-import { ScrollStage } from "./ScrollStage";
+import { PinnedScrollScene } from "./PinnedScrollScene";
 import { Scissors, Trophy, Truck, Sparkles } from "lucide-react";
 import studio from "./StudioSections.module.css";
 import cinema from "./StickerCinema.module.css";
@@ -68,7 +68,7 @@ const STICKER_SERVICES = [
 
 export function CustomStickerSection() {
   return <section id="custom-sticker" className={`${studio.custom} ${cinema.section} editorial-custom`} aria-labelledby="sticker-title">
-    <ScrollStage className={cinema.scroll} distance={1.8}>
+    <PinnedScrollScene className={cinema.scroll} distance={1.5}>
       <div className={cinema.scene}>
         <div className={cinema.lightSweep} aria-hidden="true"/>
         <div className={cinema.orbit} aria-hidden="true"><span/><span/><span/></div>
@@ -98,7 +98,7 @@ export function CustomStickerSection() {
         <div className={cinema.sceneFooter}><a href="#sticker-services">SCROLL UNTUK EKSPLORASI <span>↓</span></a><span>ORIGINAL GRAPHICS.<br/>PERSONAL EXPRESSION.</span></div>
         <div className={cinema.progress} aria-hidden="true"><i/></div>
       </div>
-    </ScrollStage>
+    </PinnedScrollScene>
     <div className={cinema.typeBand} aria-hidden="true"><span>YOUR STYLE.</span><span>YOUR <i>SIGNATURE.</i> ↗</span></div>
     <div className="custom-services" id="sticker-services"><div className={studio.serviceIntro}><h2>Empat cara.<br/><em>Satu karakter.</em></h2><p>Pilih ruang ekspresimu. Kami kerjakan sampai ke detail terakhir.</p></div>
       {STICKER_SERVICES.map((service,index)=><HoverDetails key={service.title} className="service-item motion-reveal" group="sticker-services">

@@ -127,3 +127,5 @@
 .heroMedia,.image,.dialogImage,:global(html.dark) .image,:global(html.dark) .dialogImage{background:var(--paper)}
 .heroMedia::after,:global(html:not(.dark)) .heroMedia::after{background:linear-gradient(90deg,var(--story-overlay-strong),transparent 80%),linear-gradient(0deg,var(--story-overlay-soft),transparent 35%)}
 .heroFooter>button,:global(html:not(.dark)) .heroFooter>button{background:var(--paper);color:var(--ink);border-color:var(--border-strong)}
+/* The hero fits the pin viewport; the archive below remains normal flow. */
+@media(min-width:761px){.stage .hero{height:100svh;min-height:0;max-height:none}}

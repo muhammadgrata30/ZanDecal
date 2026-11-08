@@ -46,7 +46,7 @@ export default function HomeMaterialSection() {
     document.addEventListener("visibilitychange", update);
     return () => { observer.disconnect(); document.removeEventListener("visibilitychange", update); };
   }, []);
-  return <section className={`${studio.material} hm-material hm-flat${reduced ? " hm-reduced" : ""}`} id="material" aria-labelledby="hm-title">
+  return <section className={`${studio.material} hm-material hm-flat${reduced ? " hm-reduced" : ""}`} id="material" data-nav-align="viewport" aria-labelledby="hm-title">
     <ScrollStage className="hm-explorer-stage" distance={.45} top={0}><div className="hm-explorer-layout">
     <div ref={stage} className="hm-image-stage" data-paused={paused || !active || reduced}>
       <div className="hm-flat-heading"><h2 id="hm-title"><span>BEDANYA</span><span>TERASA.</span></h2></div>

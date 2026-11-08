@@ -201,3 +201,4 @@
 .material :global(.hm-spec-sheet),:global(html.dark) .material :global(.hm-spec-sheet){background:var(--story-background)}
 .custom{--bg-surface:var(--story-background);--text-main:var(--story-ink);--text-muted:var(--story-muted);background:var(--story-background);color:var(--story-ink)}
 .custom .serviceIntro p{color:var(--story-muted)}
+.material[data-nav-align="viewport"] :global(.hm-flat-heading){top:max(36px,var(--nav-offset,88px))}
