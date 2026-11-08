@@ -1,41 +1,55 @@
 "use client";
 import { useEffect } from "react";
-import { advanceScroll, wheelTarget } from "../lib/scroll-easing";
+import { usePathname } from "next/navigation";
+import type Lenis from "lenis";
 
-/** Ease desktop wheel input only; touch, pinch, keyboard and nested scrollers remain native. */
-export function GentleScroll(){
-  useEffect(()=>{
-    const fine=matchMedia("(pointer:fine)");
-    const reduced=matchMedia("(prefers-reduced-motion:reduce)");
-    let frame=0,target=window.scrollY,last=0,previousPosition=-1,stalls=0;
-    const stop=()=>{cancelAnimationFrame(frame);frame=0;last=0;previousPosition=-1;stalls=0;target=window.scrollY;};
-    const tick=(time:number)=>{
-      frame=0;
-      const elapsed=(time-(last||time-16))/1000;last=time;
-      const current=window.scrollY;
-      stalls=current===previousPosition?stalls+1:0;previousPosition=current;
-      if(stalls>=3){stop();return;}
-      if(Math.abs(current-target)<1.5){window.scrollTo({top:target,behavior:"instant"});last=0;previousPosition=-1;stalls=0;return;}
-      window.scrollTo({top:advanceScroll(current,target,elapsed),behavior:"instant"});
-      frame=requestAnimationFrame(tick);
+/** One scroll owner. Touch, reduced motion, and admin retain native scrolling. */
+export function GentleScroll() {
+  const pathname = usePathname();
+  useEffect(() => {
+    if (pathname.startsWith("/admin")) return;
+    const fine = matchMedia("(pointer:fine)");
+    const reduced = matchMedia("(prefers-reduced-motion:reduce)");
+    let instance: Lenis | undefined;
+    let disposed = false;
+    let generation = 0;
+    async function sync() {
+      const current = ++generation;
+      instance?.destroy(); instance = undefined;
+      if (disposed || !fine.matches || reduced.matches || document.hidden || document.documentElement.classList.contains("zan-intro-locked")) return;
+      const { default: Lenis } = await import("lenis");
+      if (disposed || current !== generation) return;
+      instance = new Lenis({
+        autoRaf: true,
+        lerp: 0.12,
+        smoothWheel: true,
+        syncTouch: false,
+        allowNestedScroll: true,
+        anchors: { offset: -88 },
+        prevent: element => Boolean(element.closest('input,textarea,select,[contenteditable="true"],dialog,[data-native-scroll],[data-material-scroll],[data-lenis-prevent]')),
+      });
+    }
+    const refresh = () => { void sync(); };
+    const navigate=(event:Event)=>{
+      if(!instance)return;
+      const top=(event as CustomEvent<{top:number}>).detail.top;
+      event.preventDefault();instance.scrollTo(top,{immediate:true,force:true});
     };
-    const wheel=(event:WheelEvent)=>{
-      if(event.ctrlKey||event.metaKey){stop();return;}
-      if(!fine.matches||reduced.matches||!event.cancelable||event.defaultPrevented||!event.deltaY||Math.abs(event.deltaX)>Math.abs(event.deltaY))return;
-      const element=event.target;
-      if(element instanceof Element&&element.closest('input,textarea,select,[contenteditable="true"],dialog,[data-native-scroll],[data-material-scroll],.motor-palette'))return;
-      if(!frame)target=window.scrollY;
-      const maximum=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
-      const next=wheelTarget(target,event.deltaY,event.deltaMode,window.innerHeight,maximum);
-      if(next===target&&!frame)return;
-      target=next;event.preventDefault();
-      if(!frame){last=0;previousPosition=-1;stalls=0;frame=requestAnimationFrame(tick);}
+    refresh();
+    fine.addEventListener("change", refresh);
+    reduced.addEventListener("change", refresh);
+    document.addEventListener("visibilitychange", refresh);
+    document.addEventListener("zan-intro-lock-change", refresh);
+    window.addEventListener("zan-scroll-to",navigate);
+    return () => {
+      disposed = true; generation++;
+      instance?.destroy();
+      fine.removeEventListener("change", refresh);
+      reduced.removeEventListener("change", refresh);
+      document.removeEventListener("visibilitychange", refresh);
+      document.removeEventListener("zan-intro-lock-change", refresh);
+      window.removeEventListener("zan-scroll-to",navigate);
     };
-    const visibility=()=>{if(document.hidden)stop();};
-    window.addEventListener("wheel",wheel,{passive:false,capture:true});
-    window.addEventListener("pointerdown",stop,{passive:true});window.addEventListener("keydown",stop);window.addEventListener("resize",stop);
-    document.addEventListener("visibilitychange",visibility);reduced.addEventListener("change",stop);
-    return()=>{stop();window.removeEventListener("wheel",wheel,true);window.removeEventListener("pointerdown",stop);window.removeEventListener("keydown",stop);window.removeEventListener("resize",stop);document.removeEventListener("visibilitychange",visibility);reduced.removeEventListener("change",stop);};
-  },[]);
+  }, [pathname]);
   return null;
 }

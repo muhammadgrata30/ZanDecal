@@ -10,29 +10,26 @@ import { ConsultationSection } from "../components/ConsultationSection";
 import { Footer } from "../components/Footer";
 import { MotionObserver } from "../components/ScrollStage";
 import { PortfolioHandoff } from "../components/PortfolioHandoff";
-import { PerfectApplyHero } from "../components/experience/PerfectApplyHero";
+import { ApexLiveryHero } from "../components/experience/ApexLiveryHero";
 import { SectionTransitions } from "../components/experience/SectionTransitions";
 import { MaterialCurtain } from "../components/MaterialCurtain";
 import { MotorStudio } from "../components/experience/MotorStudio";
-import { GentleScroll } from "../components/GentleScroll";
+import { SectionCurtain } from "../components/experience/SectionCurtain";
 
 export default function Home() {
   return <div className="atelier-site apply-home">
-    <GentleScroll/>
     <MotionObserver/>
     <SectionTransitions/>
     <a className="atelier-skip" href="#main">Lewati ke konten</a>
     <RacingNavbar/>
     <main id="main">
-      <PerfectApplyHero typography="11"/>
-      <MaterialCurtain studio={<MotorStudio/>}><HomeMaterialSection/></MaterialCurtain>
+      <SectionCurtain variant="material" previous={<ApexLiveryHero/>} next={<MaterialCurtain studio={<MotorStudio/>}><HomeMaterialSection/></MaterialCurtain>}/>
       <CustomStickerSection/>
       <PortfolioHandoff>
         <GallerySection/>
         <WorkflowSection/>
       </PortfolioHandoff>
-      <ConsultationSection/>
+      <SectionCurtain variant="footer" previous={<ConsultationSection/>} next={<Footer/>}/>
     </main>
-    <Footer/>
   </div>;
 }

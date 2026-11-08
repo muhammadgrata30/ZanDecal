@@ -113,19 +113,18 @@ export function WorkflowSection() {
   const [activeStep,setActiveStep]=useState(1);
   const [prepared,setPrepared]=useState<number[]>([]);
   const tabs=useRef<(HTMLButtonElement|null)[]>([]);
-  const active=ORDER_STEPS[activeStep-1];
   const stageNames=["Eksplorasi","Konsultasi & mockup","Produksi","Pemasangan"];
   const outcomes=["Arah desain & pilihan finishing","Mockup yang disepakati bersama","Decal siap untuk diaplikasikan","Hasil akhir & panduan perawatan"];
   return <section id="cara-order" className={`${process.section} editorial-workflow`} aria-labelledby="order-title">
       <div className={process.hero}>
-        <div className={process.topline}><span>06 / CARA ORDER</span><span>THE ZAN WAY — FROM IDEA TO INSTALL</span><span>01—04</span></div>
-        <div className={process.heroCopy}><span className={process.eyebrow}>KAMU BAWA IDE. KITA BENTUK BERSAMA.</span><h2 id="order-title"><span>DARI IDE.</span><span><em>Ke jalan.</em><ArrowUpRight aria-hidden="true"/></span></h2><p>Empat tahap. Satu visi yang sama.<br/>Dari eksplorasi pertama sampai detail terakhir.</p><a href="#order-stations">Lihat prosesnya <span>↓</span></a></div>
-        <div className={process.heroImage}><Image src="/images/workflow-install.lossless.webp" alt="Detail pengerjaan vinyl lavender oleh teknisi studio" width={1536} height={1024} sizes="(max-width:760px) 88vw, 44vw"/><span>DARI LAYAR KE PERMUKAAN. / ZAN DECAL</span></div>
-        <div className={process.heroBottom}><span>DESIGNED TOGETHER.<br/>MADE WITH INTENT.</span><span>SCROLL / EXPLORE / START</span></div>
+        
+        <div className={process.heroCopy}><h2 id="order-title"><span>DARI IDE.</span><span><em>Ke jalan.</em><ArrowUpRight aria-hidden="true"/></span></h2><a href="#order-stations">Lihat prosesnya <span>↓</span></a></div>
+        <div className={process.heroImage}><Image src="/images/workflow-install.lossless.webp" alt="Detail pengerjaan vinyl lavender oleh teknisi studio" width={1536} height={1024} sizes="(max-width:760px) 88vw, 44vw"/></div>
+        
         <div className={process.scrollLine} aria-hidden="true"><i/></div>
       </div>
     <div className={process.workspace} id="order-stations" style={{"--order-progress":activeStep/4} as CSSProperties}>
-      <div className={process.workspaceHeading}><span className={process.eyebrow}>THE PROCESS / PILIH TAHAP UNTUK MELIHAT DETAIL</span><span aria-live="polite">TAHAP {active.number} DARI 04 — {stageNames[activeStep-1]}</span></div>
+      <div className={process.workspaceHeading}><span aria-live="polite">{stageNames[activeStep-1]}</span></div>
       <div className={process.tabs} role="tablist" aria-label="Tahap pemesanan">
         {ORDER_STEPS.map((step,index)=><button ref={node=>{tabs.current[index]=node;}} key={step.id} type="button" role="tab" id={`order-tab-${step.id}`} aria-controls={`order-panel-${step.id}`} aria-selected={activeStep===step.id} tabIndex={activeStep===step.id?0:-1} onPointerEnter={event=>{if(event.pointerType==="mouse"&&matchMedia("(hover:hover) and (pointer:fine)").matches)setActiveStep(step.id);}} onClick={()=>setActiveStep(step.id)} onKeyDown={event=>{
           let next=index;
@@ -135,17 +134,17 @@ export function WorkflowSection() {
           else if(event.key==="End") next=3;
           else return;
           event.preventDefault();setActiveStep(next+1);tabs.current[next]?.focus();
-        }}><span>{step.number}<step.icon size={19}/></span><strong>{stageNames[index]}</strong><small>{["Cari karakter.","Matangkan arah.","Wujudkan detail.","Siap jadi milikmu."][index]}</small></button>)}
+        }}><span><step.icon size={19}/></span><strong>{stageNames[index]}</strong><small>{["Cari karakter.","Matangkan arah.","Wujudkan detail.","Siap jadi milikmu."][index]}</small></button>)}
       </div>
       <div className={process.stationProgress} aria-hidden="true"><i/></div>
       {ORDER_STEPS.map((step,index)=><article key={step.id} role="tabpanel" id={`order-panel-${step.id}`} aria-labelledby={`order-tab-${step.id}`} hidden={activeStep!==step.id} tabIndex={0} className={process.panel}>
-        <div className={process.ticket}><div className={process.ticketLabel}><span>STUDIO ROUTE</span><step.icon size={20}/></div><div className={process.bigNumber}>{step.number}<span>/04</span></div><h3>{stageNames[index]}</h3><div className={process.output}><span>HASIL TAHAP INI</span><p>{outcomes[index]}</p></div><span className={process.ticketFoot}>ZAN DECAL / MADE FOR YOU <ArrowUpRight size={17}/></span></div>
+        <div className={process.ticket}><div className={process.ticketLabel}><span>STUDIO ROUTE</span><step.icon size={20}/></div><h3>{stageNames[index]}</h3><div className={process.output}><span>HASIL TAHAP INI</span><p>{outcomes[index]}</p></div></div>
         <div className={process.detail}><div className={process.detailTop}><span className={process.eyebrow}>{step.badge}</span><span>ESTIMASI AWAL / {step.duration}</span></div><h3>{["Temukan karaktermu.","Lihat sebelum dibuat.","Dibentuk dengan presisi.","Detail terakhir. Kesan pertama."][index]}</h3><p>{step.description}</p><ul>{step.checklist.map(item=><li key={item}><Check size={15}/><span>{item}</span></li>)}</ul><aside className={process.tip}><span>CATATAN STUDIO ↗</span><p>{step.tips}</p></aside><a href={step.ctaHref} className={process.stepCta}>{step.ctaText}<ArrowUpRight size={21}/></a></div>
       </article>)}
       <div className={process.navigation}><p>Estimasi mengikuti lingkup proyek, ketersediaan bahan, dan jadwal studio. Tim mengonfirmasi detail saat konsultasi.</p><div><button type="button" disabled={activeStep===1} onClick={()=>setActiveStep(step=>step-1)}><ChevronLeft size={18}/> Sebelumnya</button><button type="button" disabled={activeStep===4} onClick={()=>setActiveStep(step=>step+1)}>Selanjutnya <ChevronRight size={18}/></button></div></div>
     </div>
     <div className={process.preparation}>
-      <div className={process.workshop}><Image src="/images/workflow-install.lossless.webp" alt="Teknisi merapikan vinyl lavender pada panel mobil menggunakan squeegee" width={1536} height={1024} sizes="(max-width:760px) 100vw, 50vw"/><div><span>THE HANDS BEHIND THE FINISH.</span><strong>Ketelitian.<br/><em>Di setiap lapisan.</em></strong></div></div>
+      <div className={process.workshop}><Image src="/images/workflow-install.lossless.webp" alt="Teknisi merapikan vinyl lavender pada panel mobil menggunakan squeegee" width={1536} height={1024} sizes="(max-width:760px) 100vw, 50vw"/><div><strong>Ketelitian.<br/><em>Di setiap lapisan.</em></strong></div></div>
       <div className={process.brief}><span className={process.eyebrow}>SEBELUM MULAI / YOUR FIRST BRIEF</span><h2>Ide belum utuh?<br/><em>Tetap bisa mulai.</em></h2><p>Siapkan yang sudah ada. Tiga hal ini membantu tim memahami kebutuhanmu; sisanya bisa kita diskusikan.</p><fieldset><legend>Checklist persiapan konsultasi</legend>{["Foto kendaraan & detail modelnya","Referensi visual atau gambaran gaya","Warna & finishing yang menarik buatmu"].map((label,index)=><label key={label}><input type="checkbox" checked={prepared.includes(index)} onChange={event=>setPrepared(current=>event.target.checked?[...current,index]:current.filter(item=>item!==index))}/><span>{label}</span><Check aria-hidden="true" size={17}/></label>)}</fieldset><div className={process.briefProgress}><span role="status">{prepared.length}/3 referensi siap</span><span>CHECKLIST PRIBADI</span></div><a href="#konsultasi">Ceritakan idemu <ArrowUpRight size={24}/></a><small>Tidak perlu mencentang semuanya untuk konsultasi.</small></div>
     </div>
     <div className={process.faq}><div><span className={process.eyebrow}>SEBELUM KAMU BERTANYA</span><h2>Biar <em>jelas.</em></h2></div><div>{[

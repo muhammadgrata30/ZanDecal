@@ -36,3 +36,4 @@ html.dark .racing-brand img{filter:brightness(0) invert(1)}
 .racing-theme button[aria-pressed=true]::after,.racing-theme button:hover::after{transform:scaleX(1)}
 @media(min-width:1200px){.racing-actions{justify-self:end;margin-left:0}}
 @media(max-width:600px){.racing-actions{gap:14px}.racing-theme{gap:8px}.racing-theme button{padding-inline:4px;min-width:30px;justify-content:center}.racing-theme button span{display:none}}
+.apply-home section[id],#komisi-visual{scroll-margin-top:var(--nav-offset,88px)}

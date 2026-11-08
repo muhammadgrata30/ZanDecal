@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { GentleScroll } from "../components/GentleScroll";
+import "lenis/dist/lenis.css";
 import localFont from "next/font/local";
 import "./globals.css";
 import "./atelier.css";
@@ -69,6 +71,7 @@ export default async function RootLayout({
       <body
         className={`${archivo.variable} ${chivo.variable} ${geistSans.variable} ${geistMono.variable} ${display.variable} antialiased min-h-screen flex flex-col font-sans transition-colors duration-300 selection:bg-[#A18CD1]/30 selection:text-white`}
       >
+        <GentleScroll/>
         <ThemeProvider><SiteContentProvider initial={content}>{children}</SiteContentProvider></ThemeProvider>
       </body>
     </html>

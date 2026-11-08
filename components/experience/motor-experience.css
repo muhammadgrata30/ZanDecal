@@ -17,3 +17,13 @@ html.dark .split-image-hero[data-theme-choice=split] .split-surface-light{transf
 .motor-studio{--studio-background:#f5f3ef;background:var(--studio-background)}
 html.dark .motor-studio{--studio-background:#17141d}
 .motor-studio .motor-preview,.motor-studio .motor-settings,.motor-studio .motor-view-buttons,.motor-studio .motor-preview-tools button{background:var(--studio-background)}
+/* Frame the interactive viewport without overlaying the vehicle itself. */
+.motor-preview:after{content:"";position:absolute;inset:10px;border:1px solid #9a86b12e;pointer-events:none;z-index:1}
+.motor-preview-tools{z-index:3;bottom:56px}.motor-preview-tools button{font-size:12px}
+.motor-interaction-hint{font-size:12px;bottom:12px;z-index:2;background:var(--studio-background);padding:4px 8px}
+@media(max-width:760px){.motor-preview-tools{bottom:75px}.motor-preview-tools button{font-size:12px}.motor-interaction-hint{font-size:12px;max-width:94%;bottom:10px}}
+.motor-preview-tools{justify-content:space-between;align-items:center}
+.motor-zoom-buttons{align-items:center;background:var(--studio-background);border:1px solid var(--border-strong);pointer-events:auto}
+.motor-zoom-buttons button{font-size:22px;min-width:44px;border:0;background:transparent}
+.motor-zoom-buttons>span{font-size:12px;padding:0 5px}
+@media(max-width:420px){.motor-preview-tools{left:12px;right:12px;gap:8px}.motor-preview-tools>div{gap:0}.motor-preview-tools button{padding:10px 8px}.motor-zoom-buttons>span{display:none}}

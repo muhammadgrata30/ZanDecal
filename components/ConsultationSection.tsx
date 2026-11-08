@@ -1,14 +1,16 @@
 "use client";
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import Image from "next/image";
 import { ArrowUpRight, CheckCircle2, Clock, MapPin, Phone, ShieldCheck } from "lucide-react";
-import { MotionHead, ScrollStage } from "./ScrollStage";
-import { TransitionVeil } from "./experience/SectionTransitions";
+import { useSelectedSectionMotion } from "./experience/useSelectedSectionMotion";
+import "./experience/selected-sections.css";
 import { HoverDetails } from "./HoverDetails";
 const VEHICLES = ["Mobil Sport / Coupe", "Superbike / Motor Sport", "Sedan / Hatchback", "SUV / Crossover", "Armada Bisnis / Fleet", "Lainnya"];
 const SERVICES = ["Full Wrap Livery", "Custom Striping & Racing Decal", "Precision Die-Cut Cutting Sticker", "Paint Protection Film (PPF)"];
 const FINISHES = ["Signature Chameleon", "Ultra High-Gloss", "Satin Stealth Matte", "Prismatic Holo"];
 export function ConsultationSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  useSelectedSectionMotion(sectionRef, "commission");
   const [vehicleType, setVehicleType] = useState(VEHICLES[0]);
   const [services, setServices] = useState([SERVICES[0]]);
   const [finishType, setFinishType] = useState(FINISHES[0]);
@@ -26,34 +28,39 @@ export function ConsultationSection() {
     window.open(`https://wa.me/6281234567890?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
     setIsSubmitted(true);
   };
-  return <section id="konsultasi" className="editorial-consultation" data-arrival="consultation">
-    <TransitionVeil/>
-    <ScrollStage distance={1.2} className="consultation-stage"><div className="consultation-hero">
-      <div className="consultation-hero-copy"><span className="editorial-kicker">07 / KOMISI BARU</span>
-        <MotionHead className="consultation-headline"><span>WARNA</span><span>PUNYA</span><span>SUARA<span className="headline-period">.</span></span></MotionHead>
-        <p>LEBIH DARI WARNA.<br/>INI CARA ANDA DIDENGAR.</p>
-      </div><div className="consultation-art"><Image src="/images/consultation-vinyl.lossless.webp" alt="Lembaran vinyl lavender dengan refleksi mobil sport hitam" fill sizes="(max-width:760px) 100vw, 65vw"/></div>
-      <span className="consultation-side-note">IDE<br/>MATERIAL<br/>TEKNIK<br/>KARAKTER<br/>DI JALAN.</span>
+  return <section ref={sectionRef} id="konsultasi" className="commission-live" aria-labelledby="manifesto-title">
+    
+    <div className="manifesto-lead" id="komisi-visual">
+      <div className="manifesto-image-wrap"><Image className="manifesto-image" src="/images/consultation-vinyl.lossless.webp" alt="Lembaran vinyl lavender dengan refleksi mobil sport hitam" fill sizes="100vw"/></div>
+      <div className="manifesto-copy"><h2 id="manifesto-title"><span className="selected-motion-line"><span className="selected-motion-word">WARNA PUNYA</span></span><span className="selected-motion-line"><span className="selected-motion-word">SUARA.</span></span></h2></div>
+      
+      
     </div>
-    <form onSubmit={handleSubmit} className="consultation-form">
-      <div className="consultation-form-title"><span className="editorial-kicker">KONSULTASI</span><h3>MULAI<br/>PROYEK<br/>KAMU.</h3><p>Ceritakan kendaraan, pilih layanan, dan bagikan ide. Kita susun arah desainnya bersama.</p></div>
-      <fieldset><legend><span>01</span> Kendaraan</legend><p className="field-hint">PILIH JENIS DAN DETAIL KENDARAAN</p>
-        <label className="sr-only" htmlFor="consult-vehicle">Jenis kendaraan</label><select id="consult-vehicle" value={vehicleType} onChange={event=>{setVehicleType(event.target.value);setIsSubmitted(false);}}>{VEHICLES.map(item=><option key={item}>{item}</option>)}</select>
-        <label className="sr-only" htmlFor="consult-make">Merek kendaraan</label><input id="consult-make" value={make} onChange={event=>setMake(event.target.value)} placeholder="Merek" maxLength={80}/>
-        <label className="sr-only" htmlFor="consult-model">Model kendaraan</label><input id="consult-model" value={model} onChange={event=>setModel(event.target.value)} placeholder="Model" maxLength={80}/>
-        <label className="sr-only" htmlFor="consult-year">Tahun kendaraan</label><input id="consult-year" value={year} onChange={event=>setYear(event.target.value)} placeholder="Tahun" inputMode="numeric" pattern="[0-9]{4}" title="Masukkan tahun dalam empat angka" maxLength={4}/>
+    <div className="manifesto-process">
+      <article><h3>Ceritakan kendaraan</h3><p>Model, pemakaian, dan karakter yang kamu cari.</p></article>
+      <article><h3>Susun arah desain</h3><p>Layanan, bahan, warna, serta referensi visual.</p></article>
+      <article><h3>Tinjau bersama</h3><p>Periksa brief sebelum menghubungi studio.</p></article>
+    </div>
+    <form onSubmit={handleSubmit} className="consultation-form manifesto-form">
+      <div className="consultation-form-title"><h3>MULAI DARI<br/>KENDARAANMU.</h3></div>
+      <fieldset><legend>Kendaraan</legend>
+        <label className="form-field-label" htmlFor="consult-vehicle">Jenis kendaraan</label><select id="consult-vehicle" value={vehicleType} onChange={event=>{setVehicleType(event.target.value);setIsSubmitted(false);}}>{VEHICLES.map(item=><option key={item}>{item}</option>)}</select>
+        <label className="form-field-label" htmlFor="consult-make">Merek</label><input id="consult-make" value={make} onChange={event=>{setMake(event.target.value);setIsSubmitted(false);}} placeholder="Contoh: Ducati" maxLength={80}/>
+        <label className="form-field-label" htmlFor="consult-model">Model</label><input id="consult-model" value={model} onChange={event=>{setModel(event.target.value);setIsSubmitted(false);}} placeholder="Contoh: Streetfighter V4 S" maxLength={80}/>
+        <label className="form-field-label" htmlFor="consult-year">Tahun <span>(opsional)</span></label><input id="consult-year" value={year} onChange={event=>{setYear(event.target.value);setIsSubmitted(false);}} placeholder="Contoh: 2024" inputMode="numeric" pattern="[0-9]{4}" title="Masukkan tahun dalam empat angka" maxLength={4}/>
       </fieldset>
-      <fieldset><legend><span>02</span> Layanan</legend><p className="field-hint">PILIH LAYANAN YANG DIINGINKAN</p>
+      <fieldset><legend>Layanan</legend>
         {SERVICES.map(item=><label className="service-checkbox" key={item}><input type="checkbox" checked={services.includes(item)} onChange={event=>{setServices(current=>event.target.checked?[...current,item]:current.filter(service=>service!==item));setIsSubmitted(false);}}/>{item}</label>)}
-        <label className="finish-label" htmlFor="consult-finish">Karakter finishing</label><select id="consult-finish" value={finishType} onChange={event=>setFinishType(event.target.value)}>{FINISHES.map(item=><option key={item}>{item}</option>)}</select>
+        <label className="finish-label" htmlFor="consult-finish">Karakter finishing</label><select id="consult-finish" value={finishType} onChange={event=>{setFinishType(event.target.value);setIsSubmitted(false);}}>{FINISHES.map(item=><option key={item}>{item}</option>)}</select>
         {!services.length&&<p className="field-error" role="status">Pilih minimal satu layanan.</p>}
       </fieldset>
-      <fieldset className="consultation-notes"><legend><span>03</span> Ceritakan ide</legend><label className="field-hint" htmlFor="consult-notes">JELASKAN KONSEP, REFERENSI, ATAU PERTANYAAN</label>
+      <fieldset className="consultation-notes"><legend>Ceritakan ide</legend><label className="form-field-label" htmlFor="consult-notes">Konsep, referensi, atau pertanyaan</label><p className="field-hint">Belum punya referensi? Ceritakan kesan yang ingin kamu tampilkan.</p>
         <textarea id="consult-notes" value={notes} onChange={event=>{setNotes(event.target.value);setIsSubmitted(false);}} placeholder="Tulis ide, gaya, referensi, atau pertanyaan kamu di sini…" rows={5} maxLength={1000}/><small className="note-count">{notes.length}/1000</small>
         <button type="submit" disabled={!services.length} className="consultation-submit">MULAI PROYEK <ArrowUpRight size={24}/></button><p className="submit-caption">Brief dibuka di WhatsApp. Kirim setelah Anda meninjaunya.</p>
         {isSubmitted&&<p className="submit-status" role="status"><CheckCircle2 size={16}/> Tautan konsultasi WhatsApp telah dibuka.</p>}
       </fieldset>
-    </form></ScrollStage>
+      <div className="manifesto-brief-summary"><span>RINGKASAN PILIHAN</span><p><strong>{vehicleType}</strong><span>{services.length} layanan dipilih</span><span>{finishType}</span></p></div>
+    </form>
     <HoverDetails className="consultation-studio"><summary>Informasi studio & standar pengerjaan <ArrowUpRight size={16}/></summary><div>
       <p><MapPin size={18}/><span><strong>Studio & Clean Room</strong>Jl. Otomotif Raya No. 88, Kawasan Modifikasi Terpadu, Jakarta / Tangerang</span></p>
       <p><Clock size={18}/><span><strong>Jam operasional</strong>Senin–Sabtu, 09:00–18:00 WIB. Instalasi berdasarkan reservasi.</span></p>

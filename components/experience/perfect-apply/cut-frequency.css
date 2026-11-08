@@ -76,7 +76,7 @@
 @media(prefers-reduced-motion:reduce){.apply-home .perfect-apply .hero-drafting{transition:none}.apply-home .perfect-apply .hero-scan-line,.apply-home .perfect-apply[data-typography="11"] .title-line::after{display:none}.apply-home .perfect-apply[data-typography="11"].settled .title-word{animation:none}.apply-home .perfect-apply[data-typography="11"] .title-line{transition:none;transform:none!important}}
 .apply-home .perfect-apply.paused .hero-type,.apply-home .perfect-apply.paused .title-word{animation:none!important;opacity:1;transform:none}
 /* A taller working area keeps the parked squeegee inside the hero. */
-.apply-home .perfect-apply.settled{height:calc(100svh + 220px);min-height:1000px}
+.apply-home .perfect-apply,.apply-home .perfect-apply.settled{height:calc(100svh + 220px);min-height:1000px}
 .apply-home .perfect-apply[data-typography="11"] .hero-type{top:18%;width:43%;max-width:660px}
 .apply-home .perfect-apply[data-typography="11"] h1{font-size:clamp(100px,10.8vw,184px);line-height:.84;letter-spacing:-.045em;margin:28px 0 32px}
 .apply-home .perfect-apply[data-typography="11"] .title-line{display:block;margin:0;padding:0;overflow:visible;transition:none;transform:none!important}
@@ -94,3 +94,18 @@
 @keyframes zan-vinyl-flex{0%,68%,100%{transform:none}77%{transform:perspective(900px) rotateY(-7deg) skewY(-2deg) translate3d(3px,-3px,0)}86%{transform:perspective(900px) rotateY(2deg) skewY(.5deg)}}
 @media(max-width:999px){.apply-home .perfect-apply{height:calc(100svh + 240px);min-height:1080px}.apply-home .perfect-apply.settled{height:calc(100svh + 240px);min-height:1080px}.apply-home .perfect-apply[data-typography="11"] .hero-type{top:13%;width:88%;left:6%;max-width:600px}.apply-home .perfect-apply[data-typography="11"] h1{font-size:clamp(96px,24vw,148px);margin:24px 0}.apply-home .perfect-apply[data-typography="11"] .line-three{margin-left:.35em}.apply-home .perfect-apply[data-typography="11"].settled .line-three .title-word{animation:zan-vinyl-unfold 1.1s .25s cubic-bezier(.16,1,.3,1) both}}
 @media(prefers-reduced-motion:reduce){.apply-home .perfect-apply[data-typography="11"].settled .title-word{animation:none!important;transform:none!important;opacity:1}}
+/* WebGL fallback stays useful on older GPUs, without loading a second renderer. */
+.perfect-apply #fallback:not([hidden]){position:absolute;top:28%;right:7%;width:42%;z-index:3;text-align:center;font:12px/1.7 var(--font-chivo),sans-serif}
+.perfect-apply .apply-static-vinyl{width:100%;aspect-ratio:1.49;background:#398eaf url('/brand/zan-wordmark-v3.png') center/76% auto no-repeat;border:1px solid #ffffff50;border-radius:12px;box-shadow:0 20px 45px #0002;transform:rotate(-5deg)}
+.perfect-apply #fallback a{text-decoration:underline}
+@media(max-width:999px){.perfect-apply #fallback:not([hidden]){top:51%;right:9%;width:82%}}
+/* Keep the escape action available while the intro owns page scrolling. */
+.apply-home .perfect-apply:not(.settled) .apply-header{visibility:visible;pointer-events:auto;top:24px;right:4%;z-index:30}
+html.zan-intro-locked{overscroll-behavior:none;scroll-behavior:auto!important}
+/* A single gentle arrival keeps the camera handoff free of competing text flips. */
+.apply-home .perfect-apply[data-typography="11"].settled .hero-type{animation:zan-hero-soft-arrival .7s cubic-bezier(.2,.65,.3,1) both}
+.apply-home .perfect-apply[data-typography="11"].settled .line-one .title-word{animation:zan-hero-soft-arrival .65s .04s cubic-bezier(.2,.65,.3,1) both}
+.apply-home .perfect-apply[data-typography="11"].settled .line-two .title-word{animation:zan-hero-soft-arrival .7s .12s cubic-bezier(.2,.65,.3,1) both}
+.apply-home .perfect-apply[data-typography="11"].settled .line-three .title-word{animation:zan-hero-soft-arrival .75s .2s cubic-bezier(.2,.65,.3,1) both}
+@keyframes zan-hero-soft-arrival{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.apply-home .perfect-apply[data-typography="11"].settled .hero-type,.apply-home .perfect-apply[data-typography="11"].settled .title-word{animation:none!important;transform:none!important;opacity:1}}

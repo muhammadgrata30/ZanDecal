@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
+import { stageLayout, stageProgress } from "../lib/scroll-stage";
 
 /** Native sticky stages: scroll is never intercepted, and tall panels remain reachable. */
 export function ScrollStage({ children, className = "", distance = 0.35, id, top }: {
@@ -13,16 +14,16 @@ export function ScrollStage({ children, className = "", distance = 0.35, id, top
     const panel = element.firstElementChild as HTMLElement;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
-    let active = false;
+    let active = false; 
+    let sticky = false;
     const clamp = (value: number) => Math.max(0, Math.min(1, value));
     const smoothstep = (value: number) => { const t = clamp(value); return t * t * (3 - 2 * t); };
     const update = () => {
       frame = 0;
       const rect = element.getBoundingClientRect();
       const height = panel.offsetHeight;
-      const travel = Math.max(1, element.offsetHeight - height);
       const top = Number.parseFloat(element.style.getPropertyValue("--stage-top")) || 0;
-      const progress = clamp((top - rect.top) / travel);
+      const progress = stageProgress(rect.top,height,element.offsetHeight,window.innerHeight,top,sticky,reduced.matches);
       element.style.setProperty("--stage-progress", String(progress));
       // Hold, depart, hand over, arrive, hold. Vehicles never blink between thresholds.
       const runway = element.querySelector<HTMLElement>(".vehicle-runway");
@@ -38,15 +39,19 @@ export function ScrollStage({ children, className = "", distance = 0.35, id, top
     };
     const schedule = () => { if (active && !frame) frame = requestAnimationFrame(update); };
     const measure = () => {
-      const enabled = !reduced.matches;
       const height = panel.offsetHeight;
+      const inset = top ?? (element.classList.contains("hero-stage") || element.classList.contains("vehicle-stage") ? 0 : 88);
+      // A panel taller than the available viewport cannot hold a stable sticky
+      // position in both directions. Keep its full content in normal flow.
       const mobileScale = window.innerWidth <= 760 ? .8 : 1;
-      const space = enabled ? window.innerHeight * distance * mobileScale : 0;
+      const layout=stageLayout(height,window.innerHeight,inset,distance,mobileScale,reduced.matches);
+      sticky=layout.sticky;
+      panel.style.position = sticky ? "sticky" : "relative";
+      panel.style.top = sticky ? `${layout.top}px` : "auto";
       // Sticky needs real parent content height, not trailing padding: otherwise it
       // releases immediately and leaves the animation's scroll distance empty.
-      element.style.setProperty("--stage-height", `${height + space}px`);
-      const inset = top ?? (element.classList.contains("hero-stage") || element.classList.contains("vehicle-stage") ? 0 : 88);
-      element.style.setProperty("--stage-top", `${Math.min(inset, window.innerHeight - height)}px`);
+      element.style.setProperty("--stage-height", `${layout.height}px`);
+      element.style.setProperty("--stage-top", `${layout.top}px`);
       update();
     };
     const observer = new IntersectionObserver(([entry]) => {

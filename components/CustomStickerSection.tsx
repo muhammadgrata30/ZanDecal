@@ -72,12 +72,12 @@ export function CustomStickerSection() {
       <div className={cinema.scene}>
         <div className={cinema.lightSweep} aria-hidden="true"/>
         <div className={cinema.orbit} aria-hidden="true"><span/><span/><span/></div>
-        <div className={cinema.topline}><span>04 / CUSTOM STICKER</span><span>ZAN DECAL — INDEPENDENT BY DESIGN</span><span className={cinema.registration} aria-hidden="true">＋</span></div>
+        
         <svg className={cinema.contours} viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="currentColor" strokeWidth="1">{Array.from({length:12},(_,i)=><path key={i} d={`M ${-100+i*28} 950 C ${540+i*22} 600, ${-200+i*45} 260, ${580+i*50} -100 S 1300 0, 1500 280`}/>)}</g></svg>
         <div className={cinema.intro}>
-          <span className={cinema.eyebrow}><i/> IDEMU. POTONGANMU. IDENTITASMU.</span>
+          
           <h2 id="sticker-title" className={cinema.headline}><span>BUAT</span><span className={cinema.vinylWord}>JEJAK<span className={cinema.period}>.</span></span></h2>
-          <p>Dari satu logo sampai satu set livery.<br/>Kami potong, cetak, dan bentuk<br/>karakter yang cuma punya kamu.</p>
+          
           <a href="#konsultasi" className={cinema.cta}>Rancang stiker kamu <ArrowUpRight size={21}/></a>
         </div>
         <div className={cinema.art} role="img" aria-label="Lembar konsep stiker Zan: nomor balap 27, wordmark Zan, emblem orisinal, dan striping presisi dengan ujung vinyl terkelupas">
@@ -100,9 +100,9 @@ export function CustomStickerSection() {
       </div>
     </ScrollStage>
     <div className={cinema.typeBand} aria-hidden="true"><span>YOUR STYLE.</span><span>YOUR <i>SIGNATURE.</i> ↗</span></div>
-    <div className="custom-services" id="sticker-services"><div className={studio.serviceIntro}><span className="editorial-kicker">DARI DETAIL SAMPAI TOTAL.</span><h2>Empat cara.<br/><em>Satu karakter.</em></h2><p>Pilih ruang ekspresimu. Kami kerjakan sampai ke detail terakhir.</p></div>
+    <div className="custom-services" id="sticker-services"><div className={studio.serviceIntro}><h2>Empat cara.<br/><em>Satu karakter.</em></h2><p>Pilih ruang ekspresimu. Kami kerjakan sampai ke detail terakhir.</p></div>
       {STICKER_SERVICES.map((service,index)=><HoverDetails key={service.title} className="service-item motion-reveal" group="sticker-services">
-        <summary><span>0{index+1}</span><h3>{["Cutting Sticker","Custom Livery","Branding Armada","Full Wrap"][index]}</h3><ArrowUpRight size={18}/></summary>
+        <summary><h3>{["Cutting Sticker","Custom Livery","Branding Armada","Full Wrap"][index]}</h3><ArrowUpRight size={18}/></summary>
         <div><p>{service.description}</p><ul>{service.points.map(point=><li key={point}>{point}</li>)}</ul><a className="editorial-link" href="#konsultasi">Konsultasikan kebutuhan ini <ArrowUpRight size={16}/></a></div>
       </HoverDetails>)}
     </div>

@@ -37,7 +37,7 @@ export function createApply(low=false,cinematic=false){
  const tool=new THREE.Group();root.add(tool);tool.name='felt-squeegee';
  const body=solid(.92,2.82,.16,.13,housing,tool);body.position.x=.11;
  const inset=solid(.65,2.32,.055,.085,new THREE.MeshStandardMaterial({color:0x40394e,roughness:.45,metalness:.25}),tool);inset.position.set(.16,0,.19);
- const felt=solid(.14,2.87,.09,.045,black,tool);felt.position.set(-.42,0,.01);
+ const felt=solid(.14,2.87,.09,.045,black,tool);felt.position.set(-.42,0,.01);felt.name='tool-felt';
  const seam=add(new THREE.BoxGeometry(.018,2.7,.018),aluminium,tool);seam.position.set(-.31,0,.18);
  const gripGeometry=new THREE.BoxGeometry(.38,.026,.027),ribs=new THREE.InstancedMesh(gripGeometry,aluminium,5),dummy=new THREE.Object3D();for(let i=0;i<5;i++){dummy.position.set(.17,(i-2)*.18,.27);dummy.updateMatrix();ribs.setMatrixAt(i,dummy.matrix);}tool.add(ribs);
  const screwGeometry=new THREE.CylinderGeometry(.045,.045,.025,low?8:14),screws=new THREE.InstancedMesh(screwGeometry,aluminium,2);for(let i=0;i<2;i++){dummy.position.set(.17,(i===0?-1:1)*1,.26);dummy.rotation.x=Math.PI/2;dummy.updateMatrix();screws.setMatrixAt(i,dummy.matrix);}tool.add(screws);

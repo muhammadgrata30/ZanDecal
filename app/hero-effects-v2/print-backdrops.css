@@ -1,0 +1,36 @@
+.v2-lab .perfect-apply{--print-cyan:#328da9;--print-lavender:#9781b8;--print-ink:#434057;--print-tint:#9d8abd13;--print-line:#69738a;--print-guide:#9d8bb067}
+.print-backdrop{position:absolute;inset:0;overflow:hidden;pointer-events:none;mask-image:linear-gradient(90deg,#000b 0%,#0004 30%,#000b 48%,#000 65%)}
+.print-composition{position:absolute;inset:0;width:100%;height:100%;fill:none;transform:translate(calc((var(--v2-x) - 68%)*.035),calc((var(--v2-y) - 46%)*.025));transition:transform 1.8s ease-out}
+.print-cyan{fill:var(--print-cyan)}.print-lavender{fill:var(--print-lavender)}.print-ink{fill:var(--print-ink)}.print-tint{fill:var(--print-tint)}.print-hatched{fill:url(#print-hatch)}.print-hatch-line{stroke:var(--bg);stroke-width:3;opacity:.38}
+.print-contour{stroke:var(--print-line);stroke-width:1.2;opacity:.38;vector-effect:non-scaling-stroke}.print-contour.strong{stroke:var(--print-cyan);stroke-width:2.5;opacity:.75}
+.print-contours{transform-origin:1000px 540px;animation:print-contour-drift 16s ease-in-out infinite}.print-solid-orbit{transform-origin:1100px 464px;animation:print-orbit 18s ease-in-out infinite;opacity:.65}
+.print-ribbon{opacity:.65;animation:print-ribbon-travel 12s ease-in-out infinite;transform-origin:300px 850px}
+.print-guide{stroke:var(--print-guide);stroke-width:1.25;stroke-dasharray:3 8}.print-trace{stroke:var(--print-cyan);stroke-width:2.5;stroke-dasharray:.26 .74;animation:print-trace-pass 14s linear infinite}
+.print-cut-panels{animation:print-panel-register 12s cubic-bezier(.65,0,.35,1) infinite;transform-origin:1050px 480px}.print-cut-panels .print-cyan{opacity:.85}.print-cut-panels .print-lavender{opacity:.65}.print-cut-panels .print-ink{opacity:.8}
+.print-frame{fill:none;stroke:var(--print-line);stroke-width:1.25;opacity:.32;transform-box:fill-box;transform-origin:center;animation:print-frame-shift 18s calc(var(--i)*-.22s) ease-in-out infinite}.print-frame.strong{stroke:var(--print-lavender);stroke-width:7;opacity:.7}.print-corner-mark{opacity:.9;animation:print-register-mark 12s ease-in-out infinite}.print-corner-mark.second{animation-delay:-6s}
+.print-speed-bands{opacity:.7}.print-band{animation:print-band-flex 14s calc(var(--i)*-.5s) ease-in-out infinite;transform-origin:1200px 450px}.print-speed-lines path{stroke:var(--print-cyan);stroke-width:1.5;stroke-dasharray:.07 .93;opacity:.7;animation:print-trace-pass 8s calc(var(--i)*-.6s) linear infinite}
+.print-hybrid-contours{transform-origin:1040px 530px;animation:print-hybrid 20s ease-in-out infinite}.print-signature-shard{opacity:.8;animation:print-shard 14s ease-in-out infinite}.print-signature-tab{opacity:.7;animation:print-shard 14s -7s ease-in-out infinite}
+.print-registration{stroke:var(--print-line);stroke-width:1;opacity:.55}.print-edition{position:absolute;top:142px;right:4%;display:flex;flex-direction:column;gap:9px;color:var(--muted);text-align:right;font:9px/1.4 var(--font-geist-mono),monospace;letter-spacing:.11em}.print-edition span+span{opacity:.55;font-size:8px}
+@keyframes print-contour-drift{0%,100%{transform:translate(0,0) rotate(-2deg)}50%{transform:translate(18px,-12px) rotate(3deg)}}
+@keyframes print-orbit{0%,100%{transform:rotate(0)}50%{transform:rotate(18deg)}}
+@keyframes print-ribbon-travel{0%,100%{transform:translateX(-12px)}50%{transform:translateX(22px)}}
+@keyframes print-trace-pass{to{stroke-dashoffset:-1}}
+@keyframes print-panel-register{0%,20%,100%{transform:translate(0,0)}40%,65%{transform:translate(16px,-12px)}80%{transform:translate(-5px,4px)}}
+@keyframes print-frame-shift{0%,100%{transform:translate(0,0) rotate(-12deg)}50%{transform:translate(12px,-8px) rotate(-6deg)}}
+@keyframes print-register-mark{0%,100%{transform:translate(0,0)}50%{transform:translate(0,14px)}}
+@keyframes print-band-flex{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(-12px,9px) rotate(1deg)}}
+@keyframes print-hybrid{0%,100%{transform:translate(0,0) rotate(-3deg)}50%{transform:translate(-15px,8px) rotate(3deg)}}
+@keyframes print-shard{0%,100%{transform:translate(0,0)}50%{transform:translate(13px,-17px)}}
+html.dark .v2-lab .perfect-apply{--print-cyan:#6ebbd2;--print-lavender:#b397d2;--print-ink:#a9a5c4;--print-tint:#aa8dce12;--print-line:#ad9bc0;--print-guide:#bfa6da66}
+@media(max-width:999px){.print-backdrop{mask-image:linear-gradient(180deg,#0002 15%,#0003 35%,#000b 58%,#000 100%)}.print-composition{width:150%;left:-32%}.print-edition{top:51%;font-size:7px}.print-edition span+span{display:none}.print-contour{stroke-width:1}.print-contour.strong{stroke-width:2}.print-frame.strong{stroke-width:5}}
+@media(prefers-reduced-motion:reduce){.v2-lab .print-backdrop *{animation:none!important;transition:none!important}.print-trace{stroke-dasharray:none;opacity:.55}.print-frame{transform:rotate(-9deg)}}
+/* Apex: seven curved 2D ribbons down the full height of the hero, at every ratio. */
+.print-backdrop-4{mask-image:none}
+.print-backdrop-4 .print-composition{left:0;width:100%;height:100%;transform:none;transition:none}
+.print-backdrop-4 .print-speed-bands{opacity:.5}
+.print-backdrop-4 .print-band{transform-origin:50% 50%;animation-name:apex-full-height-drift}
+.print-backdrop-4 .print-speed-lines{animation:apex-full-height-drift 14s ease-in-out infinite}
+.print-backdrop-4 .print-speed-lines path{stroke:var(--bg);opacity:.3}
+@keyframes apex-full-height-drift{0%,100%{transform:translateY(-10px)}50%{transform:translateY(12px)}}
+@media(max-width:999px){.print-backdrop-4{mask-image:none}.print-backdrop-4 .print-composition{left:0;width:100%}.print-backdrop-4 .print-speed-bands{opacity:.32}}
+@media(prefers-reduced-motion:reduce){.print-backdrop-4 .print-band,.print-backdrop-4 .print-speed-lines{animation:none!important}}

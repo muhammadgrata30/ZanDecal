@@ -1,0 +1,18 @@
+﻿import assert from 'node:assert/strict';
+import {navigateToSection} from '../lib/section-navigation.ts';
+const calls=[],events=[],hashes=[],frames=[];
+let absoluteTop=1650,layoutShift=0;
+globalThis.requestAnimationFrame=fn=>frames.push(fn);
+globalThis.window={scrollY:1200,scrollTo:options=>{calls.push(options);window.scrollY=options.top;},dispatchEvent:event=>{events.push(event);return true;}};
+const section={getBoundingClientRect:()=>({top:absoluteTop+layoutShift-window.scrollY})};
+globalThis.document={getElementById:()=>section,documentElement:{classList:{contains:()=>false}},querySelector:()=>({getBoundingClientRect:()=>({height:76})})};
+globalThis.location={href:'http://localhost:3000/',hash:''};
+globalThis.history={state:{},pushState:(_state,_title,url)=>hashes.push(url.hash)};
+const flush=()=>{while(frames.length)frames.shift()();};
+navigateToSection('material');frames.shift()();assert.equal(calls.at(-1).top,1562);
+layoutShift=24;flush();assert.equal(window.scrollY,1586);assert.equal(section.getBoundingClientRect().top,88);
+absoluteTop=700;layoutShift=0;navigateToSection('3d-studio');flush();assert.equal(window.scrollY,612);
+navigateToSection('beranda');flush();assert.equal(window.scrollY,0);
+const count=calls.length;window.dispatchEvent=()=>false;navigateToSection('material');flush();assert.equal(calls.length,count);
+assert(events.every(event=>event.type==='zan-scroll-to'&&event.cancelable));
+console.log('PASS: exact header offset, short layout-shift correction, normal-flow studio anchor and Lenis handoff.');
