@@ -21,7 +21,8 @@ export function GentleScroll() {
       if (disposed || current !== generation) return;
       instance = new Lenis({
         autoRaf: true,
-        lerp: 0.12,
+        lerp: 0.075,
+        wheelMultiplier: 0.7,
         smoothWheel: true,
         syncTouch: false,
         allowNestedScroll: true,

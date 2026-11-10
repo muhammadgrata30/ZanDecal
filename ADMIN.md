@@ -1,46 +1,31 @@
-# Admin Zan Decal
+# Admin dummy Zan Decal
 
-Buka `http://localhost:3000/admin` saat `npm run dev` berjalan. Kunjungan pertama menampilkan pembuatan akun; tentukan username dan password sendiri (minimal 12 karakter). Tidak ada password bawaan. Kunjungan selanjutnya memakai login yang sama.
+Buka /admin. Username: zandecal. Password: zandecal123.
 
-## Mengelola konten
+Mode demo ini memakai data awal dari lib/content-defaults.json tanpa database. Login hanya simulasi di browser, bukan autentikasi produksi.
 
-- **Jenis bahan:** tambah, ubah atau hapus nama, deskripsi, fitur dan spesifikasi. Hasilnya tampil di informasi bahan pada halaman utama.
-- **Portofolio:** tambah proyek customer, pilih kategori, isi kendaraan/bahan/finishing, lalu unggah foto atau video. Media tampil di galeri publik dan dialog detail.
-- **Preset warna:** tambah, ubah atau hapus preset warna bodi studio 3D. Minimal satu preset harus tersedia.
-- **Video galeri:** unggah video untuk latar “Built to Stand Out”, atau pilih video portofolio yang sudah diunggah. Poster video bisa diunggah terpisah.
+Admin dapat menambah, mengubah, dan menghapus bahan, portofolio foto/video, serta preset warna. Minimal satu warna tetap tersedia untuk studio 3D. Video latar galeri dapat diganti atau dihapus.
 
-Klik **Simpan & terbitkan** setelah mengedit. Upload saja belum menerbitkan proyek. Website membaca data terbaru pada kunjungan baru, saat tab kembali aktif, atau paling lambat pada pembaruan otomatis 30 detik. **Muat ulang** mengambil data tersimpan dan membuang draft pada form.
+Klik Simpan & terbitkan untuk menyimpan perubahan; penambahan melalui drawer langsung disimpan saat tombol tersebut diklik. Muat ulang membuang perubahan yang belum disimpan. Data tersimpan di localStorage dan dipakai website di browser serta origin yang sama, termasuk tab lain. Data tidak dibagikan antar perangkat. Menghapus data situs akan mengembalikan data awal.
 
-Tombol **Tambah bahan**, **Tambah portofolio**, dan **Tambah warna** membuka drawer dari kanan. Isi form lalu klik **Simpan & terbitkan** di drawer untuk menyimpan sekaligus menampilkan konten di halaman pengunjung. Portofolio wajib memiliki judul, kendaraan dan foto/video; warna wajib memiliki nama dan kode hex valid. **Batal** atau Escape menutup drawer tanpa menambahkan draft ke data tersimpan. Saat upload atau simpan berjalan, drawer terkunci sampai proses selesai. Jika penerbitan gagal, isian tetap tersedia untuk diperbaiki atau dicoba kembali. Perubahan lain yang belum disimpan ikut diterbitkan dan diberi keterangan pada drawer.
+Media dummy maksimal 2 MB per file dan kapasitas total mengikuti browser. Jika penuh, kurangi media. Keluar mengakhiri sesi tab tanpa menghapus konten tersimpan.
 
-Format upload: JPG, PNG, WebP, GIF, MP4 dan WebM; maksimal 50 MB per file. Foto maksimal 16.000 piksel pada tiap sisi. Video publik mendukung byte-range untuk seeking dan pemutaran browser. Hapus proyek menghapusnya dari galeri, tetapi file upload tetap disimpan agar media yang dipakai di tempat lain tidak rusak.
+## Library Studio: livery dan stiker
 
-## Penyimpanan dan hosting
+Menu **Library Studio** mengelola 9 preset livery dan 8 gambar stiker awal. Tambah atau edit aset, pilih kendaraan yang kompatibel, simpan draft, lalu gunakan **Uji 3D** untuk memeriksa aset langsung di Interactive Studio website. Preview draft memerlukan sesi admin pada tab yang sama. Setelah sesuai, **Publikasikan** agar aset muncul di koleksi pengguna. Aset juga bisa ditarik kembali ke draft atau dihapus.
 
-Localhost tanpa konfigurasi Supabase menggunakan penyimpanan filesystem pada **satu server Node dengan disk persisten**. Untuk database dan upload online di Netlify, ikuti [DATABASE.md](DATABASE.md). Aplikasi otomatis memakai Supabase ketika URL proyek dan secret key server tersedia.
+Setiap tindakan Library Studio disimpan langsung, terpisah dari draft konten bahan/portofolio. Data mengikuti mode admin yang sudah ada: localStorage pada browser dan origin yang sama. Pembaruan tersinkron ke Studio pengguna pada tab lain; belum dibagikan antar perangkat. Konflik revisi dan kegagalan kapasitas penyimpanan ditampilkan tanpa menimpa data tersimpan.
 
-Penyimpanan lokal:
+Panduan **upload livery & stiker** tersedia di menu ini dan di form upload. Ada contoh PNG camo untuk diunduh, langkah menyiapkan motif seamless, gambar transparan, pemeriksaan hasil, dan penjelasan template UV. Upload motif menerima PNG/WebP/JPG; stiker menerima PNG/WebP, maksimal 2 MB. Upload livery utuh berbasis UV belum didukung: file UV tidak boleh diunggah sebagai motif berulang.
 
-- `data/content.json`: bahan, portofolio, preset dan video latar.
-- `data/admin.json`: hash password, salt dan kunci penandatangan sesi. Jangan dipublikasikan.
-- `data/uploads/`: media yang diunggah.
+Studio pengguna memiliki tab Warna, Livery, dan Stiker. Penempatan tersedia pada 17 bagian mobil dan 12 bagian motor, ditambah pilihan klik langsung pada model. Ukuran, rotasi, duplikasi dan penghapusan tersedia per lapisan. Konsep dapat disimpan di browser, preview diunduh sebagai PNG, dan ringkasan livery/stiker disertakan dalam konsultasi. Preview bukan file produksi cetak.
 
-Data tidak disimpan di browser dan tidak ikut Git. Restart server tidak menghapus data. Cadangkan seluruh folder `data` secara rutin; file dan konten harus dipulihkan bersama. Lokasi dapat dipindahkan melalui `ZAN_DATA_DIR`.
+Pemeriksaan integrasi:
 
-**Filesystem lokal ini bukan penyimpanan serverless bersama.** Integrasi Supabase PostgreSQL dan Storage sudah tersedia. Jalankan migration dan isi environment sesuai DATABASE.md sebelum memakai Netlify. Deploy aplikasi saja tidak membuat data lokal laptop tersedia di hosting.
-
-Pada development, setup akun pertama diperbolehkan dari localhost. Pada production atau setup non-localhost, isi `ADMIN_SETUP_TOKEN` di environment server, lalu masukkan token yang sama pada bagian “Setup dari luar localhost”. Production harus memakai HTTPS karena cookie sesi menggunakan `Secure`. Inisialisasi akun sebelum membuka instalasi development ke jaringan umum.
-
-## Origin pada Netlify / reverse proxy
-
-Validasi admin menerima domain deployment secara persis, termasuk URL publik dari `URL`, `DEPLOY_URL` dan `DEPLOY_PRIME_URL` jika tersedia. Ini menangani perbedaan URL internal server dengan alamat browser. Domain Netlify lain dan header `X-Forwarded-Host` palsu tidak otomatis dipercaya.
-
-Untuk menetapkan domain secara eksplisit, isi `ZAN_SITE_URL=https://nama-situs.netlify.app` pada environment Netlify dengan scope **Functions**, lalu redeploy. Untuk domain tambahan milik sendiri, gunakan `ZAN_ALLOWED_ORIGINS` berisi daftar origin lengkap yang dipisahkan koma. Jangan gunakan wildcard atau menghapus pengecekan origin.
-
-Perbaikan origin tidak mengubah batasan penyimpanan filesystem di atas: admin, konten dan upload pada Netlify serverless tetap memerlukan database/object storage persisten, bukan folder lokal dari laptop.
-
-## Verifikasi
-
-`node scripts/verify-admin.mjs` menjalankan pengujian handler dengan direktori sementara terpisah: setup/login, signed cookie, pembatasan akses, origin check, foto/video, serving range, validasi, publish/edit/delete dan konflik revisi. Test tidak membuat akun pada instalasi localhost asli.
-
-`node scripts/verify-split-hero.mjs` memeriksa durasi slideshow dan gambar kendaraan untuk tema Light/Dark.
+```text
+node scripts/verify-studio-livery.mjs
+node scripts/verify-studio-assets.mjs
+node scripts/check-studio-input.mjs
+node scripts/check-studio-camera.mjs
+node scripts/verify-vehicle-rig.mjs
+```

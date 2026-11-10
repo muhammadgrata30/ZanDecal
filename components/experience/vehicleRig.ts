@@ -80,12 +80,13 @@ export function buildVehicleRig(source: THREE.Object3D, vehicle: StudioVehicle, 
     const rolling = vehicle === "car"
       ? /rim|tyre|tire|\bdisk\b/i.test(wheelName) && !/caliper/i.test(wheelName)
       : /SM_(Tire|Disk)_[FR]_/i.test(wheelName);
-    if (!rolling) { geometries.push(geometry); root.add(new THREE.Mesh(geometry, material)); return; }
+    if (!rolling) { geometries.push(geometry);const mesh=new THREE.Mesh(geometry,material);mesh.name=node.name;root.add(mesh);return; }
     const parts = vehicle === "car" ? splitWheels(geometry) : [{ key: /SM_(Tire|Disk)_F_/i.test(wheelName) ? "f" : "r", geometry }];
     if (vehicle === "car") geometry.dispose();
     for (const part of parts) {
       geometries.push(part.geometry);
       const mesh = new THREE.Mesh(part.geometry, material);
+      mesh.name=`${node.name}-${part.key}`;
       const bucket = buckets.get(part.key) ?? { meshes: [], tireBounds: new THREE.Box3() };
       bucket.meshes.push(mesh);
       if (/tyre|tire/i.test(wheelName)) bucket.tireBounds.union(new THREE.Box3().setFromBufferAttribute(part.geometry.getAttribute("position") as THREE.BufferAttribute));

@@ -1,36 +1,26 @@
 "use client";
 import {useEffect,type RefObject} from "react";
-
-/** GSAP content arrivals accompany the native section cover transition. */
-export function useStudioMotion(root:RefObject<HTMLElement|null>,onEntrance:()=>void){
+/** Native scroll without competing pin spacers or layout refreshes. */
+export function useStudioMotion(root:RefObject<HTMLElement|null>,onEntrance:()=>void,onProgress:(progress:number)=>void){
  useEffect(()=>{
-  const element=root.current;if(!element)return;
-  const section:HTMLElement=element;
-  let cancelled=false,started=false;
-  let cleanup:undefined|(()=>void);
-  let fallbackObserver:IntersectionObserver|undefined;
-  const enter=()=>{if(!cancelled&&!started){started=true;onEntrance();}};
-  const observeEntrance=()=>{
-   fallbackObserver=new IntersectionObserver(([entry])=>{if(entry.isIntersecting){enter();fallbackObserver?.disconnect();}},{threshold:.15});
-   fallbackObserver.observe(section);
+  const section=root.current;if(!section)return;
+  const reduced=matchMedia("(prefers-reduced-motion: reduce)");
+  let frame=0,visible=false,entered=false,last=-1,smoothed=0,previous=0;
+  const update=(now=performance.now())=>{
+   frame=0;
+   const top=(section.parentElement ?? section).getBoundingClientRect().top;
+   const target=reduced.matches?1:Math.max(0,Math.min(1,(-top-innerHeight*.16)/(innerHeight*1.15)));
+   const dt=previous?Math.min((now-previous)/1000,.05):1/60;previous=now;
+   smoothed=reduced.matches?target:smoothed+(target-smoothed)*(1-Math.exp(-dt/0.18));
+   if(Math.abs(target-smoothed)<.0005)smoothed=target;
+   const progress=smoothed;
+   if(progress>0&&!entered){entered=true;onEntrance();}
+   if(progress!==last){last=progress;onProgress(progress);}
+   if(visible&&progress!==target)frame=requestAnimationFrame(update);
   };
-  async function mount(){
-   const [{gsap},{ScrollTrigger}]=await Promise.all([import("gsap"),import("gsap/ScrollTrigger")]);
-   if(cancelled)return;
-   gsap.registerPlugin(ScrollTrigger);
-   const mm=gsap.matchMedia(section);
-   cleanup=()=>mm.revert();
-   mm.add({motion:"(prefers-reduced-motion: no-preference)",reduced:"(prefers-reduced-motion: reduce)"},context=>{
-    if(context.conditions?.reduced){observeEntrance();return()=>fallbackObserver?.disconnect();}
-    const preview=section.querySelector(".motor-preview");
-    ScrollTrigger.create({trigger:preview,start:"top 88%",once:true,onEnter:enter,onRefresh:self=>{if(self.progress>0)enter();}});
-    gsap.from(section.querySelectorAll(".motor-studio-heading h2"),{y:28,opacity:0,duration:.8,ease:"power3.out",scrollTrigger:{trigger:section,start:"top 90%",once:true}});
-    gsap.from(section.querySelectorAll(".motor-settings > *"),{y:18,opacity:0,duration:.65,stagger:.06,ease:"power2.out",scrollTrigger:{trigger:section.querySelector(".motor-settings"),start:"top 92%",once:true}});
-   });
-   await document.fonts.ready;
-   if(!cancelled)ScrollTrigger.refresh();
-  }
-  void mount().catch(()=>{cleanup?.();if(!cancelled)observeEntrance();});
-  return()=>{cancelled=true;fallbackObserver?.disconnect();cleanup?.();};
- },[root,onEntrance]);
+  const schedule=()=>{if(visible&&!frame)frame=requestAnimationFrame(update);};
+  const observer=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible)schedule();},{rootMargin:"200px"});
+  observer.observe(section);window.addEventListener("scroll",schedule,{passive:true});window.addEventListener("resize",schedule);reduced.addEventListener("change",schedule);update();
+  return()=>{observer.disconnect();cancelAnimationFrame(frame);window.removeEventListener("scroll",schedule);window.removeEventListener("resize",schedule);reduced.removeEventListener("change",schedule);};
+ },[root,onEntrance,onProgress]);
 }

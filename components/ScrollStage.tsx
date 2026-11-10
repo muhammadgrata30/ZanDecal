@@ -19,7 +19,8 @@ export function ScrollStage({ children, className = "", distance = 0.35, id, top
     const clamp = (value: number) => Math.max(0, Math.min(1, value));
     const smoothstep = (value: number) => { const t = clamp(value); return t * t * (3 - 2 * t); };
     const update = () => {
-      frame = 0;
+      frame = 0
+
       const rect = element.getBoundingClientRect();
       const height = panel.offsetHeight;
       const top = Number.parseFloat(element.style.getPropertyValue("--stage-top")) || 0;

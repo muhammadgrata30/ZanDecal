@@ -7,6 +7,7 @@ import { ArrowDown, ArrowUpRight, Menu, Pause, Play, RotateCcw, X } from "lucide
 import { editions, type Edition } from "./editions";
 import { RacingNavbar } from "../RacingNavbar";
 import { useTheme } from "../ThemeContext";
+import { PerfectApplyHero } from "../experience/PerfectApplyHero";
 import { navigateToSection } from "../../lib/section-navigation";
 
 type DataNavigator = Navigator & { connection?: EventTarget & { saveData?: boolean } };
@@ -92,6 +93,21 @@ export function EditionPreview({ edition, production = false }: { edition: Editi
     document.addEventListener("visibilitychange", visibility);
     return () => { observer.disconnect(); document.removeEventListener("visibilitychange", visibility); };
   }, []);
+  useEffect(() => {
+    const node = root.current;
+    if (!production || !node) return;
+    if (staticMode) { node.classList.add("he-intro-done"); return; }
+    const previousRestoration = history.scrollRestoration;
+    history.scrollRestoration = "manual";
+    window.scrollTo({ top: 0, behavior: "instant" });
+    const original = node.querySelector(".he-original-apply");
+    if (!original) return;
+    const sync = () => node.classList.toggle("he-intro-done", original.classList.contains("settled"));
+    const observer = new MutationObserver(sync);
+    observer.observe(original, { attributes: true, attributeFilter: ["class"] });
+    sync();
+    return () => { observer.disconnect(); history.scrollRestoration = previousRestoration; };
+  }, [production, staticMode]);
   const switchRendering = () => { if (staticMode) { setForceStatic(false); setForce3D(true); } else setForceStatic(true); };
   const Root = production ? "section" : "main";
   return <Root id="beranda" ref={root} aria-labelledby={production ? "home-hero-title" : undefined} className={`he-preview he-edition-${edition.id} he-${dark ? "dark" : "light"}${production ? " he-production" : ""}${paused ? " he-paused" : ""}${reveal ? " he-reveal" : ""}${staticMode ? " he-static" : ""}`} style={{ "--film": edition.film } as CSSProperties}>
@@ -109,12 +125,12 @@ export function EditionPreview({ edition, production = false }: { edition: Editi
     </header>)}
     <div className="he-kicker"><span>DECAL & AUTOMOTIVE WRAPPING</span><span>Designed around you.</span></div>
     <div className="he-headline"><h1 id={production ? "home-hero-title" : undefined} aria-label="CUT TO STAND OUT."><span className="he-line he-line-one"><span>{edition.line1}</span></span><span className="he-line he-line-two"><span>{edition.line2}</span></span>{edition.line3 && <span className="he-line he-line-three"><span>{edition.line3}</span></span>}</h1></div>
-    <MaterialScene edition={edition} dark={dark} paused={paused} reveal={reveal} replay={replay} staticMode={staticMode} />
+    {production && !staticMode ? <><div className="he-object he-original-slot" aria-hidden="true"/><PerfectApplyHero sceneOnly typography="11" realistic /></> : <MaterialScene edition={edition} dark={dark} paused={paused} reveal={reveal} replay={replay} staticMode={staticMode} />}
     <div className="he-caption"><p>{edition.tagline}</p><Link href={production ? "#konsultasi" : "/#konsultasi"} prefetch={false} onClick={event => { if (production && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && event.button === 0) { event.preventDefault(); navigateToSection("konsultasi"); } }}>Buat karaktermu <ArrowUpRight size={22} /></Link></div>
     <div className="he-material-label"><span />{edition.id === 4 ? "VINYL, WITH A POINT OF VIEW." : "CUSTOM LIVERY · PRECISELY APPLIED."}</div>
     {edition.id === 5 && <button className="he-reveal-button" onPointerDown={() => { hold.current.completed = false; hold.current.timer = setTimeout(() => { hold.current.completed = true; setReveal(true); }, 600); }} onPointerUp={() => { clearTimeout(hold.current.timer); }} onPointerCancel={() => { clearTimeout(hold.current.timer); }} onPointerLeave={() => { clearTimeout(hold.current.timer); }} onClick={() => { if (hold.current.completed) { hold.current.completed = false; return; } setReveal(value => !value); }} aria-pressed={reveal}><span>{reveal ? "Tutup lapisan" : "Buka identitasnya"}</span><ArrowUpRight size={18} /></button>}
     <div className="he-bottom-note"><span>Decal motor. Wrapping mobil. Karakter kamu.</span><ArrowDown size={16} /></div>
-    {production ? <div className="home-hero-controls" role="group" aria-label="Pengaturan animasi hero"><button type="button" onClick={() => setPaused(value => !value)} aria-label={paused ? "Lanjutkan animasi" : "Jeda animasi"} aria-pressed={paused}>{paused ? <Play size={16} /> : <Pause size={16} />}<span>{paused ? "Lanjut" : "Jeda"}</span></button><button type="button" onClick={switchRendering} aria-pressed={staticMode}>{staticMode ? "Aktifkan 3D" : "Mode hemat"}</button></div> : <aside className="he-switcher" aria-label="Kontrol mockup"><Link className="he-all-editions" href="/hero-editions" prefetch={false}>Semua opsi</Link><div className="he-switcher-links">{editions.map(item => <Link key={item.id} href={`/hero-editions/${item.id}`} prefetch={false} aria-current={item.id === edition.id ? "page" : undefined} aria-label={`${item.id}. ${item.name}`}>0{item.id}</Link>)}</div><span className="he-edition-name">{edition.name}</span><div className="he-motion-controls"><button onClick={() => setPaused(value => !value)} aria-label={paused ? "Lanjutkan animasi" : "Jeda animasi"} aria-pressed={paused}>{paused ? <Play size={14} /> : <Pause size={14} />}</button><button onClick={() => { setPaused(false); setReplay(value => value + 1); }} aria-label="Ulangi animasi"><RotateCcw size={14} /></button><button onClick={switchRendering} aria-pressed={staticMode}>{staticMode ? "Aktifkan 3D" : "Hemat"}</button><button onClick={() => setInfo(value => !value)} aria-expanded={info}>Info</button></div></aside>}
+    {!production && <aside className="he-switcher" aria-label="Kontrol mockup"><Link className="he-all-editions" href="/hero-editions" prefetch={false}>Semua opsi</Link><div className="he-switcher-links">{editions.map(item => <Link key={item.id} href={`/hero-editions/${item.id}`} prefetch={false} aria-current={item.id === edition.id ? "page" : undefined} aria-label={`${item.id}. ${item.name}`}>0{item.id}</Link>)}</div><span className="he-edition-name">{edition.name}</span><div className="he-motion-controls"><button onClick={() => setPaused(value => !value)} aria-label={paused ? "Lanjutkan animasi" : "Jeda animasi"} aria-pressed={paused}>{paused ? <Play size={14} /> : <Pause size={14} />}</button><button onClick={() => { setPaused(false); setReplay(value => value + 1); }} aria-label="Ulangi animasi"><RotateCcw size={14} /></button><button onClick={switchRendering} aria-pressed={staticMode}>{staticMode ? "Aktifkan 3D" : "Hemat"}</button><button onClick={() => setInfo(value => !value)} aria-expanded={info}>Info</button></div></aside>}
     {info && <aside className="he-info" aria-label="Detail opsi"><button onClick={() => setInfo(false)} aria-label="Tutup detail"><X size={20} /></button><span>0{edition.id} / {edition.theme.toUpperCase()}</span><h2>{edition.name}</h2><p>{edition.description}</p><h3>Gerak</h3><p>{edition.motion}</p><h3>Referensi</h3><a href={edition.referenceUrl} target="_blank" rel="noreferrer">{edition.reference} — Awwwards ↗</a><Image className="he-info-reference" src={`/design-preview/hero-editions/reference-${edition.reference === "Monolith" ? "monolith" : edition.reference === "Terminal Industries" ? "terminal" : "david-whyte"}.webp`} alt={`Screenshot referensi ${edition.reference}, sumber Awwwards`} width={1200} height={900} unoptimized /><p>{edition.adaptation}</p><h3>Mobile lebih dulu</h3><p>Satu renderer, maksimal 30 fps di mobile, tanpa HDR, shadow map, video atau postprocessing. Renderer beristirahat di antara sapuan, dan berhenti saat offscreen, tab tersembunyi, atau dijeda. Hemat mematikan 3D sepenuhnya.</p></aside>}
   </Root>;
 }

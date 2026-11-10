@@ -1,0 +1,20 @@
+import type {Asset} from '../components/experience/design';
+export const STUDIO_LIBRARY:Asset[]=[
+ {id:'woodland',name:'Woodland M81',kind:'livery',pattern:'woodland',category:'Militer',description:'Empat warna bumi, bentuk organik khas woodland.',base:'#596044',accent:'#3f492f',published:true,vehicle:'all'},
+ {id:'desert',name:'Desert Patrol',kind:'livery',pattern:'desert',category:'Militer',description:'Pasir, cokelat tanah, dan krem untuk karakter desert.',base:'#b6a17c',accent:'#806849',published:true,vehicle:'all'},
+ {id:'digital',name:'Digital Tactical',kind:'livery',pattern:'digital',category:'Militer',description:'Kamuflase piksel hijau dengan skala yang konsisten.',base:'#59654f',accent:'#344b37',published:true,vehicle:'all'},
+ {id:'endurance',name:'Heritage Endurance',kind:'livery',pattern:'endurance',category:'Mobil balap',description:'Biru muda, garis jingga, nomor start dan identitas tim.',base:'#79bfcb',accent:'#f16a26',published:true,vehicle:'car'},
+ {id:'gt',name:'GT Motorsport',kind:'livery',pattern:'gt',category:'Mobil balap',description:'Putih, pita tiga warna, nomor start, dan side graphic.',base:'#e9ecea',accent:'#d72b35',published:true,vehicle:'car'},
+ {id:'rally',name:'Rally Works',kind:'livery',pattern:'rally',category:'Mobil balap',description:'Biru royal, sapuan emas dan paket stiker kompetisi.',base:'#153c9d',accent:'#eebc36',published:true,vehicle:'car'},
+ {id:'corse',name:'Rosso Corse',kind:'livery',pattern:'corse',category:'Motor balap',description:'Merah balap, bidang putih dan detail tricolore.',base:'#b80d20',accent:'#f2f1e9',published:true,vehicle:'ducati'},
+ {id:'factory',name:'Factory Blue',kind:'livery',pattern:'factory',category:'Motor balap',description:'Biru elektrik, hitam grafit, nomor start dan aksen putih.',base:'#174bb8',accent:'#f1f3ee',published:true,vehicle:'ducati'},
+ {id:'neon',name:'Apex Fluoro',kind:'livery',pattern:'neon',category:'Motor balap',description:'Grafit dan kuning fluoresen untuk gaya track-day.',base:'#25292e',accent:'#d5fa31',published:true,vehicle:'ducati'},
+ {id:'zan',name:'ZAN RACING',kind:'sticker',image:'/stickers/zan-racing.svg',published:true,vehicle:'all'},
+ {id:'number',name:'Nomor 27',kind:'sticker',image:'/stickers/number-27.svg',published:true,vehicle:'all'},
+ {id:'roundel',name:'Nomor 67',kind:'sticker',image:'/stickers/roundel-67.svg',published:true,vehicle:'all'},
+ {id:'motorsport',name:'Motorsport Division',kind:'sticker',image:'/stickers/motorsport.svg',published:true,vehicle:'all'},
+ {id:'flag',name:'Merah Putih',kind:'sticker',image:'/stickers/indonesia.svg',published:true,vehicle:'all'},
+ {id:'star',name:'Military Star',kind:'sticker',image:'/stickers/military-star.svg',published:true,vehicle:'all'},
+ {id:'tow',name:'Tow Arrow',kind:'sticker',image:'/stickers/tow.svg',published:true,vehicle:'car'},
+ {id:'speed',name:'Speed Club',kind:'sticker',image:'/stickers/speed-club.svg',published:true,vehicle:'all'},
+];

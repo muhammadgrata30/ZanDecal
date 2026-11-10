@@ -1,8 +1,8 @@
 /* Option 4: archive composition, with the site's active theme as its surface. */
-.motor-studio{--studio-background:var(--bg-primary);--studio-ink:var(--text-main);--studio-line:var(--border-strong);--studio-blue:#256087;--studio-stage:var(--bg-primary);--studio-pink:#ff9a9e;color:var(--studio-ink);background:var(--studio-background);padding-top:85px;padding-bottom:45px;display:grid;grid-template-columns:300px minmax(0,1fr);column-gap:clamp(30px,4vw,65px);isolation:isolate}
+.motor-studio{--studio-background:var(--bg-primary);--studio-ink:var(--text-main);--studio-line:var(--border-strong);--studio-blue:#256087;--studio-stage:var(--bg-primary);--studio-pink:#8fd3f4;color:var(--studio-ink);background:var(--studio-background);padding-top:85px;padding-bottom:45px;display:grid;grid-template-columns:300px minmax(0,1fr);column-gap:clamp(30px,4vw,65px);isolation:isolate}
 .motor-studio-heading{grid-column:2;grid-row:1;align-items:center;margin-bottom:30px}
 .motor-studio-heading h2{font:900 clamp(42px,5.8vw,88px)/.95 var(--font-archivo),sans-serif;margin:0;letter-spacing:-.04em}
-.motor-studio-heading h2>span{color:#aa425f}
+.motor-studio-heading h2>span{color:var(--studio-blue)}
 .motor-gallery-rule{width:120px;height:4px;background:#8fd3f4;margin-top:28px}
 .motor-workspace{display:contents}
 .motor-studio .motor-preview{grid-column:1;grid-row:1/3;background:transparent;isolation:isolate}
@@ -33,14 +33,14 @@
 .motor-settings>small{font-size:12px;color:var(--studio-ink);opacity:.75;line-height:1.7}
 .motor-preview-tools{left:20px;right:20px;bottom:65px}
 .motor-studio .motor-preview-tools button{background:var(--studio-background);border-color:var(--studio-line);color:var(--studio-ink);font-size:12px}
-.motor-preview-tools button[aria-pressed=true]{box-shadow:inset 0 -3px #ff9a9e}
+.motor-preview-tools button[aria-pressed=true]{box-shadow:inset 0 -3px #8fd3f4}
 .motor-interaction-hint{background:transparent;color:var(--studio-ink);font-size:12px;bottom:20px;padding:0 16px}
 .motor-credit{grid-column:1/-1;font-size:12px;line-height:1.7;color:var(--studio-ink);opacity:.7;margin-top:38px}
 .motor-studio :is(button,a):focus-visible{outline-color:var(--studio-blue)}
 html.dark .motor-studio{--studio-background:var(--bg-primary);--studio-ink:var(--text-main);--studio-line:var(--border-strong);--studio-blue:#8fd3f4;--studio-stage:var(--bg-primary)}
 html.dark .motor-studio-heading h2>span{color:var(--studio-pink)}
 html.dark .motor-studio .motor-finishes button[aria-pressed=true],html.dark .motor-view-buttons button[aria-pressed=true]{color:#172638}
-html.dark .motor-studio .motor-consult{background:#ff9a9e;color:#172638}
+html.dark .motor-studio .motor-consult{background:#8fd3f4;color:#172638}
 html.dark .motor-interaction-hint{color:var(--studio-ink)}
 @media(prefers-reduced-motion:no-preference){.motor-studio[data-entered=true] .motor-gallery-rule{animation:motor-rule-arrival .8s cubic-bezier(.16,1,.3,1) both;transform-origin:left}@keyframes motor-rule-arrival{from{transform:scaleX(0)}to{transform:scaleX(1)}}}
 .motor-studio{grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);row-gap:0}
@@ -55,3 +55,12 @@ html.dark .motor-interaction-hint{color:var(--studio-ink)}
 @media(max-width:420px){.motor-canvas{height:470px}.motor-studio-heading h2{font-size:clamp(34px,8.5vw,42px)}}
 /* The section surface reaches the top; its heading clears the fixed navbar. */
 .motor-studio[data-nav-align="viewport"]{padding-top:max(55px,var(--nav-offset,88px));scroll-margin-top:0}
+/* Hold the studio first, then let the vehicle enter with the next scroll. */
+.motor-studio-runway{position:relative;padding-bottom:90svh;background:var(--bg-primary)}
+.motor-studio-runway>.motor-studio{position:sticky;top:0}
+.motor-studio :is(.motor-view-buttons button,.motor-settings>small,.motor-preview-tools button,.motor-interaction-hint,.motor-credit){font-size:13px}
+@media(prefers-reduced-motion:reduce){.motor-studio-runway{padding-bottom:0}.motor-studio-runway>.motor-studio{position:relative}}
+.motor-studio-runway{padding-bottom:0}
+.motor-studio-runway::after{content:"";display:block;height:90svh;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.motor-studio-runway::after{display:none}}
+.motor-studio-runway::after{height:140svh}

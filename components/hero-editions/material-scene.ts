@@ -69,12 +69,12 @@ export function mountMaterialScene(canvas: HTMLCanvasElement, edition: Edition, 
   const image = new Image(); image.onload = () => { if (!disposed) { logo = image; paint(); schedule(); } }; image.src = "/design-preview/hero-editions/wordmark.webp";
   function schedule() { if (timer) { clearTimeout(timer); timer = undefined; } if (!disposed && !frame && visible && !document.hidden) frame = requestAnimationFrame(draw); }
   let ratio = lean ? Math.min(devicePixelRatio, 1) : Math.min(devicePixelRatio, 1.4);
+  let pendingWidth = 0, pendingHeight = 0;
   function resize() {
     if (disposed) return;
     const w = canvas.clientWidth, h = canvas.clientHeight;
     if (!w || !h) return;
-    renderer.setPixelRatio(Math.min(ratio, Math.sqrt((lean ? 600000 : 1400000) / (w * h)))); renderer.setSize(w, h, false);
-    camera.aspect = w / h; camera.position.z = Math.max(5.25, 6.6 / camera.aspect) / (2 * Math.tan(THREE.MathUtils.degToRad(17.5))); camera.updateProjectionMatrix(); schedule();
+    pendingWidth = w; pendingHeight = h; schedule();
   }
   const observer = new ResizeObserver(resize); observer.observe(canvas); resize();
   const intersection = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) { last = 0; schedule(); } else stop(); }); intersection.observe(canvas);
@@ -88,15 +88,25 @@ export function mountMaterialScene(canvas: HTMLCanvasElement, edition: Edition, 
   function draw(now: number) {
     frame = 0; if (disposed || !visible || document.hidden) return;
     if (now - lastRendered < 1000 / fps - 1) { schedule(); return; }
+    // Resize only alongside a render: changing the buffer between capped frames
+    // clears it and makes the decal flicker during the intro-to-hero handoff.
+    if (pendingWidth && pendingHeight) {
+      renderer.setPixelRatio(Math.min(ratio, Math.sqrt((lean ? 600000 : 1400000) / (pendingWidth * pendingHeight))));
+      renderer.setSize(pendingWidth, pendingHeight, false);
+      camera.aspect = pendingWidth / pendingHeight; camera.updateProjectionMatrix();
+      pendingWidth = pendingHeight = 0;
+    }
     const rawDelta = last ? (now - last) / 1000 : 1 / fps, dt = Math.min(rawDelta, .08); last = now; lastRendered = now;
     const quiet = controls.current.paused || reduced.matches;
     if (replay !== controls.current.replay) { replay = controls.current.replay; age = 0; }
     if (!quiet) age += rawDelta;
-    const phase = reduced.matches ? 7 : age % 10;
-    const sweep = phase < 4.5 ? ease((phase - .55) / 2.8) : 1;
-    const park = phase < 4.5 ? ease((phase - 3.35) / .9) : 1;
-    const wrinkles = phase < 4.5 ? 1 : 0;
-    const pressure = edition.id === 2 && phase < 4.5 ? Math.sin(Math.PI * THREE.MathUtils.clamp((phase - .15) / 4.35, 0, 1)) : 0;
+    const phase = reduced.matches ? 8 : age % 12;
+    const approach = ease(phase / 1.5);
+    const contact = ease((phase - 1.5) / .65);
+    const sweep = ease((phase - 2.15) / 2.8);
+    const park = ease((phase - 4.95) / 1.4);
+    const wrinkles = 1 - ease((phase - 4.95) / .5);
+    const pressure = edition.id === 2 ? Math.sin(Math.PI * THREE.MathUtils.clamp((phase - 1.5) / 3.6, 0, 1)) : 0;
     if (sweep !== lastSweep || wrinkles !== lastWrinkle || pressure !== lastPressure) {
       const pos = geometry.attributes.position, uv = geometry.attributes.uv;
       for (let i = 0; i < pos.count; i++) {
@@ -120,8 +130,25 @@ export function mountMaterialScene(canvas: HTMLCanvasElement, edition: Edition, 
     rig.position.set(edition.id === 2 ? (mobile ? -.1 : -.4) : 0, .2 + pressure * .035, 0);
     rig.scale.setScalar(edition.id === 2 ? 1.08 : edition.id === 3 ? .9 : edition.id === 4 ? .88 : .94);
     const toolX = THREE.MathUtils.lerp(-2.8, 2.9, sweep);
-    tool.visible = edition.id < 3 || phase < 4.4;
-    tool.position.set(THREE.MathUtils.lerp(toolX, 1.6, park), THREE.MathUtils.lerp(.02, edition.id === 2 ? -1.45 : -2.05, park), THREE.MathUtils.lerp(.15, .3, park)); tool.rotation.set(0, -.12, THREE.MathUtils.lerp(-.04, -1.08, park));
+    const parkedY = edition.id === 2 ? -1.45 : -2.05;
+    tool.visible = true;
+    const startX = THREE.MathUtils.lerp(1.6, -2.8, approach);
+    const startY = THREE.MathUtils.lerp(parkedY, .02, approach);
+    const startZ = THREE.MathUtils.lerp(.3, .8, approach) - contact * .65;
+    tool.position.set(THREE.MathUtils.lerp(phase < 2.15 ? startX : toolX, 1.6, park), THREE.MathUtils.lerp(startY, parkedY, park), THREE.MathUtils.lerp(startZ, .3, park) + Math.sin(Math.PI * park) * .7);
+    tool.rotation.set(0, -.12, THREE.MathUtils.lerp(THREE.MathUtils.lerp(-1.08, -.04, approach), -1.08, park));
+    const intro = canvas.closest(".he-production") && !reduced.matches && !canvas.closest(".he-intro-done");
+    if (intro) {
+      // Finish the entire application pass (including lifting/parking the tool)
+      // before opening the camera and handing the same decal into the hero.
+      const pullback = ease((age - 6.55) / 1.1);
+      const targetZ = Math.max(5.25, 6.6 / camera.aspect) / (2 * Math.tan(THREE.MathUtils.degToRad(17.5)));
+      camera.position.z = THREE.MathUtils.lerp(targetZ * .57, targetZ, pullback);
+      canvas.dataset.intro = pullback === 1 ? "complete" : "playing";
+      canvas.dataset.introStage = age < 2.15 ? "intro" : age < 4.95 ? "swipe" : age < 6.55 ? "finish" : "move-to-hero";
+      canvas.dataset.pullback = pullback.toFixed(3);
+      if (pullback === 1) canvas.dispatchEvent(new Event("he-intro-complete", { bubbles: true }));
+    } else camera.position.z = Math.max(5.25, 6.6 / camera.aspect) / (2 * Math.tan(THREE.MathUtils.degToRad(17.5)));
     key.position.x = phase < 4.5 ? THREE.MathUtils.lerp(-4, 3.5, sweep) : 3.5;
     if (edition.id === 2) { key.position.z = 5 + pressure * .45; vinyl.shininess = 100 + pressure * 30; }
     fill.intensity = controls.current.dark ? .9 : .5;
@@ -132,8 +159,11 @@ export function mountMaterialScene(canvas: HTMLCanvasElement, edition: Edition, 
     if (frames % 60 === 0 && slow > 20) { ratio = Math.max(.7, ratio * .85); fps = 20; resize(); slow = 0; }
     const moving = Math.abs(pointerX - followX) + Math.abs(pointerY - followY) > .002 && !quiet;
     const resolving = Math.abs((controls.current.reveal ? 1 : 0) - revealBlend) > .002;
-    if ((!quiet && phase < 4.5) || moving || resolving) schedule();
-    else if (!quiet) timer = setTimeout(schedule, Math.max(50, (10 - phase) * 1000));
+    canvas.dataset.toolX = tool.position.x.toFixed(3);
+    canvas.dataset.phase = phase.toFixed(3);
+    canvas.dataset.sweep = sweep.toFixed(3);
+    if ((!quiet && (phase < 6.4 || intro)) || moving || resolving) schedule();
+    else if (!quiet) timer = setTimeout(schedule, Math.max(50, (12 - phase) * 1000));
   }
   schedule();
   return () => {

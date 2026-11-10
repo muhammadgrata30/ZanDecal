@@ -10,7 +10,8 @@ import "./split-hero.css";
 import "./typography.css";
 import { ThemeProvider } from "../components/ThemeContext";
 import { SiteContentProvider } from "../components/SiteContentContext";
-import { readInitialContent } from "../lib/content-store";
+import defaults from "../lib/content-defaults.json";
+import type { SiteContent } from "../lib/content-types";
 
 export const dynamic = "force-dynamic";
 
@@ -64,7 +65,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const content = await readInitialContent();
+  const content = defaults as SiteContent;
   return (
     <html lang="id" suppressHydrationWarning className="scroll-smooth">
       <head><script dangerouslySetInnerHTML={{__html:"try{if(localStorage.getItem('zan-decal-theme')==='dark')document.documentElement.classList.add('dark')}catch{}"}}/></head>

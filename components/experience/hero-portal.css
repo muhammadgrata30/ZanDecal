@@ -1,0 +1,21 @@
+.hero-portal{position:relative;isolation:isolate}
+.hero-portal-track{position:relative;z-index:2}
+.hero-portal-pin{overflow:hidden}
+.hero-portal-destination{position:relative;z-index:1}
+.hero-portal[data-portal-active=true]>.hero-portal-spacer{height:var(--portal-runway)}
+.hero-portal[data-portal-active=true]>.hero-portal-track{position:absolute;inset:0 0 auto;height:calc(var(--portal-runway) + 100svh);pointer-events:none}
+.hero-portal[data-portal-active=true] .hero-portal-pin{position:sticky;top:0;height:100svh}
+.hero-portal[data-portal-active=true] .hero-portal-surface{height:100%;pointer-events:auto}
+.hero-portal[data-portal-active=true] .perfect-apply{height:100%;min-height:0}
+.hero-portal[data-portal-active=true]>.hero-portal-destination{position:sticky;top:0}
+.hero-portal[data-travelling=true] .hero-portal-surface{will-change:transform,mask-image;pointer-events:none}
+.hero-portal[data-travelling=true] .hero-type,.hero-portal[data-travelling=true] .title-word{animation:none!important;transform:none!important}
+.hero-portal[data-travelling=true] .title-line{transform:none!important;transition:none!important}
+.hero-portal[data-travelling=true] .title-line::after{display:none!important}
+@media(prefers-reduced-motion:reduce){.hero-portal{padding-top:0!important}.hero-portal-track{position:relative!important;height:auto!important}.hero-portal-pin{position:relative!important;height:auto!important}.hero-portal-destination{top:0!important}.hero-portal-surface{transform:none!important;mask-image:none!important;visibility:visible!important}.hero-portal .perfect-apply{height:100svh!important}}
+
+.perfect-apply[data-typography="11"] .portal-glyph{display:inline-block;vertical-align:baseline;width:.76em}
+.perfect-apply[data-typography="11"] .portal-glyph::before,.perfect-apply[data-typography="11"] .portal-glyph::after{display:none!important}
+.portal-ring{display:inline-block;position:relative;width:.72em;height:.72em;border:.135em solid var(--ink);border-radius:50%;box-sizing:border-box;vertical-align:baseline}
+.portal-ring>[data-portal-counter]{position:absolute;inset:0;border-radius:50%}
+@media(prefers-reduced-motion:reduce){.hero-portal-spacer{height:0!important}}

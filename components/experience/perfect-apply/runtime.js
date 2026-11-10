@@ -1,5 +1,5 @@
 ﻿import * as THREE from 'three';
-import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
+import {createHeroEnvironment} from './environment.js';
 import {createApply,direction,ease,INTRO_END,PASS_INTERVAL,PASS_DURATION,autoPassTime,heroScale,passCameraPullback} from './model.js';
 import {INTRO_FILM,THEMES,normalizeTheme} from './theme.js';
 import {applyCinematicCoating} from './cinematic-coating.js';
@@ -11,6 +11,7 @@ export function mountPerfectApply(stage,initialTheme='light') {
 const canvas=stage.querySelector('#apply-canvas'),body=stage;
 const cinematic=stage.dataset.heroCinematic==='true';
 const realistic=stage.dataset.realistic==='true';
+const compactHero=stage.classList.contains('he-original-apply');
 let coatingFront=null;
 let artworkCanvas=null,artworkMap=null,artworkDirty=true;
 const abort=new AbortController();let disposed=false,visible=true;
@@ -96,10 +97,8 @@ async function initialize(){try{
  const logo=new Image();logo.src='/brand/zan-wordmark-v3.png';const logoReady=logo.decode();
  renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:!quality.lean,powerPreference:quality.lean?'low-power':'high-performance'});renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=THEMES[theme].exposure;
  scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(34,1,.1,80);camera.position.set(0,0,14.2);camera.lookAt(0,0,0);
- const room=new RoomEnvironment(),stripGeometry=new THREE.BoxGeometry(),strips=[];
- for(const [x,y,z,w,h,d,color,intensity] of [[-4,7,5,.25,7,2,0xf3f1f5,9],[5,4,3,.2,5,.7,0xf8fafc,12],[0,8,-4,7,.1,2,0xffffff,12]]){const material=new THREE.MeshBasicMaterial({color:new THREE.Color(color).multiplyScalar(intensity)}),strip=new THREE.Mesh(stripGeometry,material);strip.position.set(x,y,z);strip.scale.set(w,h,d);room.add(strip);strips.push(material);}
- const pmrem=new THREE.PMREMGenerator(renderer);environmentTarget=pmrem.fromScene(room,.012,.1,100,{size:low?128:256});scene.environment=environmentTarget.texture;room.dispose();stripGeometry.dispose();strips.forEach(m=>m.dispose());pmrem.dispose();
- scene.add(new THREE.HemisphereLight(0xffffff,0x67636b,realistic?.35:cinematic?.8:1.7));
+ environmentTarget=createHeroEnvironment(renderer,low);scene.environment=environmentTarget?.texture??null;
+ scene.add(new THREE.HemisphereLight(0xffffff,0x67636b,environmentTarget?(realistic?.35:cinematic?.8:1.7):1.7));
  const key=new THREE.DirectionalLight(0xffffff,3.1);key.position.set(1,5,6);scene.add(key);
  if(cinematic)key.position.set(-4.5,1.2,4.5);
  const rim=new THREE.DirectionalLight(0xffffff,2.4);rim.position.set(-5,1,3);scene.add(rim);const cyan=new THREE.DirectionalLight(0xffffff,1.8);cyan.position.set(4,-1,3);scene.add(cyan);
@@ -112,7 +111,9 @@ async function initialize(){try{
   model.shadowMaterial.opacity=.09;stage.dataset.lighting='studio-fallback';
  }else if(cinematic)coatingFront=applyCinematicCoating(model.filmMaterial);
  rig=new THREE.Group();rig.add(model.root);scene.add(rig);
- if(realistic&&quality.hdri){
+ // If the environment shader failed, HDRI uses the same convolution shader.
+ // Keep the direct-lighting path instead of repeating the failing GPU bake.
+ if(realistic&&quality.hdri&&environmentTarget){
   let hdr=null,hdriGenerator=null;
   try{
    const {HDRLoader}=await import('three/examples/jsm/loaders/HDRLoader.js');
@@ -121,7 +122,7 @@ async function initialize(){try{
    hdr.mapping=THREE.EquirectangularReflectionMapping;
    hdriGenerator=new THREE.PMREMGenerator(renderer);
    const studio=hdriGenerator.fromEquirectangular(hdr);
-   environmentTarget.dispose();environmentTarget=studio;scene.environment=studio.texture;
+   environmentTarget?.dispose();environmentTarget=studio;scene.environment=studio.texture;
    scene.environmentRotation.set(0,.65,0);stage.dataset.lighting='polyhaven-studio-small-05';
   }catch(error){console.warn('Studio HDRI unavailable; using the local studio light rig.',error);}
   finally{hdr?.dispose();hdriGenerator?.dispose();}
@@ -178,10 +179,13 @@ function frame(now){
  if(returnProgress<1&&passOrigin){const destination=model.tool.position.clone(),rotation=model.tool.quaternion.clone();model.tool.position.copy(passOrigin).lerp(destination,returnProgress);model.tool.position.z+=Math.sin(returnProgress*Math.PI)*.8;model.tool.quaternion.copy(passRotation).slerp(rotation,returnProgress);}
  const introFrustum=2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*(mobile?7.3:4.35);
  const openingFit=Math.max(introFrustum*(width/viewportHeight)/5,introFrustum/3.25)*1.2;
- const fit=THREE.MathUtils.lerp(openingFit,heroScale(finalAspect,mobile),p.open);
+ const finalScale=heroScale(finalAspect,mobile)*(compactHero?(mobile?.84:.69):1);
+ const fit=THREE.MathUtils.lerp(openingFit,finalScale,p.open);
  const resting=quiet||realistic||quality.lean;
  const breathing=resting?0:Math.sin(idle*.55)*.025*ease(idle/1.4),turn=resting?0:Math.sin(idle*.27)*.016*ease(idle/1.4);
- rig.position.set(p.x,p.y+breathing,0);rig.rotation.set(p.rx+(quiet?0:follow.y*.04*p.open),p.ry+turn+(quiet?0:follow.x*.095*p.open),p.rz);rig.scale.setScalar(fit);
+ const layoutX=compactHero&&!mobile?1.2*p.open:0;
+ const layoutY=compactHero?(mobile?-.05:-.3)*p.open:0;
+ rig.position.set(p.x+layoutX,p.y+layoutY+breathing,0);rig.rotation.set(p.rx+(quiet?0:follow.y*.04*p.open),p.ry+turn+(quiet?0:follow.x*.095*p.open),p.rz);rig.scale.setScalar(fit);
  camera.position.set(p.cameraX,p.cameraY,p.cameraZ*passCameraPullback(passTime));camera.lookAt(0,0,0);
  const {key,rim,cyan}=scene.userData.lights;rimTint.set(THEMES[theme].rim);fillTint.set(THEMES[theme].fill);rim.color.copy(white).lerp(rimTint,themeBlend);cyan.color.copy(white).lerp(fillTint,themeBlend);
  if(cinematic){const working=t<4.15||passTime!==null;cinematicKeyTarget.set(working?THREE.MathUtils.lerp(-4.5,4.5,sweep):3.5,working?1.2:4,4.5);key.position.lerp(cinematicKeyTarget,1-Math.exp(-5*dt));key.intensity=THREE.MathUtils.lerp(key.intensity,working?3.8:3.1,1-Math.exp(-5*dt));rim.position.set(-4,2.5,3);rim.intensity=2.6;}

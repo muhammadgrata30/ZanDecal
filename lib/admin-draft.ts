@@ -13,8 +13,8 @@ export function createDraft(kind:CreationKind,content:SiteContent):CreationDraft
   return{kind,value:{id:Math.max(0,...content.portfolio.map(item=>item.id))+1,title:"",category:"mobil",categoryLabel:"Mobil",mediaType:"photo",mediaSrc:"",posterSrc:"",materialBrand:"",finishType:"",gradient:"",vehicleModel:"",description:"",transformationHighlights:[]}};
 }
 
-export function contentWithDraft(content:SiteContent,draft:CreationDraft):SiteContent{
-  if(draft.kind==="materials")return validateContent({...content,materials:[draft.value,...content.materials]});
-  if(draft.kind==="colors")return validateContent({...content,colors:[draft.value,...content.colors]});
-  return validateContent({...content,portfolio:[draft.value,...content.portfolio]});
+export function contentWithDraft(content:SiteContent,draft:CreationDraft,inline=false):SiteContent{
+  if(draft.kind==="materials")return validateContent({...content,materials:[draft.value,...content.materials]},inline);
+  if(draft.kind==="colors")return validateContent({...content,colors:[draft.value,...content.colors]},inline);
+  return validateContent({...content,portfolio:[draft.value,...content.portfolio]},inline);
 }

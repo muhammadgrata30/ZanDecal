@@ -23,8 +23,7 @@ export default function Home() {
     <a className="atelier-skip" href="#main">Lewati ke konten</a>
     <RacingNavbar/>
     <main id="main">
-      <NightLacquerHero/>
-      <MaterialCurtain studio={<MotorStudio/>}><HomeMaterialSection/></MaterialCurtain>
+   <SectionCurtain variant="material" previous={<NightLacquerHero/>} next={<MaterialCurtain studio={<MotorStudio/>}><HomeMaterialSection/></MaterialCurtain>}/>
       <CustomStickerSection/>
       <PortfolioHandoff>
         <GallerySection/>

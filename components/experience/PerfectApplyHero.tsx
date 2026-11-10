@@ -14,12 +14,12 @@ interface ApplyRuntime {
 function HeadlineLine({ text, row }: { text: string; row: number }) {
   return <span className={`title-line ${row === 0 ? "line-one" : row === 1 ? "line-two" : "line-three"}`} data-text={text} aria-hidden="true">
     <span className="title-word">{[...text].map((letter, index) => <span className="letter" key={`${row}-${index}`} style={{ "--i": index + row * 4 } as CSSProperties}>
-      <span className="glyph" data-letter={letter}>{letter === " " ? "\u00a0" : letter}</span>
+      <span className={`glyph${row === 2 && letter === "O" ? " portal-glyph" : ""}`} data-letter={letter}>{row === 2 && letter === "O" ? <span className="portal-ring"><span data-portal-counter="true" /></span> : letter === " " ? "\u00a0" : letter}</span>
     </span>)}</span>
   </span>;
 }
 
-export function PerfectApplyHero({ typography, artwork, realistic = false, backdrop }: { typography?: string; artwork?: number; realistic?: boolean; backdrop?: ReactNode } = {}) {
+export function PerfectApplyHero({ typography, artwork, realistic = false, backdrop, headlineLines, sceneOnly = false }: { typography?: string; artwork?: number; realistic?: boolean; backdrop?: ReactNode; headlineLines?: readonly [string, string, string]; sceneOnly?: boolean } = {}) {
   const headlines: Record<string, [string, string]> = {
     "5": ["BREAK", "THE SAME."], "6": ["Bukan", "bawaan."],
     "7": ["BEYOND", "SURFACE."], "8": ["Beda.", "Berani."],
@@ -81,7 +81,7 @@ export function PerfectApplyHero({ typography, artwork, realistic = false, backd
     };
   }, []);
 
-  return <section ref={root} id="beranda" className="perfect-apply" data-theme={theme} data-typography={typography} data-artwork={artwork} data-realistic={realistic || undefined} aria-labelledby="apply-title">
+  return <section ref={root} id={sceneOnly ? undefined : "beranda"} className={`perfect-apply${sceneOnly ? " he-original-apply" : ""}`} data-theme={theme} data-typography={typography} data-artwork={artwork} data-realistic={realistic || undefined} aria-labelledby={sceneOnly ? undefined : "apply-title"} aria-label={sceneOnly ? "Animasi pemasangan decal ZAN" : undefined}>
     <div className="atmosphere" aria-hidden="true" />
     {backdrop}
     <div className="hero-drafting" aria-hidden="true">
@@ -97,9 +97,9 @@ export function PerfectApplyHero({ typography, artwork, realistic = false, backd
       </div>
     </div>
     <div className="hero-type">
-      <h1 id="apply-title" aria-label={headline.join(" ")}>
-        <HeadlineLine text={headline[0]} row={0} />
-        {typography === "11" ? <><HeadlineLine text="STAND" row={1}/><HeadlineLine text="OUT." row={2}/></> : <HeadlineLine text={headline[1]} row={1} />}
+      <h1 id={sceneOnly ? undefined : "apply-title"} aria-label={headlineLines?.join(" ") ?? headline.join(" ")}>
+        <HeadlineLine text={headlineLines?.[0] ?? headline[0]} row={0} />
+        {typography === "11" ? <><HeadlineLine text={headlineLines?.[1] ?? "STAND"} row={1}/><HeadlineLine text={headlineLines?.[2] ?? "OUT."} row={2}/></> : <HeadlineLine text={headline[1]} row={1} />}
       </h1>
       <div className="hero-support"><a className="hero-cta" href="#konsultasi"><span>Buat karaktermu</span><i aria-hidden="true">↗</i></a></div>
     </div>
