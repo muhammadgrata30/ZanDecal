@@ -10,20 +10,21 @@ import { ConsultationSection } from "../components/ConsultationSection";
 import { Footer } from "../components/Footer";
 import { MotionObserver } from "../components/ScrollStage";
 import { PortfolioHandoff } from "../components/PortfolioHandoff";
-import { ApexLiveryHero } from "../components/experience/ApexLiveryHero";
+import { NightLacquerHero } from "../components/hero-editions/NightLacquerHero";
 import { SectionTransitions } from "../components/experience/SectionTransitions";
 import { MaterialCurtain } from "../components/MaterialCurtain";
 import { MotorStudio } from "../components/experience/MotorStudio";
 import { SectionCurtain } from "../components/experience/SectionCurtain";
 
 export default function Home() {
-  return <div className="atelier-site apply-home">
+  return <div className="atelier-site apply-home selected-lacquer-home">
     <MotionObserver/>
     <SectionTransitions/>
     <a className="atelier-skip" href="#main">Lewati ke konten</a>
     <RacingNavbar/>
     <main id="main">
-      <SectionCurtain variant="material" previous={<ApexLiveryHero/>} next={<MaterialCurtain studio={<MotorStudio/>}><HomeMaterialSection/></MaterialCurtain>}/>
+      <NightLacquerHero/>
+      <MaterialCurtain studio={<MotorStudio/>}><HomeMaterialSection/></MaterialCurtain>
       <CustomStickerSection/>
       <PortfolioHandoff>
         <GallerySection/>
