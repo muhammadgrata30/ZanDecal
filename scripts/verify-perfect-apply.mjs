@@ -3,12 +3,14 @@ import fs from 'node:fs';
 import postcss from 'postcss';
 import * as THREE from 'three';
 import {mountPerfectApply} from '../components/experience/perfect-apply/runtime.js';
-import {createApply,direction,heroScale,ease,INTRO_END,PASS_INTERVAL,autoPassTime,passCameraPullback} from '../components/experience/perfect-apply/model.js';
+import {createApply,direction,heroScale,ease,INTRO_END,PASS_INTERVAL,PASS_DURATION,autoPassTime,passCameraPullback} from '../components/experience/perfect-apply/model.js';
 import {THEMES,THEME_KEY,persistTheme,readTheme,pixelRatio} from '../components/experience/perfect-apply/theme.js';
 
 assert.equal(typeof mountPerfectApply,'function','Native renderer can be imported without browser globals');
 const main=fs.readFileSync(new URL('../app/page.tsx',import.meta.url),'utf8');
-assert(main.includes('<PerfectApplyHero typography="11"/>')&&main.includes('apply-home'));
+assert(main.includes('<NightLacquerHero/>')&&main.includes('apply-home'));
+const production=fs.readFileSync(new URL('../components/hero-editions/EditionPreview.tsx',import.meta.url),'utf8');
+assert(production.includes('<PerfectApplyHero sceneOnly typography="11" realistic />'),'Production hero uses the original decal renderer');
 assert(!main.includes('<HeroStudioSequence'));
 const component=fs.readFileSync(new URL('../components/experience/PerfectApplyHero.tsx',import.meta.url),'utf8');
 assert(!component.includes('<iframe'));
@@ -35,7 +37,7 @@ assert.equal(THEMES.dark.film,0x8fd3f4);assert(new THREE.Color(THEMES.light.film
 assert(runtime.includes("logo.src='/brand/zan-wordmark-v3.png'")&&runtime.includes('ctx.drawImage(logo'));
 const stored=new Map(),storage={getItem:key=>stored.get(key)??null,setItem:(key,value)=>stored.set(key,value)};
 assert.equal(readTheme(storage),'light');persistTheme(storage,'dark');assert.equal(stored.get(THEME_KEY),'dark');assert.equal(readTheme(storage),'dark');
-assert.equal(PASS_INTERVAL,7);for(let cycle=1;cycle<=12;cycle++){assert.equal(autoPassTime(cycle*7),0);assert.equal(autoPassTime(cycle*7+5.3),null);}
+assert(Math.abs(PASS_INTERVAL-PASS_DURATION-3)<1e-10);for(let cycle=1;cycle<=12;cycle++){assert(Math.abs(autoPassTime(cycle*PASS_INTERVAL+.001)-.001)<1e-10);assert.equal(autoPassTime(cycle*PASS_INTERVAL+5.3),null);}
 const geometry=[];
 // The taller canvas must still cover the first viewport during the full-screen intro.
 const introModel=createApply(true),introRig=new THREE.Group();introRig.add(introModel.root);
@@ -72,4 +74,4 @@ for(const low of [true,false]){
  geometry.push({quality:low?'lean':'coated',triangles:model.triangles,widths});
 }
 assert.equal(pixelRatio(390,844,3),1.5);
-console.log(JSON.stringify({nativeHero:true,headlineWeight:800,scopedSelectors:checkedSelectors,automaticPass:'7 seconds / 12 cycles',sharedTheme:'light/dark + persistence',resourceCleanup:'abort, observers, textures, renderer',geometry,visualVerification:'No connected browser; screenshot and device FPS unavailable.'},null,2));
+console.log(JSON.stringify({nativeHero:true,headlineWeight:800,scopedSelectors:checkedSelectors,automaticPass:`${PASS_INTERVAL} second cycle / 3 second rest / 12 cycles`,sharedTheme:'light/dark + persistence',resourceCleanup:'abort, observers, textures, renderer',geometry,visualVerification:'No connected browser; screenshot and device FPS unavailable.'},null,2));

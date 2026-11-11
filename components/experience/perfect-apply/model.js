@@ -2,7 +2,8 @@
 export const clamp=THREE.MathUtils.clamp,lerp=THREE.MathUtils.lerp;
 export function ease(t){t=clamp(t,0,1);return t*t*t*(t*(t*6-15)+10);}
 export const INTRO_END=6.6;
-export const PASS_INTERVAL=7,PASS_DURATION=5.2;
+// Finish the full application pass, then rest for three seconds before repeating.
+export const PASS_DURATION=5.2,PASS_REST=3,PASS_INTERVAL=PASS_DURATION+PASS_REST;
 export function autoPassTime(heroAge){if(heroAge<PASS_INTERVAL)return null;const phase=(heroAge-PASS_INTERVAL)%PASS_INTERVAL;return phase<PASS_DURATION?phase:null;}
 export function passCameraPullback(passTime){return passTime===null?1:1+.34*ease(passTime/.65)*(1-ease((passTime-4.1)/1.1));}
 export function heroScale(aspect,mobile){return mobile?Math.min(aspect/.65,1)*1.03:1.28*Math.min(aspect/1.6,1);}

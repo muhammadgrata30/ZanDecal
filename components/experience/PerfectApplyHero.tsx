@@ -89,7 +89,7 @@ export function PerfectApplyHero({ typography, artwork, realistic = false, backd
       <div className="hero-measure-line" />
       <div className="hero-scan-line" />
     </div>
-    <canvas id="apply-canvas" aria-label="Vinyl ZAN diratakan dengan squeegee, lalu menyapu otomatis setiap tujuh detik" />
+    <canvas id="apply-canvas" aria-label="Vinyl ZAN diratakan dengan squeegee, dengan jeda tiga detik antar sapuan otomatis" />
     <div className="cinema cinema-top" aria-hidden="true" /><div className="cinema cinema-bottom" aria-hidden="true" />
     <div className="apply-header">
       <div className="header-actions">

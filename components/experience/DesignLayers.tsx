@@ -1,4 +1,4 @@
-﻿import {useEffect,useMemo} from 'react';
+﻿import {useEffect,useRef} from 'react';
 import {useThree} from '@react-three/fiber';
 import * as T from 'three';
 import type {Design} from './design';
@@ -6,45 +6,55 @@ import type {StudioVehicle} from '../vehiclePaint';
 import {findPanel} from '../../lib/studio-panels';
 import {stickerTargets,stickerGeometry} from '../../lib/sticker-placement';
 import {drawCamouflage,drawRace,MILITARY} from '../../lib/livery-artwork';
+import {bindLiveryMaterial} from '../../lib/studio-livery-material';
 const createCanvas=()=>document.createElement('canvas');
-export function DesignLayers({root,paint,design:d,color,vehicle,onPlacement}:{root:T.Group;paint:Set<T.MeshStandardMaterial>;design:Design;color:string;vehicle:StudioVehicle;onPlacement?:(id:string,status:boolean)=>void}){
+export function DesignLayers({root,paint,design:d,color,vehicle,onPlacement,onLiveryError}:{root:T.Group;paint:Set<T.MeshStandardMaterial>;design:Design;color:string;vehicle:StudioVehicle;onPlacement?:(id:string,status:boolean)=>void;onLiveryError?:(message:string)=>void}){
  const invalidate=useThree(s=>s.invalidate);
- const targets=useMemo(()=>new Map<string,ReturnType<typeof stickerTargets>>(),[root]);
- useEffect(()=>()=>{targets.forEach(meshes=>meshes.forEach(mesh=>{if(mesh.userData.ownedGeometry)mesh.geometry.dispose()}));targets.clear();},[targets]);
+ const targetCache=useRef(new Map<string,ReturnType<typeof stickerTargets>>());
+ useEffect(()=>{const targets=targetCache.current;return()=>{targets.forEach(meshes=>meshes.forEach(mesh=>{if(mesh.userData.ownedGeometry)mesh.geometry.dispose()}));targets.clear();};},[root]);
+ const binding=useRef<ReturnType<typeof bindLiveryMaterial>|null>(null);
+ const resources=useRef<{side:HTMLCanvasElement;top:HTMLCanvasElement;map:T.CanvasTexture;topMap:T.CanvasTexture}|null>(null);
  useEffect(()=>{
-  let cancelled=false;const c=createCanvas(),top=createCanvas();
-  const military=MILITARY.includes(d.pattern),isNone=d.pattern==='none';
-  if(isNone){paint.forEach(material=>material.color.set(color));invalidate();return;}
-  if(military)drawCamouflage(c,d.pattern,d.accent,color);else drawRace(c,d.pattern,color,d.accent);
+  const side=createCanvas(),top=createCanvas();
+  side.width=side.height=top.width=top.height=1024;
+  const map=new T.CanvasTexture(side),topMap=new T.CanvasTexture(top);
+  [map,topMap].forEach(texture=>{texture.colorSpace=T.SRGBColorSpace;texture.wrapS=texture.wrapT=T.RepeatWrapping;texture.anisotropy=4;});
+  resources.current={side,top,map,topMap};
+  const materialBinding=bindLiveryMaterial(paint,map,topMap);
+  binding.current=materialBinding;
+  return()=>{materialBinding.dispose();binding.current=null;resources.current=null;map.dispose();topMap.dispose();};
+ },[paint]);
+ useEffect(()=>{
+  const livery=resources.current;if(!livery)return;
+  let cancelled=false;
+  const military=MILITARY.includes(d.pattern),enabled=d.pattern!=='none';
+  const settings={enabled,triplanar:military||d.pattern==='upload',scale:d.scale,opacity:d.opacity,color};
+  const apply=()=>{if(cancelled)return;livery.map.needsUpdate=true;livery.topMap.needsUpdate=true;binding.current?.update(settings);invalidate();};
+  // Clear the previous design immediately, including while a new image loads.
+  binding.current?.update({...settings,enabled:false});
+  invalidate();
+  if(!enabled)return;
+  if(d.pattern==='upload'&&d.image){
+   const image=new Image();
+   image.onload=()=>{if(cancelled)return;const c=livery.side;c.width=c.height=1024;c.getContext('2d')!.drawImage(image,0,0,1024,1024);apply();};
+   image.onerror=()=>{if(!cancelled)onLiveryError?.('Gambar livery tidak dapat dimuat. Pilih ulang desain atau gunakan gambar lain.');};
+   image.src=d.image;
+   return()=>{cancelled=true;image.onload=null;image.onerror=null;};
+  }
+  // Keep GPU texture dimensions fixed when moving between 512px camouflage
+  // and 1024px race artwork, and always replace every pixel of the old design.
+  const side=createCanvas(),top=createCanvas();
+  if(military)drawCamouflage(side,d.pattern,d.accent,color);else drawRace(side,d.pattern,color,d.accent);
   drawRace(top,d.pattern,color,d.accent,true);
-  const map=new T.CanvasTexture(c),topMap=new T.CanvasTexture(top);[map,topMap].forEach(t=>{t.colorSpace=T.SRGBColorSpace;t.wrapS=t.wrapT=T.RepeatWrapping;t.anisotropy=4;});
-  const previous=new Map<T.MeshStandardMaterial,{map:T.Texture|null;hook:T.MeshStandardMaterial['onBeforeCompile'];cache:T.MeshStandardMaterial['customProgramCacheKey']}>();
-  const apply=()=>{if(cancelled)return;paint.forEach(m=>{
-   if(!previous.has(m))previous.set(m,{map:m.map,hook:m.onBeforeCompile,cache:m.customProgramCacheKey});
-   m.map=isNone?null:map;m.color.set(isNone?color:'#ffffff');
-   m.onBeforeCompile=shader=>{
-    shader.uniforms.studioTop={value:topMap};shader.uniforms.studioScale={value:d.scale/100};shader.uniforms.studioOpacity={value:d.opacity/100};shader.uniforms.studioBase={value:new T.Color(color)};
-    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 studioPosition;varying vec3 studioNormal;').replace('#include <begin_vertex>','#include <begin_vertex>\nstudioPosition=position;studioNormal=normal;');
-    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 studioPosition;varying vec3 studioNormal;uniform sampler2D studioTop;uniform float studioScale;uniform float studioOpacity;uniform vec3 studioBase;');
-    if(!isNone)shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',military||d.pattern==='upload'?`
-     vec3 blend=pow(abs(normalize(studioNormal)),vec3(6.));blend/=max(blend.x+blend.y+blend.z,.001);
-     vec3 pos=studioPosition*studioScale*.65;
-     vec4 tex=texture2D(map,pos.zy)*blend.x+texture2D(map,pos.xz)*blend.y+texture2D(map,pos.xy)*blend.z;
-     diffuseColor.rgb*=mix(studioBase,tex.rgb,studioOpacity);
-    `:`
-     vec2 sideUV=vec2((studioPosition.x+2.2)/4.4,studioPosition.y/2.5);
-     vec2 topUV=vec2(studioPosition.z/1.95+.5,(studioPosition.x+2.2)/4.4);
-     float upBlend=smoothstep(.5,.85,abs(normalize(studioNormal).y));
-     vec3 art=mix(texture2D(map,sideUV).rgb,texture2D(studioTop,topUV).rgb,upBlend);
-     diffuseColor.rgb*=mix(studioBase,art,studioOpacity);
-    `);
-   };
-   m.customProgramCacheKey=()=>`zan-livery-v3-${d.pattern}-${d.scale}-${d.opacity}-${color}-${d.accent}`;m.needsUpdate=true;
-  });invalidate();};
-  if(d.image&&d.pattern==='upload'){const image=new Image();image.onload=()=>{if(cancelled)return;c.width=c.height=1024;c.getContext('2d')!.drawImage(image,0,0,1024,1024);map.needsUpdate=true;apply();};image.src=d.image;}else apply();
-  return()=>{cancelled=true;previous.forEach((old,m)=>{m.map=old.map;m.onBeforeCompile=old.hook;m.customProgramCacheKey=old.cache;m.color.set(color);m.needsUpdate=true;});map.dispose();topMap.dispose();};
- },[root,paint,d.pattern,d.image,d.accent,d.scale,d.opacity,color,invalidate]);
+  livery.side.getContext('2d')!.clearRect(0,0,1024,1024);
+  livery.side.getContext('2d')!.drawImage(side,0,0,1024,1024);
+  livery.top.getContext('2d')!.clearRect(0,0,1024,1024);
+  livery.top.getContext('2d')!.drawImage(top,0,0,1024,1024);
+  apply();
+  return()=>{cancelled=true;};
+ },[paint,d.pattern,d.image,d.accent,d.scale,d.opacity,color,invalidate,onLiveryError]);
  useEffect(()=>{
+  const targets=targetCache.current;
   let cancelled=false;const decals:T.Mesh[]=[];const allocated=new Set<T.BufferGeometry>();
   for(const s of d.stickers){
    const preset=findPanel(vehicle,s.panel||(s.side==='Kanan'?(vehicle==='car'?'front-door-right':'tank-right'):undefined));
@@ -61,6 +71,6 @@ export function DesignLayers({root,paint,design:d,color,vehicle,onPlacement}:{ro
    else{ctx.fillStyle='#fff';ctx.font=`italic 900 ${Math.floor(c.height*.62)}px Arial`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(s.text||s.name,c.width/2,c.height/2,c.width*.94);place();}
   }
   return()=>{cancelled=true;const materials=new Set<T.MeshStandardMaterial>();decals.forEach(m=>{root.remove(m);materials.add(m.material as T.MeshStandardMaterial)});allocated.forEach(g=>g.dispose());materials.forEach(m=>{m.map?.dispose();m.dispose()});};
- },[root,paint,vehicle,d.stickers,invalidate,onPlacement,targets]);
+ },[root,paint,vehicle,d.stickers,invalidate,onPlacement]);
  return null;
 }

@@ -24,8 +24,8 @@ export function RacingNavbar({ themeOverride, sectionBase }: RacingNavbarProps =
   const [overHero, setOverHero] = useState(true);
   const toggle = useRef<HTMLButtonElement>(null);
   const header = useRef<HTMLElement>(null);
-  const sectionHref=(id:string)=>sectionBase!==undefined&&id!=="beranda"?`${sectionBase}#${id}`:`#${id}`;
-  const go=(event:MouseEvent<HTMLAnchorElement>,id:string)=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||event.button!==0)return;event.preventDefault();event.stopPropagation();setActive(id);setOpen(false);if(sectionBase!==undefined&&id!=="beranda")router.push(sectionHref(id));else navigateToSection(id);};
+  const sectionHref=(id:string)=>id==="galeri"?"/gallery":sectionBase!==undefined?`${sectionBase}#${id}`:`#${id}`;
+  const go=(event:MouseEvent<HTMLAnchorElement>,id:string)=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||event.button!==0)return;event.preventDefault();event.stopPropagation();setActive(id);setOpen(false);if(id==="galeri"||sectionBase!==undefined)router.push(sectionHref(id));else navigateToSection(id);};
 
   useEffect(()=>{
     const element=header.current;if(!element)return;

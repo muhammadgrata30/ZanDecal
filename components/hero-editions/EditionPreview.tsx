@@ -77,6 +77,7 @@ export function EditionPreview({ edition, production = false }: { edition: Editi
   const [info, setInfo] = useState(false);
   const [forceStatic, setForceStatic] = useState(false);
   const [force3D, setForce3D] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
   const hold = useRef<{ timer?: ReturnType<typeof setTimeout>; completed: boolean }>({ completed: false });
   const saveData = useSyncExternalStore(subscribeData, readSaveData, serverSaveData);
   const staticMode = forceStatic || (saveData && !force3D);
@@ -96,13 +97,14 @@ export function EditionPreview({ edition, production = false }: { edition: Editi
   useEffect(() => {
     const node = root.current;
     if (!production || !node) return;
-    if (staticMode) { node.classList.add("he-intro-done"); return; }
+    if (staticMode) return;
     const previousRestoration = history.scrollRestoration;
     history.scrollRestoration = "manual";
     window.scrollTo({ top: 0, behavior: "instant" });
     const original = node.querySelector(".he-original-apply");
     if (!original) return;
-    const sync = () => node.classList.toggle("he-intro-done", original.classList.contains("settled"));
+    // Keep intro visibility in React state so changing the theme cannot erase it.
+    const sync = () => setIntroDone(original.classList.contains("settled"));
     const observer = new MutationObserver(sync);
     observer.observe(original, { attributes: true, attributeFilter: ["class"] });
     sync();
@@ -110,7 +112,7 @@ export function EditionPreview({ edition, production = false }: { edition: Editi
   }, [production, staticMode]);
   const switchRendering = () => { if (staticMode) { setForceStatic(false); setForce3D(true); } else setForceStatic(true); };
   const Root = production ? "section" : "main";
-  return <Root id="beranda" ref={root} aria-labelledby={production ? "home-hero-title" : undefined} className={`he-preview he-edition-${edition.id} he-${dark ? "dark" : "light"}${production ? " he-production" : ""}${paused ? " he-paused" : ""}${reveal ? " he-reveal" : ""}${staticMode ? " he-static" : ""}`} style={{ "--film": edition.film } as CSSProperties}>
+  return <Root id="beranda" ref={root} aria-labelledby={production ? "home-hero-title" : undefined} className={`he-preview he-edition-${edition.id} he-${dark ? "dark" : "light"}${production ? " he-production" : ""}${production && (introDone || staticMode) ? " he-intro-done" : ""}${paused ? " he-paused" : ""}${reveal ? " he-reveal" : ""}${staticMode ? " he-static" : ""}`} style={{ "--film": edition.film } as CSSProperties}>
     <div className="he-art" aria-hidden="true">
       {(edition.id === 1 || edition.id === 3) && <Contours id={edition.id} />}
       {edition.id === 1 && <><div className="he-outline-sign">ZAN</div><div className="he-blueprint-edge" /></>}

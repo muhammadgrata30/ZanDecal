@@ -1,7 +1,7 @@
 "use client";
 import {Suspense,useEffect,useMemo,useRef,type RefObject} from "react";
 import {Canvas,useFrame,useLoader,useThree,type ThreeEvent} from "@react-three/fiber";
-import {Environment,Lightformer,OrbitControls,useTexture} from "@react-three/drei";
+import {OrbitControls,useTexture} from "@react-three/drei";
 import type {OrbitControls as Controls} from "three-stdlib";
 import * as THREE from "three";
 import {buildVehicleRig} from "./vehicleRig";
@@ -12,8 +12,19 @@ import {STUDIO_VEHICLES} from "../../lib/studio-vehicles";
 import {bindStudioWheel} from "../../lib/studio-input";
 import {DesignLayers} from './DesignLayers';
 import type {Design} from './design';
-interface Props{design?:Design;picking?:boolean;onSurfacePick?:(point:[number,number,number],normal:[number,number,number],mesh:string)=>void;onPlacement?:(id:string,status:boolean)=>void;vehicle:StudioVehicle;color:string;finish:FinishType;dark:boolean;active:boolean;view:string;grid:boolean;resetKey:number;background?:string;gridTone?:string;enter?:boolean;entranceProgress?:RefObject<number>;onReady:()=>void}
-function Vehicle({vehicle,color,finish,onReady,enter=true,active,entranceProgress,design,picking,onSurfacePick,onPlacement}:Props){
+import {bindStudioEnvironment} from './perfect-apply/environment.js';
+
+function StudioLighting(){
+ const {gl,scene,invalidate}=useThree();
+ useEffect(()=>{
+  const cleanup=bindStudioEnvironment(gl,scene);
+  invalidate();
+  return cleanup;
+ },[gl,scene,invalidate]);
+ return <><hemisphereLight args={['#ffffff','#718095',1]}/><directionalLight position={[-5,3,-2]} intensity={1.4}/></>;
+}
+interface Props{onLiveryError?:(message:string)=>void;design?:Design;picking?:boolean;onSurfacePick?:(point:[number,number,number],normal:[number,number,number],mesh:string)=>void;onPlacement?:(id:string,status:boolean)=>void;vehicle:StudioVehicle;color:string;finish:FinishType;dark:boolean;active:boolean;view:string;grid:boolean;resetKey:number;background?:string;gridTone?:string;enter?:boolean;entranceProgress?:RefObject<number>;onReady:()=>void}
+function Vehicle({vehicle,color,finish,onReady,enter=true,active,entranceProgress,design,picking,onSurfacePick,onPlacement,onLiveryError}:Props){
  const entrance=useRef<THREE.Group>(null);
 
  const reducedMotion=useRef(false);
@@ -47,11 +58,11 @@ function Vehicle({vehicle,color,finish,onReady,enter=true,active,entranceProgres
  useEffect(()=>{onReady();return()=>rig.dispose();},[rig,onReady]);
  useEffect(()=>{
   const spec=FINISH_SPECS[finish];
-  rig.paint.forEach(material=>{material.color.set(design&&design.pattern!=='none'?'#ffffff':color);material.roughness=spec.roughness;material.metalness=spec.metalness;if(material instanceof THREE.MeshPhysicalMaterial)material.clearcoat=spec.coat;});
+  rig.paint.forEach(material=>{if(!design)material.color.set(color);material.roughness=spec.roughness;material.metalness=spec.metalness;if(material instanceof THREE.MeshPhysicalMaterial)material.clearcoat=spec.coat;});
   invalidate();
- },[rig,color,finish,design?.pattern,invalidate]);
+ },[rig,color,finish,design,invalidate]);
  const pick=(event:ThreeEvent<MouseEvent>)=>{if(!picking||event.delta>5||!event.face||event.object.userData.studioDecal)return;event.stopPropagation();const point=rig.root.worldToLocal(event.point.clone());const normal=event.face.normal.clone().transformDirection(event.object.matrixWorld).transformDirection(rig.root.matrixWorld.clone().invert());onSurfacePick?.(point.toArray() as [number,number,number],normal.toArray() as [number,number,number],event.object.name);};
- return <group ref={entrance} position={[-6,0,0]}><primitive object={rig.root} dispose={null} onClick={pick}/>{design&&<DesignLayers root={rig.root} paint={rig.paint} design={design} color={color} vehicle={vehicle} onPlacement={onPlacement}/>}<mesh rotation={[-Math.PI/2,0,0]} position={[0,-.015,0]} scale={[2.5,.72,1]}><circleGeometry args={[1,24]}/><meshBasicMaterial color="#080610" transparent opacity={.12} depthWrite={false}/></mesh></group>;
+ return <group ref={entrance} position={[-6,0,0]}><primitive object={rig.root} dispose={null} onClick={pick}/>{design&&<DesignLayers root={rig.root} paint={rig.paint} design={design} color={color} vehicle={vehicle} onPlacement={onPlacement} onLiveryError={onLiveryError}/>}<mesh rotation={[-Math.PI/2,0,0]} position={[0,-.015,0]} scale={[2.5,.72,1]}><circleGeometry args={[1,24]}/><meshBasicMaterial color="#080610" transparent opacity={.12} depthWrite={false}/></mesh></group>;
 }
 function Camera({view,active,resetKey}:Props){
  const orbit=useRef<Controls>(null);
@@ -72,7 +83,7 @@ function Camera({view,active,resetKey}:Props){
 export default function MotorStudioScene(props:Props){
  return <Canvas frameloop="demand" resize={{scroll:false,debounce:{resize:100,scroll:100}}} dpr={[1,1.5]} camera={{position:[5.4,2.7,6.7],fov:36}} gl={{antialias:true,alpha:false,powerPreference:"default",preserveDrawingBuffer:true}}>
   <color attach="background" args={[props.background??(props.dark?"#17141d":"#f5f3ef")]}/><ambientLight intensity={1.2}/><directionalLight position={[3,6,4]} intensity={2.8}/>
-  <Environment resolution={128} frames={1}><Lightformer position={[0,5,0]} rotation={[Math.PI/2,0,0]} scale={[8,4,1]} intensity={3}/><Lightformer position={[-5,3,2]} rotation={[0,Math.PI/2,0]} scale={[5,3,1]} intensity={2}/></Environment>
+  <StudioLighting/>
   {props.grid&&<gridHelper args={[12,24,props.gridTone??(props.dark?"#8f7caa":"#9a86b1"),props.gridTone??(props.dark?"#63596e":"#bcb4c5")]} position={[0,-.025,0]} material-transparent material-opacity={.3} material-depthWrite={false}/>}
   <Camera {...props}/><Suspense fallback={null}><Vehicle key={props.vehicle} {...props}/></Suspense>
  </Canvas>;

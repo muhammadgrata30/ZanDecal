@@ -1,6 +1,14 @@
 import * as THREE from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 
+/** Imperative Three scene resources, isolated from React's render state. */
+export function bindStudioEnvironment(renderer,scene){
+ const previous=scene.environment;
+ const target=createHeroEnvironment(renderer,true);
+ if(target)scene.environment=target.texture;
+ return()=>{scene.environment=previous;target?.dispose();};
+}
+
 // Shader compilation failures are reported through Three's debug callback rather
 // than thrown. Turn a failed environment bake into a recoverable lighting path;
 // leave error reporting for every subsequent scene/material untouched.
